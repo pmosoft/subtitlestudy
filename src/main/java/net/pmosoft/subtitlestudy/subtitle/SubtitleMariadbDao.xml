@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.pmosoft.fframe.dams.code.SubtitleDao">
+
+<select id="selectSubtitleList" parameterType="java.util.HashMap" resultType="java.util.LinkedHashMap">
+
+    -- SubtitleDao.selectSubtitleList
+    SELECT   A.CD_ID_NM    
+            ,A.CD_ID_HNM   
+            ,A.CD_ID_GRP_NM
+            ,A.CD          
+            ,A.CD_NM       
+            ,A.CD_HNM      
+            ,A.CD_DESC      
+            ,A.CD_TY_CD
+            ,C.CD_HNM AS CD_TY_CD_NM   
+            ,A.CD_STS_CD   
+            ,B.CD_HNM AS CD_STS_CD_NM   
+            ,DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+            ,A.REG_USR_ID
+            ,DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+            ,A.UPD_USR_ID
+    FROM    TDACM00060 A
+            LEFT JOIN TDACM00060 B
+            ON  B.CD_ID_NM = 'CD_STS_CD'
+            AND B.CD = A.CD_STS_CD
+            LEFT JOIN TDACM00060 C
+            ON  C.CD_ID_NM = 'CD_TY_CD'
+            AND C.CD = A.CD_TY_CD
+    WHERE   A.CD_ID_HNM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
+    OR      A.CD LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
+    OR      A.CD_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
+    OR      A.CD_HNM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
+    OR      A.CD_ID_GRP_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
+    ORDER BY A.CD_TY_CD,A.CD_ID_NM, A.CD
+</select>
+
+
+<insert id="insertSubtitle" parameterType="java.util.HashMap">
+
+    -- SubtitleDao.insertSubtitle
+    INSERT INTO TDACM00060
+    (
+         CD_ID_NM     
+        ,CD_ID_HNM    
+        ,CD_ID_GRP_NM 
+        ,CD           
+        ,CD_NM        
+        ,CD_HNM       
+        ,CD_DESC      
+        ,CD_TY_CD     
+        ,CD_STS_CD    
+        ,REG_DTM      
+        ,REG_USR_ID   
+        ,UPD_DTM      
+        ,UPD_USR_ID   
+    ) VALUES (
+         #{CD_ID_NM}
+        ,#{CD_ID_HNM}
+        ,#{CD_ID_GRP_NM}
+        ,#{CD}
+        ,#{CD_NM}
+        ,#{CD_HNM}
+        ,#{CD_DESC}
+        ,#{CD_TY_CD}
+        ,#{CD_STS_CD}
+        ,curdate()
+        ,#{REG_USR_ID}
+        ,curdate()
+        ,#{UPD_USR_ID}
+    )
+</insert>
+
+
+<update id="updateSubtitle" parameterType="java.util.HashMap">
+
+    -- SubtitleDao.updateSubtitle
+    UPDATE TDACM00060
+    SET  CD_ID_NM      = #{CD_ID_NM}
+        ,CD_ID_HNM     = #{CD_ID_HNM}
+        ,CD_ID_GRP_NM  = #{CD_ID_GRP_NM}
+        ,CD            = #{CD}
+        ,CD_NM         = #{CD_NM}
+        ,CD_HNM        = #{CD_HNM}
+        ,CD_DESC       = #{CD_DESC}
+        ,CD_TY_CD      = #{CD_TY_CD}
+        ,CD_STS_CD     = #{CD_STS_CD}
+        ,UPD_DTM       = curdate()
+        ,UPD_USR_ID    = #{UPD_USR_ID}
+    WHERE  CD_ID_NM = #{CD_ID_NM}
+    AND    CD       = #{CD}
+
+</update>
+
+
+<delete id="deleteSubtitle" parameterType="java.util.HashMap">
+    -- SubtitleDao.deleteSubtitle
+    DELETE FROM TDACM00060 WHERE CD_ID_NM = #{CD_ID_NM} AND CD = #{CD}
+</delete> 
+
+
+</mapper>
