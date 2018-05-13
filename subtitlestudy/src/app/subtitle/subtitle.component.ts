@@ -35,7 +35,7 @@ export class SubtitleComponent implements OnInit {
   onUpload() {
     const fd = new FormData();
     fd.append('uploadFile', this.foreignFile);
-    
+    //study english using sutitles (foreign and self)
     this.http.post('http://localhost:8085/subtitle/saveUsrSubtitles',fd)
     //this.http.post('http://localhost:8080/dams/code/selectCodeExtList?searchValue=',fd)
     .subscribe(res => {
