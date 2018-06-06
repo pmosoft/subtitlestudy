@@ -8,7 +8,7 @@
 						<label for="inputAddress">Foreign Language</label>
 					</div>
 					<div class="custom-file">
-					  <input type="file" class="custom-file-input" name="uploadFile" (change)="onForeignFileSelected($event)">
+					  <input type="file" class="custom-file-input" name="foreignFile" (change)="onForeignFileSelected($event)">
 						<label class="custom-file-label" for="customFile">{{foreignFileNm}}</label>
 					</div>
 			  </div>
@@ -17,7 +17,7 @@
 						<label for="inputAddress">Mother Language</label>
 			    </div>
 					<div class="custom-file">
-					  <input type="file" class="custom-file-input" id="customFile">
+					  <input type="file" class="custom-file-input"  name="motherFile" (change)="onMotherFileSelected($event)">
 					  <label class="custom-file-label" for="customFile">{{motherFileNm}}</label>
 					</div>
 			  </div>

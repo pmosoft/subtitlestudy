@@ -34,7 +34,8 @@ export class SubtitleComponent implements OnInit {
   onMotherFileSelected(event) {
     this.motherFile = <File> event.target.files[0];
     this.motherFileNm = this.motherFile.name;
-    if(this.motherFileNm.indexOf(".srt") == -1 || this.motherFileNm.indexOf(".smi") == -1){
+    alert(this.motherFileNm);
+    if(this.motherFileNm.indexOf(".srt") == -1 && this.motherFileNm.indexOf(".smi") == -1){
       alert("Please, choose srt,smi file only" );
       this.motherFile = null;
       this.motherFileNm = "Choose Srt or Smi File";
