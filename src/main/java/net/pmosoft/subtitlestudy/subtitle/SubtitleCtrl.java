@@ -2,6 +2,7 @@ package net.pmosoft.subtitlestudy.subtitle;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,10 +29,17 @@ public class SubtitleCtrl {
      * @param  
     */
     @RequestMapping(value = "/subtitle/saveUsrSubtitles")
-    public void saveUsrSubtitles(@RequestPart("uploadFile") MultipartFile files, HttpServletResponse response){
-        System.out.println("11111111111111111111111111111111111111111111");
+    public void saveUsrSubtitles(
+             @RequestPart("uploadFile") MultipartFile foreignSubtitleFile
+            ,@RequestPart("uploadFile2") MultipartFile motherSubtitleFile
+            ,@RequestParam String usr
+            ,HttpServletResponse response){
         try {
-             JSONObject jsonObj = subtitleSrv.saveUsrSubtitles(files);
+            
+             System.out.println("asdf333333333sdf==="+foreignSubtitleFile.getName());
+             System.out.println("asdf33333sdf==="+motherSubtitleFile.getName());
+             System.out.println("asdf33333sdf==="+usr);
+             JSONObject jsonObj = subtitleSrv.saveUsrSubtitles(usr,foreignSubtitleFile,motherSubtitleFile);
              response.setContentType("text/plain; charset=UTF-8");
              PrintWriter pw = response.getWriter();
              pw.print(jsonObj);
@@ -40,7 +48,6 @@ public class SubtitleCtrl {
         } catch (IOException e) {}
             //return codeSrv.uploadCodeRegList(files);
     }        
-    
     
     /**
      * 자막목록 조회
@@ -78,4 +85,11 @@ public class SubtitleCtrl {
     }        
     
     
+    @RequestMapping(value = "/subtitle/test3")
+    public Map<String, Object> test3(){
+        System.out.println("111111111444411111111111111112222");
+        Map<String, Object> result = new HashMap<String, Object>();
+        return result;
+    }        
+        
 }

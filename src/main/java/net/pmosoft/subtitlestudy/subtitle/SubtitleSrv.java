@@ -4,11 +4,14 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pmosoft.fframe.comm.App;
+import net.pmosoft.subtitlestudy.file.FileInfo;
+import net.pmosoft.subtitlestudy.file.FileSave;
+import net.pmosoft.subtitlestudy.sync.SyncSubtitles;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +31,33 @@ public class SubtitleSrv {
     @Autowired
     private SubtitleValidatorSrv subtitleValidatorSrv;
 
-    public JSONObject saveUsrSubtitles(MultipartFile files) {
-        String fileNm = files.getOriginalFilename();
-        //System.out.println("fileNm="+fileNm);
-        
-        JSONObject jsonObj = new JSONObject();
+    public JSONObject saveUsrSubtitles(String usr, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
+
+        JSONObject jsonObj = new JSONObject();        
+        List<Map<String,String>> list = null; 
         
         try {
-//            for (int i = 0; i < files.size(); i++) {
-//                byte[] bytes = files.get(i).getBytes();
-//                Path path = Paths.get(App.excelPath + fileNm);
-//                Files.write(path, bytes);
-//            } 
-            byte[] bytes = files.getBytes();
-            Path path = Paths.get(App.excelPath + fileNm);
-            System.out.println(App.excelPath + fileNm);
-            Files.write(path, bytes);
-             
-            List<Map<String,String>> list = null; 
-
-            jsonObj.put("success", true);
+            
+            /************************************************
+             * 자막파일들 저장
+             ************************************************/
+            Map<String,ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+            FileSave fileSave = new FileSave();
+            map = fileSave.saveUsrSubtitles(usr, foreignSubtitleFile, motherSubtitleFile);
+           
+            /************************************************
+             * 자막파일 합성
+             ************************************************/
+            SyncSubtitles syncSubtitles = new SyncSubtitles();
+            //syncSubtitles.syncSubtitles(map.get("foreignSubtitleList"), map.get("motherSubtitleList"));
+            syncSubtitles.syncSubtitles(map.get("subtitleFilePathList").get(0)
+                                       ,map.get("subtitleFilePathList").get(1));
+            
+            /************************************************
+             * res 정보 생성
+             ************************************************/
+            
+            jsonObj.put("Success", true);
             jsonObj.put("isSuccess", true);
             jsonObj.put("successMsg", "업로드 되었습니다");
             jsonObj.put("data", list);
@@ -62,6 +72,7 @@ public class SubtitleSrv {
         } finally {
             return jsonObj;
         }
+        
     }     
     
     public Map<String, Object> selectUsrSubtitleList(Map<String,String> params){

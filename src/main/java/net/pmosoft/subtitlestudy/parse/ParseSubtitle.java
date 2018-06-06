@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import net.pmosoft.fframe.comm.util.FileUtil;
 
-public class ParseSrt {
+public class ParseSubtitle {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -20,15 +20,140 @@ public class ParseSrt {
         
         //System.out.println(s1.matches("<i>")
         
-        ParseSrt parseSrt = new ParseSrt();
+        ParseSubtitle parseSubtitle = new ParseSubtitle();
         //String srtfilePathName = "d:/Videos/sincity.srt";
         //parseSrt.parseSrtFile(srtfilePathName);
 
-        String smifilePathName = "d:/Videos/sincity.smi";
-        parseSrt.parseSmiFile(smifilePathName);
-        //parseSrt.test();
+        //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Valerian.and.the.City.of.a.Thousand.Planets.smi";
+        //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/[VIP] Demon City Shinjuku.smi";
+        String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Star Wars Rebels S02E01 - The Siege of Lothal.smi";
+        
+        parseSubtitle.parseSmiFile3(smifilePathName);
+        //parseSubtitle.test3();
     }
 
+    
+    public void test3(){
+        System.out.println("test3");
+        ArrayList<SmiVo> sl = new ArrayList<SmiVo>();
+        SmiVo svo01 = new SmiVo(); svo01.setStime(111); sl.add(svo01);
+        SmiVo svo02 = new SmiVo(); svo02.setStime(222); sl.add(svo02);
+        SmiVo svo03 = new SmiVo(); svo01.setStime(111); svo01.setEtime(222);
+        
+        sl.get(0).print();
+        sl.get(1).print();
+        
+    }    
+
+    
+    
+    public void parseSmiFile3(String filePathName) {
+
+        Pattern p; Matcher m;
+        String parseRule;
+        
+        
+        BufferedReader br = null;
+        String src = "";
+        try {
+
+            File file = new File(filePathName);
+            if (file.isFile()) {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),"EUC-KR"));
+                int num = 0;
+                int bnum = 0;
+                int rnum = 0;
+                int stime = 0;
+                int etime = 0;
+                ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
+                
+                while (true) {
+                    String str = br.readLine();
+                    if (str != null) {
+                        if(str.matches("<SYNC.*")) {
+                            // rnum의 기반을 산출한다.
+                            num++;
+                            parseRule = "[0-9]+";
+                            p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
+                            stime = Integer.parseInt(m.group());
+                            //System.out.println(str+" "+stime);
+                        } else {
+                            if(num>0){
+                                // rnum별로 내용을 산출한다.
+                                rnum++;
+                                SmiVo smiVo = new SmiVo();
+                                smiVo.num = rnum;
+                                smiVo.stime = stime;
+                                smiVo.etime = 0;
+                                //smiList.set(rnum-2, etime).get(rnum-2).stime:333;
+                                smiVo.content = str;
+                                //smiVo.print();
+                                smiList.add(smiVo);
+                            }   
+                        }
+                    } else {
+                        break;
+                    }    
+                }
+                br.close();
+                
+                // etime를 세팅한다
+                for (int i = 0; i < smiList.size(); i++) {
+                    if(i < smiList.size()-1) {
+                        SmiVo tvo = new SmiVo(); 
+                        tvo.setNum(smiList.get(i).getNum());
+                        tvo.setStime(smiList.get(i).getStime());
+                        tvo.setEtime(smiList.get(i+1).getStime());
+                        tvo.setContent(smiList.get(i).getContent());
+                        smiList.set(i, tvo);
+                        //smiList.get(i).print();
+                    }    
+                }
+
+                ArrayList<SmiVo> smiList2 = new ArrayList<SmiVo>();
+                
+                num = 0;
+                // stime별로 content를 합친다
+                String content2 = "";
+                for (int i = 0; i < smiList.size(); i++) {
+                    if(smiList.get(i).getStime() == smiList.get(i+1).getStime()) {
+                        content2 += smiList.get(i).getContent();
+                    } else {
+                        SmiVo tvo = new SmiVo(); 
+                        tvo.setNum(++num);
+                        tvo.setStime(smiList.get(i).getStime());
+                        tvo.setEtime(smiList.get(i+1).getStime());
+                        tvo.setContent(content2+smiList.get(i).getContent());
+                        content2 = "";
+                        tvo.print();
+                        smiList2.add(tvo);
+                    }
+                        
+                }            
+            
+            }
+        } catch (Exception e) {
+            System.out.println("e=" + e.getMessage());
+        }
+        
+        //String src2 = src.replaceAll("<br>\n", " ");
+        //System.out.println(src2.substring(328+7,src2.length()));
+        
+    }
+    
+    
+    public void test2(){
+        System.out.println("test2");
+        Pattern p; Matcher m;
+        String parseRule; boolean a;
+        
+        String src = "<SYNC Start=98679><P Class=KRCC>";
+        parseRule = "[0-9]+";
+        p = Pattern.compile(parseRule); m = p.matcher(src); a = false;
+        m.find();
+        System.out.println(m.group());
+    }    
+    
     public void test(){
         String src = "1\n00:00:34,720 --> 00:00:36,860\n<i>Metal screams.</i>\n\n2\n00:00:38,600 --> 00:00:41,341\n<i>Something hits me\nsquare in the chest.</i>";
         
@@ -109,12 +234,15 @@ public class ParseSrt {
     }
 
     public void parseSmiFile(String filePathName) {
-        //System.out.println(parseSrt.readFile(filePathName));
+
+        List<SmiVo> smiList = new ArrayList<SmiVo>();
+        
+        //String src = FileUtil.readFile(filePathName);
+        //System.out.println("src===\n"+src);
         String src = FileUtil.readFileEucKr(filePathName);
         
         Pattern p; Matcher m;
         String parseRule; boolean a;
-//<SYNC Start=41587><P Class=KRCC>
         parseRule = "<SYNC Start=[0-9]*>[<P Class=KRCC>]+";
         p = Pattern.compile(parseRule); m = p.matcher(src); a = false;
 
@@ -127,22 +255,21 @@ public class ParseSrt {
             map.put("time"     ,m.group());
   
             parseList.add(map);
-            System.out.println(String.valueOf(m.start()));
-            System.out.println(String.valueOf(m.end()));
-            System.out.println(m.group());
+            //System.out.println(String.valueOf(m.start()));
+            //System.out.println(String.valueOf(m.end()));
+            //System.out.println(m.group());
         }
         
         System.out.println(parseList);
         
         for (int i = 0; i < parseList.size(); i++) {
-            System.out.println(parseList.get(i).get("time"));
+            //System.out.println(parseList.get(i).get("time"));
             if(i<parseList.size()-1) {
-                System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
-                        ,Integer.parseInt(parseList.get(i+1).get("timeStart"))));
+                //System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                //        ,Integer.parseInt(parseList.get(i+1).get("timeStart"))));
             } else {
-                System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
-                        ,src.length()));
-                
+                //System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                //        ,src.length()));
             }
         }
 
@@ -237,6 +364,7 @@ public class ParseSrt {
 //            System.out.println(m.group().replace("<i>","").replace("</i>",""));
 //        }
     }
+
     
     
 }

@@ -34,7 +34,6 @@ export class SubtitleComponent implements OnInit {
   onMotherFileSelected(event) {
     this.motherFile = <File> event.target.files[0];
     this.motherFileNm = this.motherFile.name;
-    alert(this.motherFileNm);
     if(this.motherFileNm.indexOf(".srt") == -1 && this.motherFileNm.indexOf(".smi") == -1){
       alert("Please, choose srt,smi file only" );
       this.motherFile = null;
@@ -44,15 +43,17 @@ export class SubtitleComponent implements OnInit {
     
   onUpload() {
 
-    //alert("asdfasdfsadf");
     const fd = new FormData();
     fd.append('uploadFile', this.foreignFile);
+    fd.append('uploadFile2', this.motherFile);
+    fd.append('usr', "lifedomy");
     //study english using sutitles (foreign and self)
-    this.http.post('http://localhost:8085/subtitle/test2',"")
-    //this.http.post('http://localhost:8085/subtitle/saveUsrSubtitles',fd)
+    //this.http.post('http://localhost:8085/subtitle/test3',"")
+    this.http.post('http://localhost:8085/subtitle/saveUsrSubtitles',fd)
     //this.http.post('http://localhost:8085/dams/code/selectCodeExtList?searchValue=',fd)
     .subscribe(res => {
-      console.log(res);
+      console.log("1111111111111111111");
+      //console.log(res);
     });    
   }
 
