@@ -66,4 +66,16 @@ public class SubtitleCtrl {
         return subtitleSrv.deleteSubtitle(params);
     }
 
+    @RequestMapping(value = "/subtitle/test")
+    public void test(){
+        System.out.println("11111111111111111111111111111111111111111111");
+    }        
+    
+    @RequestMapping(value = "/subtitle/test2")
+    public String test2(){
+        System.out.println("111111111111111111111111111111111111112222");
+        return "abc";
+    }        
+    
+    
 }
