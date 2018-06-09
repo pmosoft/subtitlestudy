@@ -1,0 +1,5 @@
+create user 'fframe'@'localhost' identified by 'f1234';
+
+grant all privileges on fframe.* to fframe@localhost;
+
+create database fframe;

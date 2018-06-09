@@ -1,0 +1,62 @@
+######################
+## fframe springboot
+######################
+cd /home/fframe/webapp
+nohup java -jar  fframe-0.0.1-SNAPSHOT.war &
+tail -f /home/fframe/webapp/nohup.out
+ps -ef | grep fframe
+kill
+
+==> springboot는 톰캣이 내장되었으므로 별도의 톰캣서버가 필요없다.
+
+###############
+## bashrc
+###############
+vi /etc/bashrc
+export PS1="[\[\e[36;1m\]\u@\[\e[31;1m\]\w]$ "
+export PS1="[\[\e[36;1m\]\u@\[\e[32;1m\]\h:\[\e[31;1m\]\w]$ "
+
+# alias
+alias webapp='cd /usr/local/server/tomcat/webapps'
+alias startup='/usr/local/server/tomcat/bin/startup.sh'
+alias shutdown='/usr/local/server/tomcat/bin/shutdown.sh'
+alias fhome='cd /home/fframe'
+alias logh1='tail -f /usr/local/hadoop/logs/hadoop-hadoop-namenode-h001.log'
+alias logh2='tail -f /usr/local/hadoop/logs/hadoop-hadoop-datanode-h002.log'
+alias logh3='tail -f /usr/local/hadoop/logs/hadoop-hadoop-datanode-h003.log'
+alias userlist='grep /bin/bash /etc/passwd | cut -f1 -d:'
+alias grouplist='tail -f /etc/group'
+
+# java path
+export JAVA_HOME=/usr/local/java
+export PATH=$PATH:$JAVA_HOME/bin
+export M2_HOME=/usr/local/maven
+export PATH=$PATH:$M2_HOME/bin
+export PATH=$PATH:/usr/local/apache-maven-3.5.0/bin
+
+# screen
+setterm -blank 0
+
+###############
+## root 자동로그인
+###############
+vi /etc/gdm/custom.conf 에서 설정
+[daemon] 밑에 아래의 설정값 추가.
+AutomaticLoginEnable=true
+AutomaticLogin=root
+
+###############
+## user
+###############
+root/life200727
+fframe/life200727
+
+mysql -u root -plife200727
+
+
+#####################################################
+## 방화벽 해제
+#####################################################
+systemctl stop firewalld
+systemctl disable firewalld
+

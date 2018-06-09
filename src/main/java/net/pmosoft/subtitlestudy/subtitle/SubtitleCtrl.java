@@ -36,8 +36,8 @@ public class SubtitleCtrl {
             ,HttpServletResponse response){
         try {
             
-             System.out.println("asdf333333333sdf==="+foreignSubtitleFile.getName());
-             System.out.println("asdf33333sdf==="+motherSubtitleFile.getName());
+             System.out.println("asdf344443sdf==="+foreignSubtitleFile.getName());
+             System.out.println("11222222222222222222221134123412341ddddsdf==="+motherSubtitleFile.getName());
              System.out.println("asdf33333sdf==="+usr);
              JSONObject jsonObj = subtitleSrv.saveUsrSubtitles(usr,foreignSubtitleFile,motherSubtitleFile);
              response.setContentType("text/plain; charset=UTF-8");
