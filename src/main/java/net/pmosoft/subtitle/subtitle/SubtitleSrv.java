@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.subtitle;
+package net.pmosoft.subtitle.subtitle;
 
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pmosoft.subtitlestudy.file.FileInfo;
-import net.pmosoft.subtitlestudy.file.FileSave;
-import net.pmosoft.subtitlestudy.sync.SyncSubtitles;
+import net.pmosoft.subtitle.file.FileInfo;
+import net.pmosoft.subtitle.file.FileSave;
+import net.pmosoft.subtitle.sync.SyncSubtitles;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

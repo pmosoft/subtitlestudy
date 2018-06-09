@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.subtitle;
+package net.pmosoft.subtitle.subtitle;
 
 import java.io.IOException;
 import java.io.PrintWriter;

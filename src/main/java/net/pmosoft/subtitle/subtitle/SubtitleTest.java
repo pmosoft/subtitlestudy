@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.subtitle;
+package net.pmosoft.subtitle.subtitle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.pmosoft.subtitlestudy.SubtitlestudyApplication;
+import net.pmosoft.subtitle.SubtitlestudyApplication;
 
 import org.junit.Ignore;
 import org.junit.Test;

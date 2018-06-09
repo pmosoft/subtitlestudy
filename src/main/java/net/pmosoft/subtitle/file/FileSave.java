@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.file;
+package net.pmosoft.subtitle.file;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

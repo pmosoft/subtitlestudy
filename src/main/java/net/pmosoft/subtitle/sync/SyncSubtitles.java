@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.sync;
+package net.pmosoft.subtitle.sync;
 
 import java.util.ArrayList;
 import java.util.Map;

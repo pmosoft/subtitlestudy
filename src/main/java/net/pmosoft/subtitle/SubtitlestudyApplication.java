@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy;
+package net.pmosoft.subtitle;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

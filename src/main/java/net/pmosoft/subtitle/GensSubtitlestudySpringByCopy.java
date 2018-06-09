@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy;
+package net.pmosoft.subtitle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +13,9 @@ public class GensSubtitlestudySpringByCopy {
         
         
         Map<String, String> params = new HashMap<String, String>();
-        params.put("srcPackNm", "net.pmosoft.subtitlestudy.parse");
+        params.put("srcPackNm", "net.pmosoft.subtitle.parse");
         params.put("srcPgmNm" , "Parse");
-        params.put("tarPackNm", "net.pmosoft.subtitlestudy.subtitle");
+        params.put("tarPackNm", "net.pmosoft.subtitle.subtitle");
         params.put("tarPgmNm" , "Subtitle");
         
         try {

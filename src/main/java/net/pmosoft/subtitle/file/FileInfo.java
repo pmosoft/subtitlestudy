@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.file;
+package net.pmosoft.subtitle.file;
 
 public class FileInfo {
 

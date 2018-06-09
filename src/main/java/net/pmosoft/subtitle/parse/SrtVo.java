@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.parse;
+package net.pmosoft.subtitle.parse;
 
 public class SrtVo {
 

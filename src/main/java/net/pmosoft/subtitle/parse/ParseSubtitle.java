@@ -1,4 +1,4 @@
-package net.pmosoft.subtitlestudy.parse;
+package net.pmosoft.subtitle.parse;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
