@@ -1,6 +1,8 @@
 -----------------------------
 -- 유저
 -----------------------------
+DROP TABLE STTL.TSYUR00010;
+
 CREATE TABLE STTL.TSYUR00010 (
  USR_EMAIL    VARCHAR(40)    NOT NULL comment '사용자이메일'    
 ,USR_ID       VARCHAR(40)        NULL COMMENT '사용자아이디'    
