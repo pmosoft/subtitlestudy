@@ -57,4 +57,24 @@ export class SubtitleComponent implements OnInit {
     });    
   }
 
+
+  onTest() {
+
+    const fd = new FormData();
+    fd.append('uploadFile', this.foreignFile);
+    fd.append('uploadFile2', this.motherFile);
+    fd.append('usr', "lifedomy");
+    console.log("1111111111111111111");
+    console.log(this.http.get('http://localhost:8085/subtitle/test3'));
+
+    // this.http.post('http://localhost:8085/subtitle/test3',"")
+    // .subscribe(res => {
+    //   console.log("1111111111111111111");
+    //   //console.log(res);
+    });    
+  }
+
+
+
+
 } 

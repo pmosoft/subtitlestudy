@@ -2,6 +2,7 @@ package net.pmosoft.subtitle.subtitle;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,7 +90,27 @@ public class SubtitleCtrl {
     public Map<String, Object> test3(){
         System.out.println("111111111444411111111111111112222");
         Map<String, Object> result = new HashMap<String, Object>();
+        result.put("name", "abc");
+        result.put("age", 10);        
         return result;
     }        
+
+    @RequestMapping(value = "/subtitle/test4")
+    public Map<String, Object> test4(){
+        System.out.println("111111111444411111111111111112222");
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("name", "abc");
+        result.put("age", 10);
         
+        ArrayList<Map<String,Object>> list1 = new ArrayList<Map<String,Object>>();
+        list1.add(result);
+
+        Map<String, Object> result1 = new HashMap<String, Object>();
+        result1.put("name", "abc");
+        result1.put("age", 10);
+
+        result.put("result1", result1);
+        return result;
+    }    
+    
 }
