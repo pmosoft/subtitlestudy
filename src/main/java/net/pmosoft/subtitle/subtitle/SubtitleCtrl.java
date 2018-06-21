@@ -90,11 +90,21 @@ public class SubtitleCtrl {
     public Map<String, Object> test3(){
         System.out.println("111111111444411111111111111112222");
         Map<String, Object> result = new HashMap<String, Object>();
+        result.put("id", 10);        
         result.put("name", "abc");
-        result.put("age", 10);        
         return result;
     }        
 
+    @RequestMapping(value = "/subtitle/test5")
+    public Subtitle test5(){
+        System.out.println("test5 1111111111112222");
+        Subtitle st = new Subtitle();
+        st.setId(10);
+        st.setName("abc");
+        return st;
+    }        
+    
+    
     @RequestMapping(value = "/subtitle/test4")
     public Map<String, Object> test4(){
         System.out.println("111111111444411111111111111112222");
@@ -112,5 +122,12 @@ public class SubtitleCtrl {
         result.put("result1", result1);
         return result;
     }    
+
+    
+    
+    
+    
+    
+    
     
 }
