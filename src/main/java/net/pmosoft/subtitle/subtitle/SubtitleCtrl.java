@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -87,6 +88,7 @@ public class SubtitleCtrl {
     
     
     @RequestMapping(value = "/subtitle/test3")
+    @CrossOrigin(origins="http://localhost:4200")
     public Map<String, Object> test3(){
         System.out.println("111111111444411111111111111112222");
         Map<String, Object> result = new HashMap<String, Object>();
@@ -95,9 +97,26 @@ public class SubtitleCtrl {
         return result;
     }        
 
+    @RequestMapping(value = "/subtitle/test4")
+    @CrossOrigin(origins="http://localhost:4200")
+    public Map<String, Object> test4(@RequestParam Map<String,String> mapParam) {
+    	
+    	System.out.println("mapParam=="+mapParam);
+    	System.out.println("mapParam.name=="+mapParam.get("name"));
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("id", 10);        
+        result.put("name", "abc");
+        return result;
+    }
+    
+    
     @RequestMapping(value = "/subtitle/test5")
-    public Subtitle test5(){
+    @CrossOrigin(origins="http://localhost:4200")
+    public Subtitle test5(Subtitle param){
         System.out.println("test5 1111111111112222");
+        System.out.println("param="+param);
+        System.out.println("param.name="+param.name);
+        
         Subtitle st = new Subtitle();
         st.setId(10);
         st.setName("abc");
@@ -105,8 +124,8 @@ public class SubtitleCtrl {
     }        
     
     
-    @RequestMapping(value = "/subtitle/test4")
-    public Map<String, Object> test4(){
+    @RequestMapping(value = "/subtitle/test6")
+    public Map<String, Object> test6(){
         System.out.println("111111111444411111111111111112222");
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("name", "abc");

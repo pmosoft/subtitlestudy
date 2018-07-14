@@ -1,40 +1,53 @@
 package net.pmosoft.subtitle.usr;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-    
+ 
 /**
+ * @author Administrator
  *
  */
 @RestController
 public class UsrCtrl {
 
-    /**
-     * 유저등록
-     */
+	@Autowired
+	private UsrSrv UsrSrv;
+ 
+	@RequestMapping(value = "/usr/selectUsrList")
+//	public Map<String, Object> selectUsrList(@RequestParam("searchCondition") String searchCondition) {
+	public Map<String, Object> selectUsrList(@RequestParam Map<String,String> params) {
+		return UsrSrv.selectUsrList(params);
+	}
+	
+	@RequestMapping(value = "/usr/saveUsr")
+	public Map<String, Object> saveUsr(@RequestParam Map<String,String> params) {
+		return UsrSrv.saveUsr(params);
+	}	
+	 
+/*	@InitBinder
+	protected void initBinder(WebDataBinder binder){
+		binder.setValidator(new UsrValidator());
+	}
+*/	
 
-    /**
-     * 유저정보 조회
-     */    
-    
-    /**
-     * 유저정보 수정
-     */    
-
-    /**
-     * 유저정보 삭제
-     */        
-    
+	@RequestMapping(value = "/usr/deleteUsr")
+	public Map<String, Object> deleteUsr(@RequestParam Map<String,String> params) {
+		return UsrSrv.deleteUsr(params);
+	}	
+	
+	@RequestMapping(value = "/test")
+	public Map<String, Object> test() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("name", "피승현");
+		result.put("age", 50);
+		return result;
+	}
+	
+	
+	
 }
