@@ -112,17 +112,17 @@ public class SubtitleCtrl {
     
     @RequestMapping(value = "/subtitle/test5")
     @CrossOrigin(origins="http://localhost:4200")
-    public Subtitle test5(Subtitle param){
+    public Subtitle test5(Subtitle subtitle){
         System.out.println("test5 1111111111112222");
-        System.out.println("param="+param);
-        System.out.println("param.name="+param.name);
+        System.out.println("subtitle="+subtitle);
+        System.out.println("subtitle.name="+subtitle.name);
+        System.out.println("subtitle.id="+subtitle.id);
         
         Subtitle st = new Subtitle();
         st.setId(10);
         st.setName("abc");
         return st;
     }        
-    
     
     @RequestMapping(value = "/subtitle/test6")
     public Map<String, Object> test6(){

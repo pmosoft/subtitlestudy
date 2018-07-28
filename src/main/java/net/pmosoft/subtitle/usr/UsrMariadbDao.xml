@@ -3,91 +3,106 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.pmosoft.fframe.syst.usr.UsrDao">
+<mapper namespace="net.pmosoft.subtitle.usr.UsrDao">
 
-<select id="selectUsrList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
- 
-	-- UsrDao.selectUsrList
-	SELECT   
-	         USR_ID
-			,USR_EMAIL
-			,USR_PW
-			,USR_NM
-			,USR_AGE
-			,USE_YN
-			,date_format(REG_DT,'%Y.%m.%d %H:%i:%S') AS REG_DT
-			,REG_USR_ID
-			,date_format(UPD_DT,'%Y.%m.%d %H:%i:%S') AS UPD_DT
-			,UPD_USR_ID 
-	FROM   TSYUR00010
-    WHERE 1=1 
-    AND  (
-          (#{searchKeyCombo} = 'USR_ID' AND USR_ID LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
-	       OR   
-	      (#{searchKeyCombo} = 'USR_NM' AND USR_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
-	     ) 
-	ORDER BY USR_ID 		  	
-</select>
+<insert id="insertUsr" parameterType="net.pmosoft.subtitle.usr.Usr">
 
-<select id="selectUsrCnt" parameterType="java.util.HashMap" resultType="int">
-	-- UsrDao.selectUsrCnt
-	SELECT COUNT(*) CNT 
-	FROM   TSYUR00010
-    WHERE  USR_ID = #{USR_ID}
-</select>
-
-
-<insert id="insertUsr" parameterType="java.util.HashMap">
-
-	-- UsrDao.insertUsr
-	INSERT INTO STTL.TSYUR00010
-	(
-	     USR_ID
-		,USR_EMAIL
-		,USR_PW
-		,USR_NM
-		,USR_AGE
-		,USE_YN
-		,REG_DT
-		,REG_USR_ID
-		,UPD_DT
-		,UPD_USR_ID
-	) VALUES ( 
-         #{USR_ID}
-		,#{USR_EMAIL}
-		,#{USR_PW}
-		,#{USR_NM}
-		,CAST(#{USR_AGE} AS INT)
-		,CASE WHEN #{USE_YN} = 'true' THEN 'Y' ELSE 'N' END
-		,curdate()
-		,#{REG_USR_ID}
-		,curdate()
-		,#{UPD_USR_ID} 
-	)
-		  	
+    -- UsrDao.insertUsr
+    INSERT INTO STTL.TSYUR00010
+    (
+         USR_ID
+        ,USR_EMAIL
+        ,USR_PW
+        ,USR_NM
+        ,USR_AGE
+        ,USE_YN
+        ,REG_DTM
+        ,REG_USR_ID
+        ,UPD_DTM
+        ,UPD_USR_ID
+    ) VALUES ( 
+         #{usrEmail}
+        ,#{usrEmail}
+        ,#{usrPw}
+        ,#{usrNm}
+        ,CAST(#{usrAge} as INT)
+        ,'Y'
+        ,CURDATE()
+        ,'ADMIN'
+        ,CURDATE() 
+        ,'ADMIN' 
+    )
 </insert>
 
 
-<delete id="deleteUsr" parameterType="java.util.HashMap">
-	-- UsrDao.deleteUsr
-	DELETE FROM STTL.TSYUR00010 WHERE USR_ID = #{USR_ID} 
-</delete>
-	
+<select id="selectUsr" parameterType="String" resultType="net.pmosoft.subtitle.usr.Usr">
+    -- UsrDao.selectUsr
+    SELECT   
+           USR_ID
+         , USR_EMAIL
+         , USR_PW
+         , USR_NM
+         , USR_AGE
+         , USE_YN
+         , DATE_FORMAT(REG_DTM,'%Y.%M.%D %H:%I:%S') AS REG_DTM
+         , REG_USR_ID
+         , DATE_FORMAT(UPD_DTM,'%Y.%M.%D %H:%I:%S') AS UPD_DTM
+         , UPD_USR_ID 
+    FROM   TSYUR00010
+    WHERE  USR_EMAIL = #{usrEmail}
+    ORDER BY USR_ID               
+</select>
+
+
+<select id="selectUsrList" parameterType="java.util.HashMap" resultType="net.pmosoft.subtitle.usr.Usr">
+     -- UsrDao.selectUsrList
+    SELECT   
+           USR_ID
+         , USR_EMAIL
+         , USR_PW
+         , USR_NM
+         , USR_AGE
+         , USE_YN
+         , date_format(REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DT
+         , REG_USR_ID
+         , date_format(UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DT
+         , UPD_USR_ID 
+    FROM   TSYUR00010
+    WHERE 1=1 
+    AND  (
+          (#{searchKeyCombo} = 'USR_ID' AND USR_ID LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
+           OR   
+          (#{searchKeyCombo} = 'USR_NM' AND USR_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
+         ) 
+    ORDER BY USR_ID               
+</select>
+
+<select id="selectUsrCnt" parameterType="net.pmosoft.subtitle.usr.Usr" resultType="int">
+    -- UsrDao.selectUsrCnt
+    SELECT COUNT(*) CNT 
+    FROM   TSYUR00010
+    WHERE  USR_EMAIL = #{usrEmail}
+</select>
+
 <update id="updateUsr" parameterType="java.util.HashMap">
-	
-	-- UsrDao.updateUsr
-	UPDATE STTL.TSYUR00010 
-	SET  USR_ID     = #{USR_ID}            
-		,USR_EMAIL  = #{USR_EMAIL}         
-		,USR_PW     = #{USR_PW}            
-		,USR_NM     = #{USR_NM}            
-		,USR_AGE    = CAST(#{USR_AGE} AS INT)
-		,USE_YN      = CASE WHEN #{USE_YN} = 'true' THEN 'Y' ELSE 'N' END
-		,UPD_DT      = curdate()
-		,UPD_USR_ID = #{UPD_USR_ID}
-	WHERE  USR_ID = #{USR_ID}
-	 
+    
+    -- UsrDao.updateUsr
+    UPDATE STTL.TSYUR00010 
+    SET   USR_ID     = #{usrId}            
+        , USR_EMAIL  = #{usrEmail}         
+        , USR_PW     = #{usrPw}            
+        , USR_NM     = #{usrNm}            
+        , USR_AGE    = CAST(#{usrAge} AS INT)
+        , USE_YN     = CASE WHEN #{useYn} = 'true' THEN 'Y' ELSE 'N' END
+        , UPD_DTM     = curdate()
+        , UPD_USR_ID = #{updUsrId}
+    WHERE  USR_ID = #{usrId}
+     
 </update>
 
-	
+<delete id="deleteUsr" parameterType="java.util.HashMap">
+    -- UsrDao.deleteUsr
+    DELETE FROM STTL.TSYUR00010 WHERE USR_ID = #{usrId} 
+</delete>
+    
 </mapper>

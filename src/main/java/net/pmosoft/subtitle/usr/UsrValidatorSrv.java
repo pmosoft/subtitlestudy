@@ -1,4 +1,4 @@
-package net.pmosoft.fframe.syst.usr;
+package net.pmosoft.subtitle.usr;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class UsrValidatorSrv {
 
 	@Autowired
-	private UsrDao UsrDao;
+	private UsrDao usrDao;
 
 	//String configLocation = "classpath:springJdbcOracle.xml"; // src/main/resources/springJdbcOracle.xml
 	//AbstractApplicationContext ctx = new GenericXmlApplicationContext(configLocation);
@@ -26,33 +26,77 @@ public class UsrValidatorSrv {
     //private WebApplicationContext webContext; // WebApplicationContext 주입
  	
     //UsrDao UsrDao = webContext.getBean("UsrDao",UsrDao.class);
-	
-	public Map<String, String> validateSaveUsr(Map<String, String> target) {
 
-		
+	public Map<String, String> validateInsertUsr(Usr usr) {
+
 		Map<String, String> errors = new HashMap<String, String>();
-		if (target.get("USR_ID").length() < 5 || target.get("USR_ID").length() > 15) {
-			errors.put("errUsrMsg", "유저아이디를 5자리에서 14자리로 입력해 주시기 바랍니다.");
-		} else if  (target.get("USR_EMAIL").length() < 5 || target.get("USR_EMAIL").length() > 15) {
-			errors.put("errUsrMsg", "이메일 형식이 아닙니다.");
-		} else if  (target.get("USR_PW").length() < 5 || target.get("USR_PW").length() > 15) {
-			errors.put("errUsrMsg", "유저암호를 5자리에서 14자리로 입력해 주시기 바랍니다.");
-		} else if  (!target.get("USR_PW").equals(target.get("USR_PW2"))) {
-			errors.put("errUsrMsg", "암호와 암호확인을 일치시켜 주십시요.");
-		} else if  (target.get("USR_NM").length() < 5 || target.get("USR_NM").length() > 15) {
-			errors.put("errUsrMsg", "성명을 5자리에서 14자리로 입력해 주시기 바랍니다.");
+		Usr dbUsr = usrDao.selectUsr(usr.getUsrEmail());
+		if (dbUsr == null) {
+			return errors;
+		} else if (dbUsr.getUsrEmail().equals(usr.getUsrEmail())) {
+			errors.put("errUsrMsg", "이미 등록된 유저입니다.");
 		}
+		
+//		if (usr.getUsrId().length() < 5 || usr.getUsrId().length() > 15) {
+//			errors.put("errUsrMsg", "유저아이디를 5자리에서 14자리로 입력해 주시기 바랍니다.");
+//		} else if  (usr.getUsrEmail().length() < 5 || usr.getUsrEmail().length() > 15) {
+//			errors.put("errUsrMsg", "이메일 형식이 아닙니다.");
+//		} else if  (usr.getUsrPw().length() < 5 || usr.getUsrPw().length() > 15) {
+//			errors.put("errUsrMsg", "유저암호를 5자리에서 14자리로 입력해 주시기 바랍니다.");
+//		} else if  (!usr.getUsrPw().equals(usr.getUsrPw2())) {
+//			errors.put("errUsrMsg", "암호와 암호확인을 일치시켜 주십시요.");
+//		} else if  (usr.getUsrNm().length() < 5 || usr.getUsrNm().length() > 15) {
+//			errors.put("errUsrMsg", "성명을 5자리에서 14자리로 입력해 주시기 바랍니다.");
+//		}
+		return errors;
+	}
+	
+	public Map<String, String> validateUsrLogin(Usr usr) {
+
+		Map<String, String> errors = new HashMap<String, String>();
+		Usr dbUsr = usrDao.selectUsr(usr.getUsrEmail());
+		if (dbUsr == null) {
+			errors.put("errUsrMsg", "유저이메일 확인하시거나 유저를 신규 등록 하시기 바랍니다.");
+		} else if (!dbUsr.getUsrPw().equals(usr.getUsrPw())) {
+			errors.put("errUsrMsg", "암호를 확인하시기 바랍니다.");
+		}
+        
+		return errors;
+	}
+		
+	
+	public Map<String, String> validateSaveUsr(Usr usr) {
+
+		Map<String, String> errors = new HashMap<String, String>();
+		Usr dbUsr = usrDao.selectUsr(usr.getUsrEmail());
+		if (dbUsr == null) {
+			return errors;
+		} else if (dbUsr.getUsrEmail().equals(usr.getUsrEmail())) {
+			errors.put("errUsrMsg", "이미 등록된 유저입니다.");
+		}
+		
+//		if (usr.getUsrId().length() < 5 || usr.getUsrId().length() > 15) {
+//			errors.put("errUsrMsg", "유저아이디를 5자리에서 14자리로 입력해 주시기 바랍니다.");
+//		} else if  (usr.getUsrEmail().length() < 5 || usr.getUsrEmail().length() > 15) {
+//			errors.put("errUsrMsg", "이메일 형식이 아닙니다.");
+//		} else if  (usr.getUsrPw().length() < 5 || usr.getUsrPw().length() > 15) {
+//			errors.put("errUsrMsg", "유저암호를 5자리에서 14자리로 입력해 주시기 바랍니다.");
+//		} else if  (!usr.getUsrPw().equals(usr.getUsrPw2())) {
+//			errors.put("errUsrMsg", "암호와 암호확인을 일치시켜 주십시요.");
+//		} else if  (usr.getUsrNm().length() < 5 || usr.getUsrNm().length() > 15) {
+//			errors.put("errUsrMsg", "성명을 5자리에서 14자리로 입력해 주시기 바랍니다.");
+//		}
 		return errors;
 	}
 	
 	
-	public Map<String, String> validateDeleteUsr(Map<String, String> target) {
+	public Map<String, String> validateDeleteUsr(Usr usr) {
 		
 		Map<String, String> errors = new HashMap<String, String>();
-		if (target.get("USR_ID").length() < 5 || target.get("USR_ID").length() > 15) {
+		if (usr.getUsrId().length() < 5 || usr.getUsrId().length() > 15) {
 			errors.put("errUsrMsg", "유저아이디를 5자리에서 14자리로 입력해 주시기 바랍니다.");
-		} else if  (UsrDao.selectUsrCnt(target)==0) {
-			errors.put("errUsrMsg", "아이디가 미존재합니다.");
+		//} else if  (UsrDao.selectUsrCnt(target)==0) {
+		//	errors.put("errUsrMsg", "아이디가 미존재합니다.");
 		}	
 			
 		return errors;

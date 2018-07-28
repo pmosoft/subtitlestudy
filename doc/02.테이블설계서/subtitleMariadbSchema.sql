@@ -1,3 +1,55 @@
+SELECT * FROM STTL.TSYUR00010
+	
+DELETE FROM STTL.TSYUR00010
+
+INSERT INTO STTL.TSYUR00010
+	(
+	     USR_ID
+		,USR_EMAIL
+		,USR_PW
+		,USR_NM
+		,USR_AGE
+		,USE_YN
+		,REG_DTM
+		,REG_USR_ID
+		,UPD_DTM
+		,UPD_USR_ID
+	) VALUES ( 
+         'lifedomy@gmail.com'
+		,'lifedomy@gmail.com'
+		,'12345678'
+		,0
+		,CAST('' as INT)
+		,'Y'
+		,CURDATE()
+		,'ADMIN'
+		,CURDATE() 
+		,'ADMIN' 
+	)
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -----------------------------
 -- 유저
 -----------------------------
@@ -10,13 +62,33 @@ CREATE TABLE STTL.TSYUR00010 (
 ,USR_NM       VARCHAR(40)        NULL comment '사용자명'        
 ,USR_AGE      INT                NULL comment '사용자나이'      
 ,USE_YN       CHAR(1)            NULL comment '사용여부'        
-,REG_DTM      VARCHAR(14)        NULL COMMENT '등록일시'
+,REG_DTM      DATE               NULL COMMENT '등록일시'
 ,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
-,UPD_DTM      VARCHAR(14)        NULL COMMENT '변경일시'
+,UPD_DTM      DATE               NULL COMMENT '변경일시'
 ,UPD_USR_ID   VARCHAR(40)        NULL COMMENT '변경자'
 ,PRIMARY KEY (USR_EMAIL)
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='사용자';
 ;
+
+SELECT   
+	         USR_ID
+			,USR_EMAIL
+			,USR_PW
+			,USR_NM
+			,USR_AGE
+			,USE_YN
+			,date_format(REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DT
+			,REG_USR_ID
+			,date_format(UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DT
+			,UPD_USR_ID 
+	FROM   TSYUR00010
+    WHERE  USR_EMAIL = 'lifedomy@gmail.com'
+	ORDER BY USR_ID
+ 
+
+
+
+
 
 -----------------------------
 -- 유저자막목록

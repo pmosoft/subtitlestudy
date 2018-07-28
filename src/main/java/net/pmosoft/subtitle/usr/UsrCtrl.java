@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,21 +15,65 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 public class UsrCtrl {
 
-	@Autowired
-	private UsrSrv UsrSrv;
- 
+  	@Autowired
+	private UsrSrv usrSrv;
+
+	@RequestMapping(value = "/usr/insertUsr")
+	public Map<String, Object> insertUsr(@RequestBody Usr usr) {
+		return usrSrv.insertUsr(usr);
+	}	
+  	
+  	
+	@RequestMapping(value = "/usr/saveUsr2")
+	public Map<String, Object> saveUsr2(@RequestParam Map<String,String> params) {
+
+		System.out.println(params);		  
+		System.out.println(params.get("usr"));		  
+		System.out.println(params.get("usr.usrEmail"));		  
+		System.out.println(params.get("usrId"));		  
+		System.out.println(params.get("usrEmail"));		
+		System.out.println(params.get("usrPw"));		  
+		System.out.println(params.get("usr"));		      
+		System.out.println(params.get("usr"));		      
+		
+		//return usrSrv.saveUsr(params);
+		return null;
+	}	
+  
+	@RequestMapping(value = "/usr/saveUsr")
+	public Map<String, Object> saveUsr(@RequestBody Usr usr) {
+
+		System.out.println(usr.getUsrId());
+		System.out.println(usr.getUsrEmail());
+		System.out.println(usr.getUsrPw());
+		System.out.println(usr.getUsrPw2());
+		
+		//Usr usr1 = new Usr();
+		//usr1.setUsrEmail("lifehelp@naver.com");
+		
+		return usrSrv.saveUsr(usr);
+	}	
+	
+	@RequestMapping(value = "/usr/selectUsrLogin")
+	public Map<String, Object> selectUsrLogin(@RequestBody Usr usr) {
+		return usrSrv.selectUsrLogin(usr);
+	}	
+	
+	
 	@RequestMapping(value = "/usr/selectUsrList")
-//	public Map<String, Object> selectUsrList(@RequestParam("searchCondition") String searchCondition) {
-	public Map<String, Object> selectUsrList(@RequestParam Map<String,String> params) {
-		return UsrSrv.selectUsrList(params);
+	public Map<String, Object> selectUsrList(@RequestBody Usr usr) {
+		return usrSrv.selectUsrList(usr);
+	}
+
+	@RequestMapping(value = "/usr/selectUsr")
+	public Map<String, Object> selectUsr(@RequestParam String usrEmail) {
+		return usrSrv.selectUsr(usrEmail);
 	}
 	
-	@RequestMapping(value = "/usr/saveUsr")
-	public Map<String, Object> saveUsr(@RequestParam Map<String,String> params) {
-		return UsrSrv.saveUsr(params);
-	}	
+	
 	 
 /*	@InitBinder
 	protected void initBinder(WebDataBinder binder){
@@ -36,8 +82,8 @@ public class UsrCtrl {
 */	
 
 	@RequestMapping(value = "/usr/deleteUsr")
-	public Map<String, Object> deleteUsr(@RequestParam Map<String,String> params) {
-		return UsrSrv.deleteUsr(params);
+	public Map<String, Object> deleteUsr(@RequestParam Usr usr) {
+		return usrSrv.deleteUsr(usr);
 	}	
 	
 	@RequestMapping(value = "/test")

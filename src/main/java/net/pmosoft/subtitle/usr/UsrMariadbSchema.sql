@@ -7,10 +7,10 @@ CREATE TABLE TSYUR00010 (
 ,USR_PW      VARCHAR(100)   NOT NULL comment '사용자암호'      
 ,USR_NM      VARCHAR(40)    NOT NULL comment '사용자명'        
 ,USR_AGE     INT                NULL comment '사용자나이'      
-,USE_YN       CHAR(1)       NOT NULL comment '사용여부'        
-,REG_DT       DATE              NULL comment '등록일시'        
+,USE_YN      CHAR(1)       NOT  NULL comment '사용여부'        
+,REG_DT      DATE               NULL comment '등록일시'        
 ,REG_USR_ID  VARCHAR(20)        NULL comment '등록사용자아이디'
-,UPD_DT       DATE              NULL comment '변경일시'        
+,UPD_DT      DATE               NULL comment '변경일시'        
 ,UPD_USR_ID  VARCHAR(20)        NULL comment '변경사용자아이디'
 ,PRIMARY KEY (USR_ID)
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='사용자';

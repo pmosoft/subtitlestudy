@@ -1,58 +1,66 @@
-//package net.pmosoft.fframe.syst.usr;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//import net.pmosoft.fframe.AbstractTest;
-//import net.pmosoft.fframe.FframeApplication;
-//
-//import org.junit.Before;
-//import org.junit.Ignore;
-//import org.junit.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-//import org.springframework.web.context.WebApplicationContext;
-//import org.junit.runner.RunWith;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-//
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest(classes = FframeApplication.class)
-//public class UsrTest {
-//
-////	@Autowired
-////	private WebApplicationContext webApplicationContext;
-////	private MockMvc mockMvc;
-////
-////	@Before
-////	public void setup() {
-////		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();		
-////	}
-////	@Test
-////	public void testUsrListCtrl() throws Exception { 
-////		 this.mockMvc.perform(get("/"))
-////		 .andDo(print())
-////		 .andExpect(status().isOk())
-////		 .andExpect(model().attributeExists("serverTime"));  
-////		
-////	}
-//	
+package net.pmosoft.subtitle.usr;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import net.pmosoft.subtitle.SubtitlestudyApplication;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = SubtitlestudyApplication.class)
+public class UsrTest {
+
 //	@Autowired
-//	private UsrSrv UsrSrv;
-//	
-//	@Autowired
-//	private UsrDao UsrDao;
+//	private WebApplicationContext webApplicationContext;
+//	private MockMvc mockMvc;
 //
-//	
-//	@Test @Ignore
-//	public void testUsrListDao() { 
-//		Map<String, String> params = new HashMap<String, String>();
-//		//params.put("searchKeyCombo", ""); params.put("searchValue", "");		
-//		params.put("searchKeyCombo", "Usr_ID"); params.put("searchValue", "admin");
-//		UsrDao.selectUsrList(params);
+//	@Before
+//	public void setup() {
+//		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();		
 //	}
-//	
+//	@Test
+//	public void testUsrListCtrl() throws Exception { 
+//		 this.mockMvc.perform(get("/"))
+//		 .andDo(print())
+//		 .andExpect(status().isOk())
+//		 .andExpect(model().attributeExists("serverTime"));  
+//		
+//	}
+	
+	@Autowired
+	private UsrSrv UsrSrv;
+	
+	@Autowired
+	private UsrDao UsrDao;
+
+	@Test
+	public void testUsrCtl() { 
+		Usr usr = new Usr();
+		usr.setUsrEmail("lifedomy@gmail.com");
+		UsrSrv.selectUsr(usr.getUsrEmail());
+	}
+		
+	@Test @Ignore
+	public void testUsrSrv() { 
+		Usr usr = new Usr();
+		usr.setUsrEmail("lifedomy@gmail.com");
+		UsrSrv.selectUsr(usr.getUsrEmail());
+	}
+		
+	@Test @Ignore
+	public void testUsrDao() { 
+		Usr usr = new Usr();
+		usr.setUsrEmail("lifedomy@gmail.com");
+		UsrDao.selectUsr(usr.getUsrEmail());
+	}
+	
 //	@Test @Ignore
 //	public void testUsrList() { 
 //		Map<String, String> params = new HashMap<String, String>();
@@ -122,5 +130,5 @@
 //
 //		testUsrList();
 //	}
-//}
-//
+}
+
