@@ -5,101 +5,101 @@
 
 <mapper namespace="net.pmosoft.fframe.dams.code.SubtitleDao">
 
-<select id="selectSubtitleList" parameterType="java.util.HashMap" resultType="java.util.LinkedHashMap">
+<insert id="insertUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
 
-    -- SubtitleDao.selectSubtitleList
-    SELECT   A.CD_ID_NM    
-            ,A.CD_ID_HNM   
-            ,A.CD_ID_GRP_NM
-            ,A.CD          
-            ,A.CD_NM       
-            ,A.CD_HNM      
-            ,A.CD_DESC      
-            ,A.CD_TY_CD
-            ,C.CD_HNM AS CD_TY_CD_NM   
-            ,A.CD_STS_CD   
-            ,B.CD_HNM AS CD_STS_CD_NM   
-            ,DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
-            ,A.REG_USR_ID
-            ,DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
-            ,A.UPD_USR_ID
-    FROM    TDACM00060 A
-            LEFT JOIN TDACM00060 B
-            ON  B.CD_ID_NM = 'CD_STS_CD'
-            AND B.CD = A.CD_STS_CD
-            LEFT JOIN TDACM00060 C
-            ON  C.CD_ID_NM = 'CD_TY_CD'
-            AND C.CD = A.CD_TY_CD
-    WHERE   A.CD_ID_HNM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
-    OR      A.CD LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
-    OR      A.CD_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
-    OR      A.CD_HNM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
-    OR      A.CD_ID_GRP_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%')
-    ORDER BY A.CD_TY_CD,A.CD_ID_NM, A.CD
-</select>
-
-
-<insert id="insertSubtitle" parameterType="java.util.HashMap">
-
-    -- SubtitleDao.insertSubtitle
-    INSERT INTO TDACM00060
+    -- SubtitleDao.insertUsrSttlMstr
+    INSERT INTO STTL.TSSCM00010
     (
-         CD_ID_NM     
-        ,CD_ID_HNM    
-        ,CD_ID_GRP_NM 
-        ,CD           
-        ,CD_NM        
-        ,CD_HNM       
-        ,CD_DESC      
-        ,CD_TY_CD     
-        ,CD_STS_CD    
-        ,REG_DTM      
-        ,REG_USR_ID   
-        ,UPD_DTM      
-        ,UPD_USR_ID   
+         USR_ID          -- 사용자아이디    
+        ,STTL_NM         -- 자막명      
+        ,FSTTL_NM        -- 외국어자막명      
+        ,MSTTL_NM        -- 모국어자막명      
+        ,REG_DTM         -- 등록일시
+        ,REG_USR_ID      -- 등록자
+        ,UPD_DTM         -- 변경일시
+        ,UPD_USR_ID      -- 변경자
     ) VALUES (
-         #{CD_ID_NM}
-        ,#{CD_ID_HNM}
-        ,#{CD_ID_GRP_NM}
-        ,#{CD}
-        ,#{CD_NM}
-        ,#{CD_HNM}
-        ,#{CD_DESC}
-        ,#{CD_TY_CD}
-        ,#{CD_STS_CD}
-        ,curdate()
-        ,#{REG_USR_ID}
-        ,curdate()
-        ,#{UPD_USR_ID}
+         #{usrId}        -- 사용자아이디    
+        ,#{sttlNm}       -- 자막명      
+        ,#{fsttlNm}      -- 외국어자막명      
+        ,#{msttlNm}      -- 모국어자막명      
+        ,curdate()       -- 등록일시
+        ,#{regUsrId}     -- 등록자
+        ,curdate()       -- 변경일시
+        ,#{updUsrId}     -- 변경자
     )
 </insert>
 
+<insert id="insertUsrSttlDtl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
 
-<update id="updateSubtitle" parameterType="java.util.HashMap">
+    -- SubtitleDao.insertUsrSttlDtl
+    INSERT INTO STTL.TSSCM00020
+    (
+         USR_ID          -- 사용자아이디    
+        ,STTL_NM         -- 자막명      
+        ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+        ,STTL_STM        -- 자막시작시각      
+        ,STTL_ETM        -- 자막종료시각      
+        ,STTL_DESC       -- 자막문장내용
+        ,REG_DTM         -- 등록일시
+        ,REG_USR_ID      -- 등록자
+        ,UPD_DTM         -- 변경일시
+        ,UPD_USR_ID      -- 변경자
+    ) VALUES (
+         #{usrId}        -- 사용자아이디    
+        ,#{sttlNm}       -- 자막명      
+        ,#{sttlCd}       -- 자막구분(1:외국어,2:모국어)  
+        ,#{sttlStm}      -- 자막시작시각             
+        ,#{sttlEtm}      -- 자막종료시각             
+        ,#{sttlDesc}     -- 자막문장내용             
+        ,curdate()       -- 등록일시
+        ,#{regUsrId}     -- 등록자
+        ,curdate()       -- 변경일시
+        ,#{updUsrId}     -- 변경자
+    )
+</insert>
 
-    -- SubtitleDao.updateSubtitle
-    UPDATE TDACM00060
-    SET  CD_ID_NM      = #{CD_ID_NM}
-        ,CD_ID_HNM     = #{CD_ID_HNM}
-        ,CD_ID_GRP_NM  = #{CD_ID_GRP_NM}
-        ,CD            = #{CD}
-        ,CD_NM         = #{CD_NM}
-        ,CD_HNM        = #{CD_HNM}
-        ,CD_DESC       = #{CD_DESC}
-        ,CD_TY_CD      = #{CD_TY_CD}
-        ,CD_STS_CD     = #{CD_STS_CD}
-        ,UPD_DTM       = curdate()
-        ,UPD_USR_ID    = #{UPD_USR_ID}
-    WHERE  CD_ID_NM = #{CD_ID_NM}
-    AND    CD       = #{CD}
+<select id="selectUsrSttlMstrList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
+    SELECT A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.FSTTL_NM        -- 외국어자막명      
+         , A.MSTTL_NM        -- 모국어자막명      
+         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00010 A
+    WHERE  A.USR_ID = #{usrEmail}
+    ORDER BY A.REG_DTM
+</select>
 
-</update>
+<select id="selectUsrSttlDtlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.selectUsrSttlDtlList : 유저자막내용
+    SELECT A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = #{usrEmail}
+    ORDER BY A.REG_DTM
 
+</select>
 
-<delete id="deleteSubtitle" parameterType="java.util.HashMap">
+<delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.deleteSubtitle
-    DELETE FROM TDACM00060 WHERE CD_ID_NM = #{CD_ID_NM} AND CD = #{CD}
+    DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrEmail}
 </delete> 
 
+<delete id="deleteUsrSttlDtl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.deleteSubtitle
+    DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrEmail}
+</delete> 
 
 </mapper>

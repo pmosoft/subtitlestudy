@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 public class SubtitleCtrl {
 
     @Autowired
@@ -31,48 +32,40 @@ public class SubtitleCtrl {
      * @param  
     */
     @RequestMapping(value = "/subtitle/saveUsrSubtitles")
-    public void saveUsrSubtitles(
+    public Map<String, Object> saveUsrSubtitles(
              @RequestPart("uploadFile") MultipartFile foreignSubtitleFile
             ,@RequestPart("uploadFile2") MultipartFile motherSubtitleFile
-            ,@RequestParam String usr
-            ,HttpServletResponse response){
-        try {
+            ,@RequestParam String usrEmail){
             
-             System.out.println("asdf344443sdf==="+foreignSubtitleFile.getName());
-             System.out.println("11222222222222222222221134123412341ddddsdf==="+motherSubtitleFile.getName());
-             System.out.println("asdf33333sdf==="+usr);
-             JSONObject jsonObj = subtitleSrv.saveUsrSubtitles(usr,foreignSubtitleFile,motherSubtitleFile);
-             response.setContentType("text/plain; charset=UTF-8");
-             PrintWriter pw = response.getWriter();
-             pw.print(jsonObj);
-             pw.flush();
-             pw.close();
-        } catch (IOException e) {}
-            //return codeSrv.uploadCodeRegList(files);
+             System.out.println("foreignSubtitleFile.getName()==="+foreignSubtitleFile.getName());
+             System.out.println("motherSubtitleFile.getName()==="+motherSubtitleFile.getName());
+             System.out.println("usrEmail==="+usrEmail);
+
+             return subtitleSrv.saveUsrSubtitles(usrEmail,foreignSubtitleFile,motherSubtitleFile);
     }        
     
     /**
      * 자막목록 조회
      */
-    @RequestMapping(value = "/subtitle/selectUsrSubtitleList")
-    public Map<String, Object> selectUsrSubtitleList(@RequestParam Map<String,String> params) {
-        return subtitleSrv.selectUsrSubtitleList(params);
-    }
-   
-    /**
-     * 자막 저장(Multi:json)
-     */
-    @RequestMapping(value = "/subtitle/saveSubtitle")
-    public Map<String, Object> saveSubtitle(@RequestParam Map<String,String> params) {
-        return subtitleSrv.saveSubtitle(params);
+    @RequestMapping(value = "/subtitle/selectUsrSttlMstrList")
+    public Map<String, Object> selectUsrSttlMstrList(@RequestParam UsrSttlVo inVo) {
+        return subtitleSrv.selectUsrSttlMstrList(inVo);
     }
 
     /**
+     * 자막상세 조회
+     */
+    @RequestMapping(value = "/subtitle/selectUsrSttlDtlList")
+    public Map<String, Object> selectUsrSttlDtlList(@RequestParam UsrSttlVo inVo) {
+        return subtitleSrv.selectUsrSttlDtlList(inVo);
+    }
+    
+    /**
      * 자막 삭제(Multi:json)
      */
-    @RequestMapping(value = "/subtitle/deleteSubtitle")
-    public Map<String, Object> deleteSubtitle(@RequestParam Map<String,String> params) {
-        return subtitleSrv.deleteSubtitle(params);
+    @RequestMapping(value = "/subtitle/deleteUsrSttl")
+    public Map<String, Object> deleteUsrSttl(@RequestParam UsrSttlVo inVo) {
+        return subtitleSrv.deleteUsrSttl(inVo);
     }
 
     @RequestMapping(value = "/subtitle/test")

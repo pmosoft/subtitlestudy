@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.mozilla.universalchardet.UniversalDetector;
+
 import net.pmosoft.fframe.comm.util.FileUtil;
 
 public class ParseSubtitle {
@@ -21,29 +23,99 @@ public class ParseSubtitle {
         //System.out.println(s1.matches("<i>")
         
         ParseSubtitle parseSubtitle = new ParseSubtitle();
-        //String srtfilePathName = "d:/Videos/sincity.srt";
-        //parseSrt.parseSrtFile(srtfilePathName);
+        parseSubtitle.test02();
+    }
 
+    void test02(){
+        //String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
+    	String filePathName="C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Silicon.Valley.S01E01.720p.HDTV.x264-2HD.smi";
+    	getSubtitleVo(filePathName);
+    } 
+    
+    void test01(){
         //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Valerian.and.the.City.of.a.Thousand.Planets.smi";
-        //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/[VIP] Demon City Shinjuku.smi";
-        String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Star Wars Rebels S02E01 - The Siege of Lothal.smi";
-        String srtfilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Star Wars Rebels S02E01 - The Siege of Lothal.srt";
+        String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/[VIP] Demon City Shinjuku.smi";
+        //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Star Wars Rebels S02E01 - The Siege of Lothal.smi";
+        //String srtfilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Star Wars Rebels S02E01 - The Siege of Lothal.srt";
         
         ArrayList<SrtVo> srtList = new ArrayList<SrtVo>();
         ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
 
-        srtList = parseSubtitle.parseSrtFile3(srtfilePathName);
-        smiList = parseSubtitle.parseSmiFile3(smifilePathName);
+        //srtList = parseSubtitle.parseSrtFile3(srtfilePathName);
+        smiList = parseSmiFile(smifilePathName);
         
+        for (int i = 0; i < smiList.size(); i++) {
+        	System.out.println(smiList.get(i).getContent());
+		}
+
         for (int i = 0; i < srtList.size(); i++) {
-        	System.out.println(srtList.get(i).getNum());
-        	System.out.println(srtList.get(i).getContent());
+        	//System.out.println(srtList.get(i).getNum());
+        	//System.out.println(srtList.get(i).getContent());
         	System.out.println(smiList.get(i).getContent());
 		}
         //parseSubtitle.test3();
-    }
+    } 
 
-    public ArrayList<SrtVo> parseSrtFile3(String filePathName) {
+    
+    
+    String verifySrtSmi(String subtitleFilePath) {
+    	//System.out.println("subtitleFilePath=="+subtitleFilePath);
+    	//System.out.println("subtitleFilePath=="+subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()));
+    	//System.out.println("subtitleFilePath=="+subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()).toLowerCase());
+    	return subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()).toLowerCase();
+    }   
+    
+    public SmiSrtSubtitleVo getSubtitleVo(String subtitleFilePath) {
+    	SmiSrtSubtitleVo smiSrtSubtitleVo = new SmiSrtSubtitleVo();    	
+    	smiSrtSubtitleVo.setCategory(verifySrtSmi(subtitleFilePath));
+    	if(smiSrtSubtitleVo.getCategory().equals("smi")) {
+    		smiSrtSubtitleVo.setSmiList(parseSmiFile(subtitleFilePath));
+            for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
+            	System.out.println(smiSrtSubtitleVo.getSmiList().get(i).getContent());
+    		}
+    	} else {
+    		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
+            for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
+            	System.out.println(smiSrtSubtitleVo.getSrtList().get(i).getContent());
+    		}
+    	}
+    	
+    	return smiSrtSubtitleVo;
+    }	
+    
+    
+    @SuppressWarnings("resource")
+	String detectEncoding(String filePathName) {
+    	
+		try {
+			byte[] buf = new byte[4096];
+			//String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
+	    	java.io.FileInputStream fis;
+			fis = new FileInputStream(filePathName);
+			UniversalDetector detector = new UniversalDetector(null);
+			int nread;
+			while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
+				detector.handleData(buf, 0, nread);
+			}
+			detector.dataEnd();
+			String encoding = detector.getDetectedCharset();
+			if (encoding != null) {
+				System.out.println("Detected encoding = " + encoding);
+			} else {
+				System.out.println("No encoding detected.");
+			}
+			detector.reset();
+			
+			return encoding;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}	
+    
+    
+    public ArrayList<SrtVo> parseSrtFile(String filePathName) {
 
     	ArrayList<SrtVo> srtList2 = new ArrayList<SrtVo>();
             	
@@ -56,8 +128,8 @@ public class ParseSubtitle {
 
             File file = new File(filePathName);
             if (file.isFile()) {
-                //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),"EUC-KR"));
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName)));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
+                //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName)));
                 
                 int num = 0;
                 int bnum = 0;
@@ -133,7 +205,7 @@ public class ParseSubtitle {
         
     }
 
-    public ArrayList<SmiVo> parseSmiFile3(String filePathName) {
+    public ArrayList<SmiVo> parseSmiFile(String filePathName) {
 
     	ArrayList<SmiVo> smiList2 = new ArrayList<SmiVo>();
     	
@@ -146,7 +218,9 @@ public class ParseSubtitle {
 
             File file = new File(filePathName);
             if (file.isFile()) {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),"EUC-KR"));
+                //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),"EUC-KR"));
+                //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName)));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
                 int num = 0;
                 int bnum = 0;
                 int rnum = 0;
@@ -229,7 +303,7 @@ public class ParseSubtitle {
 
     
     
-    public void parseSrtFile(String filePathName) {
+    public void parseSrtFile2(String filePathName) {
         //System.out.println(parseSrt.readFile(filePathName));
         String src = FileUtil.readFile(filePathName);
         
@@ -276,7 +350,6 @@ public class ParseSubtitle {
         ArrayList<SmiVo> sl = new ArrayList<SmiVo>();
         SmiVo svo01 = new SmiVo(); svo01.setStime(111); sl.add(svo01);
         SmiVo svo02 = new SmiVo(); svo02.setStime(222); sl.add(svo02);
-        SmiVo svo03 = new SmiVo(); svo01.setStime(111); svo01.setEtime(222);
         
         sl.get(0).print();
         sl.get(1).print();
@@ -284,7 +357,7 @@ public class ParseSubtitle {
     }    
    
     
-    public void parseSrtFile2(String filePathName) {
+    public void parseSrtFile4(String filePathName) {
         //System.out.println(parseSrt.readFile(filePathName));
         String src = FileUtil.readFile(filePathName);
         
@@ -352,7 +425,7 @@ public class ParseSubtitle {
     }
 
 
-    public void parseSmiFile(String filePathName) {
+    public void parseSmiFile3(String filePathName) {
 
         List<SmiVo> smiList = new ArrayList<SmiVo>();
         

@@ -11,7 +11,7 @@ public interface UsrDao {
 	void insertUsr(Usr usr);
 	
 	List<Usr> selectUsrList(Usr usr);
-	Usr selectUsr(String usrEmail);
+	Usr selectUsr(String usrId);
 	int selectUsrCnt(Usr usr);
 	
 	void updateUsr(Usr usr);

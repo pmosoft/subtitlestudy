@@ -1,19 +1,16 @@
 package net.pmosoft.subtitle.subtitle;
 
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pmosoft.subtitle.file.FileInfo;
 import net.pmosoft.subtitle.file.FileSave;
-import net.pmosoft.subtitle.sync.SyncSubtitles;
+import net.pmosoft.subtitle.parse.ParseSubtitle;
+import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
+import net.pmosoft.subtitle.usr.Usr;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,14 +28,22 @@ public class SubtitleSrv {
     @Autowired
     private SubtitleValidatorSrv subtitleValidatorSrv;
 
-    public JSONObject saveUsrSubtitles(String usr, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
+    public Map<String, Object> saveUsrSubtitles(String usr, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
 
-        JSONObject jsonObj = new JSONObject();        
-        List<Map<String,String>> list = null; 
-        
-        try {
-            
-            /************************************************
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, String> errors = new HashMap<String, String>();
+
+		try {
+		
+			//errors = usrValidatorSrv.validateInsertUsr(usr);
+			System.out.println(errors);
+			if(errors.size()>0){
+				result.put("isSuccess", false);
+				result.put("errUsrMsg", errors.get("errUsrMsg"));
+				return result;
+			}
+		
+	        /************************************************
              * 자막파일들 저장
              ************************************************/
             Map<String,ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
@@ -46,42 +51,60 @@ public class SubtitleSrv {
             map = fileSave.saveUsrSubtitles(usr, foreignSubtitleFile, motherSubtitleFile);
            
             /************************************************
-             * 자막파일 합성
+             * 외국어 자막 Vo
              ************************************************/
-            SyncSubtitles syncSubtitles = new SyncSubtitles();
-            //syncSubtitles.syncSubtitles(map.get("foreignSubtitleList"), map.get("motherSubtitleList"));
-            syncSubtitles.syncSubtitles(map.get("subtitleFilePathList").get(0)
-                                       ,map.get("subtitleFilePathList").get(1));
-            
+            ParseSubtitle parseSubtitle = new ParseSubtitle();
+        	SmiSrtSubtitleVo foreignSubtitleVo = parseSubtitle.getSubtitleVo(map.get("subtitleFilePathList").get(0));
+        	SmiSrtSubtitleVo motherSubtitleVo = parseSubtitle.getSubtitleVo(map.get("subtitleFilePathList").get(1));
+
             /************************************************
-             * res 정보 생성
+             * 외국어 자막 저장
              ************************************************/
-            
-            jsonObj.put("Success", true);
-            jsonObj.put("isSuccess", true);
-            jsonObj.put("successMsg", "업로드 되었습니다");
-            jsonObj.put("data", list);
-            
-        } catch (Exception e) {
-            //e.printStackTrace();
-           
-            System.out.println("ExcelSrv asdfasdfasdfasdf");
-            jsonObj.put("isSuccess", false);
-            jsonObj.put("errUsrMsg", "시스템 장애가 발생하였습니다");
-            jsonObj.put("errSysMsg", e.getMessage());
-        } finally {
-            return jsonObj;
-        }
-        
-    }     
+//          // parse foreignSubtitleList
+//          // parse motherSubtitleList
+//          // sync subtitles
+//          // verify
+//          // insert foreignSubtitleList
+//          // insert motherSubtitleList
+//          // insert syncSubtitleList
+//          // return syncSubtitleList
+        	
+        	
+           	result.put("isSuccess", true);
+   	       	result.put("usrMsg", "정상 처리 되었습니다");
+		} catch (Exception e){
+			e.printStackTrace();
+			result.put("errUsrMsg", "시스템 장애가 발생되었습니다.");
+			//result.put("errSysMsg", e.toString());
+		}
+		return result;
+    }  
     
-    public Map<String, Object> selectUsrSubtitleList(Map<String,String> params){
+    public Map<String, Object> selectUsrSttlMstrList(UsrSttlVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<Map<String,Object>> list = null;
-            list = subtitleDao.selectSubtitleList(params);;
+            List<UsrSttlVo> list = null;
+            list = subtitleDao.selectUsrSttlMstrList(inVo);;
+            result.put("isSuccess", true);
+            result.put("data", list);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    public Map<String, Object> selectUsrSttlDtlList(UsrSttlVo inVo){
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            List<UsrSttlVo> list = null;
+            list = subtitleDao.selectUsrSttlDtlList(inVo);;
             result.put("isSuccess", true);
             result.put("data", list);
         } catch (Exception e){
@@ -93,40 +116,24 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> saveSubtitle(Map<String,String> params){
+	public Map<String, Object> deleteUsrSttl(UsrSttlVo inVo){
+		
+		Map<String, Object> result = new HashMap<String, Object>();
 
-        Map<String, Object> result = new HashMap<String, Object>();
-        return result;
-    }
-
-    public Map<String, Object> deleteSubtitle(Map<String,String> params){
-
-        Map<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-            String data = params.get("data");
-            Gson gson = new Gson(); 
-            Type type = new TypeToken<List<Map<String,String>>>() {}.getType();
-            List<Map<String,String>> listParams  = gson.fromJson(data, type);
-            
-            Map<String, String> errors = new HashMap<String, String>();
-            errors = subtitleValidatorSrv.validateDeleteSubtitle(params);
-            if(errors.size()>0){
-                result.put("isSuccess", false);
-                result.put("errUsrMsg", errors.get("errUsrMsg"));
-            } else {
-                for (int i = 0; i < listParams.size(); i++) {
-                    subtitleDao.deleteSubtitle(listParams.get(i));
-                }
-                result.put("isSuccess", true);
-                result.put("usrMsg", "삭제 되었습니다.");
-            }
-        } catch (Exception e){
-            result.put("isSuccess", false);
-            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
-            result.put("errSysMsg", e.getMessage());
-            e.printStackTrace();
-        }
-        return result;
-    }
+		Map<String, String> errors = new HashMap<String, String>();
+		//errors = subtitleValidatorSrv.validateDeleteUsr(usr);
+		if(errors.size()>0){
+			//model.addAttribute("tbUsr", tbUsr);
+			result.put("isSuccess", false);
+			result.put("errUsrMsg", errors.get("errUsrMsg"));
+			System.out.println(result);
+			return result;
+		} else {	 
+			subtitleDao.deleteUsrSttlMstr(inVo);
+			subtitleDao.deleteUsrSttlDtl(inVo);
+			result.put("isSuccess", true);
+			result.put("usrMsg", "삭제 되었습니다");
+			return result;			
+		}	
+	}
 }

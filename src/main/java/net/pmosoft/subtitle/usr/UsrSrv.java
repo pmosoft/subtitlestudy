@@ -19,32 +19,30 @@ public class UsrSrv {
 	public Map<String, Object> insertUsr(Usr usr){
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String> errors = new HashMap<String, String>();
-		errors = usrValidatorSrv.validateInsertUsr(usr);
-		System.out.println(errors);
-		if(errors.size()>0){
-			result.put("isSuccess", false);
-			result.put("errUsrMsg", errors.get("errUsrMsg"));
-			return result;
-		} else {	 
-			try {
-		    	result.put("isSuccess", true);
-				
-			    if  (usrDao.selectUsrCnt(usr)==0) {
-			    	usrDao.insertUsr(usr);
-			    	result.put("usrMsg", "입력 되었습니다");
-			    } else {
-			    	usrDao.updateUsr(usr);
-			    	result.put("usrMsg", "갱신 되었습니다");
-			    }	
-			} catch (Exception e){
-				e.printStackTrace();
-				result.put("errUsrMsg", "시스템 장애가 발생되었습니다.");
-				//result.put("errSysMsg", e.toString());
+
+		try {
+			errors = usrValidatorSrv.validateInsertUsr(usr);
+			System.out.println(errors);
+			if(errors.size()>0){
+				result.put("isSuccess", false);
+				result.put("errUsrMsg", errors.get("errUsrMsg"));
+				return result;
 			}
-			return result;
-		}	
+			
+	    	result.put("isSuccess", true);
+		    if  (usrDao.selectUsrCnt(usr)==0) {
+		    	usrDao.insertUsr(usr);
+		    	result.put("usrMsg", "입력 되었습니다");
+		    } else {
+		    	usrDao.updateUsr(usr);
+		    	result.put("usrMsg", "갱신 되었습니다");
+		    }	
+		} catch (Exception e){
+			e.printStackTrace();
+			result.put("errUsrMsg", "시스템 장애가 발생되었습니다.");
+		}
+		return result;
 	}
-		
 	
 	public Map<String, Object> saveUsr(Usr usr){
 

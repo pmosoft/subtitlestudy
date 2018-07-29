@@ -69,8 +69,8 @@ public class UsrCtrl {
 	}
 
 	@RequestMapping(value = "/usr/selectUsr")
-	public Map<String, Object> selectUsr(@RequestParam String usrEmail) {
-		return usrSrv.selectUsr(usrEmail);
+	public Map<String, Object> selectUsr(@RequestParam String usrId) {
+		return usrSrv.selectUsr(usrId);
 	}
 	
 	
@@ -93,7 +93,5 @@ public class UsrCtrl {
 		result.put("age", 50);
 		return result;
 	}
-	
-	
-	
+
 }

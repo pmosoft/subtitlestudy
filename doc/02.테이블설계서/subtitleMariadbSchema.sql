@@ -27,29 +27,6 @@ INSERT INTO STTL.TSYUR00010
 		,'ADMIN' 
 	)
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -----------------------------
 -- 유저
 -----------------------------
@@ -82,14 +59,9 @@ SELECT
 			,date_format(UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DT
 			,UPD_USR_ID 
 	FROM   TSYUR00010
-    WHERE  USR_EMAIL = 'lifedomy@gmail.com'
+    WHERE  USR_ID = 'lifedomy@gmail.com'
 	ORDER BY USR_ID
  
-
-
-
-
-
 -----------------------------
 -- 유저자막목록
 -----------------------------
@@ -116,15 +88,15 @@ DROP TABLE STTL.TSSCM00020;
 CREATE TABLE STTL.TSSCM00020 (
  USR_ID       VARCHAR(40)    NOT NULL COMMENT '사용자아이디'    
 ,STTL_NM      VARCHAR(100)   NOT NULL COMMENT '자막명'      
+,STTL_CD      CHAR(1)        NOT NULL COMMENT '자막구분(1:외국어,2:모국어)' 
 ,STTL_STM     CHAR(6)        NOT NULL COMMENT '자막시작시각'      
 ,STTL_ETM     CHAR(6)            NULL COMMENT '자막종료시각'      
 ,STTL_DESC    VARCHAR(1000)      NULL COMMENT '자막문장내용'
-,STTL_CD      CHAR(1)            NULL COMMENT '자막구분(1:외국어,2:모국어)' 
 ,REG_DTM      DATE               NULL COMMENT '등록일시'
 ,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
 ,UPD_DTM      DATE               NULL COMMENT '변경일시'
 ,UPD_USR_ID   VARCHAR(40)        NULL COMMENT '변경자'
-,PRIMARY KEY (USR_ID,STTL_NM,STTL_STM)
+,PRIMARY KEY (USR_ID,STTL_NM,STTL_CD,STTL_STM)
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='유저자막내용';
 ;
 

@@ -49,7 +49,7 @@
          , DATE_FORMAT(UPD_DTM,'%Y.%M.%D %H:%I:%S') AS UPD_DTM
          , UPD_USR_ID 
     FROM   TSYUR00010
-    WHERE  USR_EMAIL = #{usrEmail}
+    WHERE  USR_ID = #{usrEmail}
     ORDER BY USR_ID               
 </select>
 
@@ -81,14 +81,14 @@
     -- UsrDao.selectUsrCnt
     SELECT COUNT(*) CNT 
     FROM   TSYUR00010
-    WHERE  USR_EMAIL = #{usrEmail}
+    WHERE  USR_ID = #{usrEmail}
 </select>
 
 <update id="updateUsr" parameterType="java.util.HashMap">
     
     -- UsrDao.updateUsr
     UPDATE STTL.TSYUR00010 
-    SET   USR_ID     = #{usrId}            
+    SET   USR_ID     = #{usrEmail}            
         , USR_EMAIL  = #{usrEmail}         
         , USR_PW     = #{usrPw}            
         , USR_NM     = #{usrNm}            
@@ -96,13 +96,13 @@
         , USE_YN     = CASE WHEN #{useYn} = 'true' THEN 'Y' ELSE 'N' END
         , UPD_DTM     = curdate()
         , UPD_USR_ID = #{updUsrId}
-    WHERE  USR_ID = #{usrId}
+    WHERE  USR_ID = #{usrEmail}
      
 </update>
 
 <delete id="deleteUsr" parameterType="java.util.HashMap">
     -- UsrDao.deleteUsr
-    DELETE FROM STTL.TSYUR00010 WHERE USR_ID = #{usrId} 
+    DELETE FROM STTL.TSYUR00010 WHERE USR_ID = #{usrEmail} 
 </delete>
     
 </mapper>

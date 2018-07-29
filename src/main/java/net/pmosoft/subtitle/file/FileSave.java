@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class FileSave {
 
-    public Map<String,ArrayList<String>> saveUsrSubtitles( String usr
+    public Map<String,ArrayList<String>> saveUsrSubtitles( String usrId
                                  , MultipartFile foreignSubtitleFile
                                  , MultipartFile motherSubtitleFile) 
     {
@@ -27,7 +27,7 @@ public class FileSave {
         
         try {
            // 유저 파일폴더 생성
-            String usrFilePathNm = FileInfo.basicPath+usr+"/";
+            String usrFilePathNm = FileInfo.basicPath+usrId+"/";
             fileUtil.makeDir(usrFilePathNm);
             
             // 외국어 자막 파일 저장            
