@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.pmosoft.fframe.dams.code.SubtitleDao">
+<mapper namespace="net.pmosoft.subtitle.subtitle.SubtitleDao">
 
 <insert id="insertUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
 
@@ -70,7 +70,7 @@
          , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00010 A
-    WHERE  A.USR_ID = #{usrEmail}
+    WHERE  A.USR_ID = #{usrId}
     ORDER BY A.REG_DTM
 </select>
 
@@ -87,19 +87,19 @@
          , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00020 A
-    WHERE  A.USR_ID = #{usrEmail}
+    WHERE  A.USR_ID = #{usrId}
     ORDER BY A.REG_DTM
 
 </select>
 
 <delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
-    -- SubtitleDao.deleteSubtitle
-    DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrEmail}
+    -- SubtitleDao.deleteUsrSttlMstr
+    DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
 </delete> 
 
 <delete id="deleteUsrSttlDtl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
-    -- SubtitleDao.deleteSubtitle
-    DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrEmail}
+    -- SubtitleDao.deleteUsrSttlDtl
+    DELETE FROM STTL.TSSCM00020 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
 </delete> 
 
 </mapper>

@@ -28,7 +28,7 @@ public class SubtitleSrv {
     @Autowired
     private SubtitleValidatorSrv subtitleValidatorSrv;
 
-    public Map<String, Object> saveUsrSubtitles(String usr, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
+    public Map<String, Object> saveUsrSubtitles(String usrId, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String> errors = new HashMap<String, String>();
@@ -48,7 +48,7 @@ public class SubtitleSrv {
              ************************************************/
             Map<String,ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
             FileSave fileSave = new FileSave();
-            map = fileSave.saveUsrSubtitles(usr, foreignSubtitleFile, motherSubtitleFile);
+            map = fileSave.saveUsrSubtitles(usrId, foreignSubtitleFile, motherSubtitleFile);
            
             /************************************************
              * 외국어 자막 Vo
@@ -60,6 +60,39 @@ public class SubtitleSrv {
             /************************************************
              * 외국어 자막 저장
              ************************************************/
+        	UsrSttlVo usrSttlVo = new UsrSttlVo();
+        	
+        	// 유저 자막 정보 저장
+        	usrSttlVo.setUsrId(usrId);
+        	usrSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
+        	subtitleDao.deleteUsrSttlMstr(usrSttlVo);
+        	subtitleDao.insertUsrSttlMstr(usrSttlVo);
+        	
+        	// 유저 외국어 자막 내용  저장
+        	subtitleDao.deleteUsrSttlDtl(usrSttlVo);
+        	if(foreignSubtitleVo.getExtention().equals("smi")) {
+        		for (int i = 0; i < foreignSubtitleVo.getSmiList().size(); i++) {
+        			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
+                	usrForiegnSttlVo.setUsrId(usrId);
+                	usrForiegnSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
+                	usrForiegnSttlVo.setSttlCd("1");
+              		usrForiegnSttlVo.setSttlStm(foreignSubtitleVo.getSmiList().get(i).getStime()+"");
+              		usrForiegnSttlVo.setSttlEtm(foreignSubtitleVo.getSmiList().get(i).getEtime()+"");
+              		usrForiegnSttlVo.setSttlDesc(foreignSubtitleVo.getSmiList().get(i).getContent());
+              		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
+				}
+        	} else {
+        		for (int i = 0; i < foreignSubtitleVo.getSrtList().size(); i++) {
+        			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
+                	usrForiegnSttlVo.setUsrId(usrId);
+                	usrForiegnSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
+                	usrForiegnSttlVo.setSttlCd("1");
+              		usrForiegnSttlVo.setSttlStm(foreignSubtitleVo.getSrtList().get(i).getStime()+"");
+              		usrForiegnSttlVo.setSttlEtm(foreignSubtitleVo.getSrtList().get(i).getEtime()+"");
+              		usrForiegnSttlVo.setSttlDesc(foreignSubtitleVo.getSrtList().get(i).getContent());
+              		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
+				}
+        	}	
 //          // parse foreignSubtitleList
 //          // parse motherSubtitleList
 //          // sync subtitles

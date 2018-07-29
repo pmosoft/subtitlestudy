@@ -65,6 +65,8 @@ SELECT
 -----------------------------
 -- 유저자막목록
 -----------------------------
+	
+	
 DROP TABLE STTL.TSSCM00010;
 
 CREATE TABLE STTL.TSSCM00010 (
@@ -83,14 +85,16 @@ CREATE TABLE STTL.TSSCM00010 (
 -----------------------------
 -- 유저자막내용
 -----------------------------
+SELECT * FROM STTL.TSSCM00020 ORDER BY CAST(STTL_STM AS INT);
+
 DROP TABLE STTL.TSSCM00020;
 
 CREATE TABLE STTL.TSSCM00020 (
  USR_ID       VARCHAR(40)    NOT NULL COMMENT '사용자아이디'    
 ,STTL_NM      VARCHAR(100)   NOT NULL COMMENT '자막명'      
 ,STTL_CD      CHAR(1)        NOT NULL COMMENT '자막구분(1:외국어,2:모국어)' 
-,STTL_STM     CHAR(6)        NOT NULL COMMENT '자막시작시각'      
-,STTL_ETM     CHAR(6)            NULL COMMENT '자막종료시각'      
+,STTL_STM     VARCHAR(50)        NOT NULL COMMENT '자막시작시각'      
+,STTL_ETM     VARCHAR(50)            NULL COMMENT '자막종료시각'      
 ,STTL_DESC    VARCHAR(1000)      NULL COMMENT '자막문장내용'
 ,REG_DTM      DATE               NULL COMMENT '등록일시'
 ,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
