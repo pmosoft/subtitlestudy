@@ -31,17 +31,8 @@ public class SubtitleSrv {
     public Map<String, Object> saveUsrSubtitles(String usrId, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, String> errors = new HashMap<String, String>();
 
 		try {
-		
-			//errors = usrValidatorSrv.validateInsertUsr(usr);
-			System.out.println(errors);
-			if(errors.size()>0){
-				result.put("isSuccess", false);
-				result.put("errUsrMsg", errors.get("errUsrMsg"));
-				return result;
-			}
 		
 	        /************************************************
              * 자막파일들 저장
@@ -51,14 +42,23 @@ public class SubtitleSrv {
             map = fileSave.saveUsrSubtitles(usrId, foreignSubtitleFile, motherSubtitleFile);
            
             /************************************************
-             * 외국어 자막 Vo
+             * 파싱 자막 Vo
              ************************************************/
-            ParseSubtitle parseSubtitle = new ParseSubtitle();
-        	SmiSrtSubtitleVo foreignSubtitleVo = parseSubtitle.getSubtitleVo(map.get("subtitleFilePathList").get(0));
-        	SmiSrtSubtitleVo motherSubtitleVo = parseSubtitle.getSubtitleVo(map.get("subtitleFilePathList").get(1));
+            ParseSubtitle parseSubtitle1 = new ParseSubtitle();
+            ParseSubtitle parseSubtitle2 = new ParseSubtitle();
+        	SmiSrtSubtitleVo foreignSubtitleVo = parseSubtitle1.getSubtitleVo(map.get("subtitleFilePathList").get(0));
+        	SmiSrtSubtitleVo motherSubtitleVo = parseSubtitle2.getSubtitleVo(map.get("subtitleFilePathList").get(1));
 
+//        	System.out.println(map.get("subtitleFilePathList").get(0));
+//        	System.out.println(map.get("subtitleFilePathList").get(1));
+//        	System.out.println("11="+foreignSubtitleVo.getSmiList().size());
+//        	System.out.println("11="+foreignSubtitleVo.getSrtList().size());
+//        	System.out.println("11="+motherSubtitleVo.getSmiList().size());
+//        	System.out.println("22="+motherSubtitleVo.getSrtList().size());
+        	
+        	
             /************************************************
-             * 외국어 자막 저장
+             * 자막 저장
              ************************************************/
         	UsrSttlVo usrSttlVo = new UsrSttlVo();
         	
@@ -70,38 +70,8 @@ public class SubtitleSrv {
         	
         	// 유저 외국어 자막 내용  저장
         	subtitleDao.deleteUsrSttlDtl(usrSttlVo);
-        	if(foreignSubtitleVo.getExtention().equals("smi")) {
-        		for (int i = 0; i < foreignSubtitleVo.getSmiList().size(); i++) {
-        			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
-                	usrForiegnSttlVo.setUsrId(usrId);
-                	usrForiegnSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
-                	usrForiegnSttlVo.setSttlCd("1");
-              		usrForiegnSttlVo.setSttlStm(foreignSubtitleVo.getSmiList().get(i).getStime()+"");
-              		usrForiegnSttlVo.setSttlEtm(foreignSubtitleVo.getSmiList().get(i).getEtime()+"");
-              		usrForiegnSttlVo.setSttlDesc(foreignSubtitleVo.getSmiList().get(i).getContent());
-              		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
-				}
-        	} else {
-        		for (int i = 0; i < foreignSubtitleVo.getSrtList().size(); i++) {
-        			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
-                	usrForiegnSttlVo.setUsrId(usrId);
-                	usrForiegnSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
-                	usrForiegnSttlVo.setSttlCd("1");
-              		usrForiegnSttlVo.setSttlStm(foreignSubtitleVo.getSrtList().get(i).getStime()+"");
-              		usrForiegnSttlVo.setSttlEtm(foreignSubtitleVo.getSrtList().get(i).getEtime()+"");
-              		usrForiegnSttlVo.setSttlDesc(foreignSubtitleVo.getSrtList().get(i).getContent());
-              		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
-				}
-        	}	
-//          // parse foreignSubtitleList
-//          // parse motherSubtitleList
-//          // sync subtitles
-//          // verify
-//          // insert foreignSubtitleList
-//          // insert motherSubtitleList
-//          // insert syncSubtitleList
-//          // return syncSubtitleList
-        	
+        	insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
+        	insertUsrSttlDtl(usrId, motherSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
         	
            	result.put("isSuccess", true);
    	       	result.put("usrMsg", "정상 처리 되었습니다");
@@ -112,6 +82,33 @@ public class SubtitleSrv {
 		}
 		return result;
     }  
+    
+    private void insertUsrSttlDtl(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
+    	
+    	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+    		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
+    			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
+            	usrForiegnSttlVo.setUsrId(usrId);
+            	usrForiegnSttlVo.setSttlNm(fileName);
+            	usrForiegnSttlVo.setSttlCd(sttlCd);
+          		usrForiegnSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
+          		usrForiegnSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
+          		usrForiegnSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
+           		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
+			}
+    	} else {
+    		for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
+    			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
+            	usrForiegnSttlVo.setUsrId(usrId);
+            	usrForiegnSttlVo.setSttlNm(fileName);
+            	usrForiegnSttlVo.setSttlCd(sttlCd);
+          		usrForiegnSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
+          		usrForiegnSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
+          		usrForiegnSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
+          		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
+			}
+    	}
+    }
     
     public Map<String, Object> selectUsrSttlMstrList(UsrSttlVo inVo){
 

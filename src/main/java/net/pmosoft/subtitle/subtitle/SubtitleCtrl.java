@@ -37,9 +37,9 @@ public class SubtitleCtrl {
             ,@RequestPart("uploadFile2") MultipartFile motherSubtitleFile
             ,@RequestParam String usrEmail){
             
-             System.out.println("foreignSubtitleFile.getName()==="+foreignSubtitleFile.getName());
-             System.out.println("motherSubtitleFile.getName()==="+motherSubtitleFile.getName());
-             System.out.println("usrEmail==="+usrEmail);
+             //System.out.println("foreignSubtitleFile.getName()==="+foreignSubtitleFile.getName());
+             //System.out.println("motherSubtitleFile.getName()==="+motherSubtitleFile.getName());
+             //System.out.println("usrEmail==="+usrEmail);
 
              return subtitleSrv.saveUsrSubtitles(usrEmail,foreignSubtitleFile,motherSubtitleFile);
     }        

@@ -42,17 +42,20 @@ public class ParseSubtitle {
      * 메인 : 샘파일를 파싱하여 VO로 리턴
      */
     public SmiSrtSubtitleVo getSubtitleVo(String subtitleFilePath) {
-    	SmiSrtSubtitleVo smiSrtSubtitleVo = new SmiSrtSubtitleVo();    	
+    	SmiSrtSubtitleVo smiSrtSubtitleVo = new SmiSrtSubtitleVo(); 
+    	System.out.println(subtitleFilePath +":"+ verifySrtSmi(subtitleFilePath));
     	smiSrtSubtitleVo.setExtention(verifySrtSmi(subtitleFilePath));
     	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+    		System.out.println("smi");
     		smiSrtSubtitleVo.setSmiList(parseSmiFile(subtitleFilePath));
             for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-            	smiSrtSubtitleVo.getSmiList().get(i).print();
+            	//smiSrtSubtitleVo.getSmiList().get(i).print();
     		}
     	} else {
+    		System.out.println("srt");
     		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
             for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-            	smiSrtSubtitleVo.getSrtList().get(i).print();
+            	//smiSrtSubtitleVo.getSrtList().get(i).print();
     		}
     	}
     	
@@ -72,9 +75,12 @@ public class ParseSubtitle {
         
         BufferedReader br = null;
         String src = "";
+        ArrayList<SrtVo> srtList = new ArrayList<SrtVo>();
+
         try {
 
             File file = new File(filePathName);
+            
             if (file.isFile()) {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
                 //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName)));
@@ -84,13 +90,12 @@ public class ParseSubtitle {
                 int rnum = 0;
                 String stime = "";
                 String etime = "";
-                ArrayList<SrtVo> srtList = new ArrayList<SrtVo>();
                 
                 String timeParseRule = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9] --> [0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
                 
                 while (true) {
                     String str = br.readLine();
-                    //System.out.println("str="+str);
+                    System.out.println("str="+str);
                     if (str != null) {
                         if(str.matches("[0-9]+$")) {
                         } else if(str.matches(timeParseRule)) {
@@ -124,13 +129,15 @@ public class ParseSubtitle {
                 }
                 br.close();
                 
-                
                 num = 0;
                 // stime별로 content를 합친다
                 String content2 = "";
-                for (int i = 0; i < srtList.size(); i++) {
-                    if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
-                        content2 += srtList.get(i).getContent();
+                for (int i = 0; i < srtList.size()-1; i++) {
+                	//System.out.println(srtList.size() +":"+ i);
+                	//System.out.println(srtList.get(i).getContent());
+                	if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
+                        //System.out.println(srtList.get(i).getContent());
+                    	content2 += srtList.get(i).getContent();
                     } else {
                         SrtVo tvo = new SrtVo(); 
                         tvo.setNum(++num);
@@ -144,10 +151,10 @@ public class ParseSubtitle {
                 }                     
             }
         } catch (Exception e) {
-            System.out.println("e=" + e.getMessage());
+            System.out.println("parseSrtFile Exception=" + e.getMessage());
         }
         
-        return srtList2;
+        return srtList;
         //String src2 = src.replaceAll("<br>\n", " ");
         //System.out.println(src2.substring(328+7,src2.length()));
         
@@ -159,6 +166,7 @@ public class ParseSubtitle {
      */    
     public ArrayList<SmiVo> parseSmiFile(String filePathName) {
 
+    	System.out.println("parseSmiFile=="+filePathName);
     	ArrayList<SmiVo> smiList2 = new ArrayList<SmiVo>();
     	
         Pattern p; Matcher m;
@@ -182,6 +190,7 @@ public class ParseSubtitle {
                 
                 while (true) {
                     String str = br.readLine();
+                    //System.out.println(str);
                     if (str != null) {
                         if(str.matches("<SYNC.*")) {
                             // rnum의 기반을 산출한다.
@@ -210,6 +219,9 @@ public class ParseSubtitle {
                 }
                 br.close();
                 
+                //System.out.println("smiList.size()=="+smiList.size());
+                
+                
                 // etime를 세팅한다
                 for (int i = 0; i < smiList.size(); i++) {
                     if(i < smiList.size()-1) {
@@ -227,7 +239,8 @@ public class ParseSubtitle {
                 num = 0;
                 // stime별로 content를 합친다
                 String content2 = "";
-                for (int i = 0; i < smiList.size(); i++) {
+                for (int i = 0; i < smiList.size()-1; i++) {
+                	//System.out.println(smiList.get(i).getContent());
                     if(smiList.get(i).getStime() == smiList.get(i+1).getStime()) {
                         content2 += smiList.get(i).getContent();
                     } else {
