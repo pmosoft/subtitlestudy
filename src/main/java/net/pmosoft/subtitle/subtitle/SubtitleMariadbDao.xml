@@ -59,6 +59,32 @@
     )
 </insert>
 
+<select id="selectUsrRecentlySttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.selectUsrRecentlySttl : 유저 최근 등록 자막
+    SELECT A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , A.REG_DTM AS REG_DTM
+         , A.REG_USR_ID
+         , A.UPD_DTM AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = #{usrId}
+    AND    A.STTL_NM = (
+                        SELECT STTL_NM 
+                        FROM STTL.TSSCM00010 
+                        WHERE USR_ID = #{usrId}
+                        AND   REG_DTM = (SELECT MAX(REG_DTM) 
+                                         FROM STTL.TSSCM00010 
+                                         WHERE USR_ID = #{usrId}
+                                         ) 
+                        )
+    ORDER BY A.REG_DTM
+</select>
+
 <select id="selectUsrSttlMstrList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
     SELECT A.USR_ID          -- 사용자아이디    
@@ -69,7 +95,7 @@
          , A.REG_USR_ID
          , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
          , A.UPD_USR_ID
-    FROM   STTL.TSSCM00010 A
+    FROM   STTL.TSSCM00020 A
     WHERE  A.USR_ID = #{usrId}
     ORDER BY A.REG_DTM
 </select>

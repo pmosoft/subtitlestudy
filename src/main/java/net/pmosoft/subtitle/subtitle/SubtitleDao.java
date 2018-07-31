@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SubtitleDao {
     void insertUsrSttlMstr(UsrSttlVo inVo);
     void insertUsrSttlDtl(UsrSttlVo inVo);
+    List<UsrSttlVo> selectUsrRecentlySttl(String usrId);
     List<UsrSttlVo> selectUsrSttlMstrList(UsrSttlVo inVo);
     List<UsrSttlVo> selectUsrSttlDtlList(UsrSttlVo inVo);
     void deleteUsrSttlMstr(UsrSttlVo inVo);

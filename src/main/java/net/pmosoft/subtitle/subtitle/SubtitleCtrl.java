@@ -1,16 +1,12 @@
 package net.pmosoft.subtitle.subtitle;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -52,6 +48,15 @@ public class SubtitleCtrl {
         return subtitleSrv.selectUsrSttlMstrList(inVo);
     }
 
+    /**
+     * 유저 최근 등록 자막 조회
+     */                       
+    @RequestMapping(value = "/subtitle/selectUsrRecentlySttl")
+    public Map<String, Object> selectUsrRecentlySttl(@RequestBody String usrId) {
+        return subtitleSrv.selectUsrRecentlySttl(usrId);
+    }
+    
+    
     /**
      * 자막상세 조회
      */
