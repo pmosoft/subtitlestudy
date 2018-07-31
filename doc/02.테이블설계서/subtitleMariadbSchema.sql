@@ -90,6 +90,20 @@ WHERE STTL_NM LIKE 'V%'
 AND STTL_CD = '2'
 ORDER BY CAST(STTL_STM AS INT);
 
+    SELECT distinct A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = 'lifedomy@gmail.com'
+    AND    A.STTL_NM = (
+                        SELECT STTL_NM 
+                        FROM STTL.TSSCM00010 
+                        WHERE USR_ID = 'lifedomy@gmail.com'
+                        AND   REG_DTM = (SELECT MAX(REG_DTM) 
+                                         FROM STTL.TSSCM00010 
+                                         WHERE USR_ID = 'lifedomy@gmail.com'
+                                         ) 
+                        )
+    ORDER BY A.REG_DTM
+
 DROP TABLE STTL.TSSCM00020;
 
 CREATE TABLE STTL.TSSCM00020 (
