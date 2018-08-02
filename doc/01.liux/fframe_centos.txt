@@ -7,7 +7,7 @@ tail -f /home/fframe/webapp/nohup.out
 ps -ef | grep fframe
 kill
 
-==> springboot´Â ÅèÄ¹ÀÌ ³»ÀåµÇ¾úÀ¸¹Ç·Î º°µµÀÇ ÅèÄ¹¼­¹ö°¡ ÇÊ¿ä¾ø´Ù.
+==> springbootï¿½ï¿½ ï¿½ï¿½Ä¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½.
 
 ###############
 ## bashrc
@@ -38,10 +38,10 @@ export PATH=$PATH:/usr/local/apache-maven-3.5.0/bin
 setterm -blank 0
 
 ###############
-## root ÀÚµ¿·Î±×ÀÎ
+## root ï¿½Úµï¿½ï¿½Î±ï¿½ï¿½ï¿½
 ###############
-vi /etc/gdm/custom.conf ¿¡¼­ ¼³Á¤
-[daemon] ¹Ø¿¡ ¾Æ·¡ÀÇ ¼³Á¤°ª Ãß°¡.
+vi /etc/gdm/custom.conf ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+[daemon] ï¿½Ø¿ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½.
 AutomaticLoginEnable=true
 AutomaticLogin=root
 
@@ -50,12 +50,19 @@ AutomaticLogin=root
 ###############
 root/life200727
 fframe/life200727
+subtitle/life200727
+
+useradd subtitle
+passwd subtitle
+life200727
+ 
+
 
 mysql -u root -plife200727
 
 
 #####################################################
-## ¹æÈ­º® ÇØÁ¦
+## ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #####################################################
 systemctl stop firewalld
 systemctl disable firewalld

@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
 
 import org.mozilla.universalchardet.UniversalDetector;
 
-import net.pmosoft.fframe.comm.util.FileUtil;
+import net.pmosoft.subtitle.file.FileUtil;
+
 
 public class ParseSubtitle {
 

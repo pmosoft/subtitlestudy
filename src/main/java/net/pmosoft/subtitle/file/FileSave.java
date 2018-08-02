@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pmosoft.fframe.comm.util.FileUtil;
 
 import org.springframework.web.multipart.MultipartFile;
 
