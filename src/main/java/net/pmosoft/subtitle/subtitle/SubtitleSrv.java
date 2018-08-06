@@ -1,22 +1,17 @@
 package net.pmosoft.subtitle.subtitle;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pmosoft.subtitle.file.FileSave;
-import net.pmosoft.subtitle.parse.ParseSubtitle;
-import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
-import net.pmosoft.subtitle.usr.Usr;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import net.pmosoft.subtitle.file.FileSave;
+import net.pmosoft.subtitle.parse.ParseSubtitle;
+import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
 
 
 @Service
@@ -90,29 +85,35 @@ public class SubtitleSrv {
     	String result = "";
     	
     	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
     		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-    			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
-            	usrForiegnSttlVo.setUsrId(usrId);
-            	usrForiegnSttlVo.setSttlNm(fileName);
-            	usrForiegnSttlVo.setSttlCd(sttlCd);
-          		usrForiegnSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
-          		usrForiegnSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
-          		usrForiegnSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
-           		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
+    			UsrSttlVo usrSttlVo = new UsrSttlVo();
+    			
+            	usrSttlVo.setUsrId(usrId);
+            	usrSttlVo.setSttlNm(fileName);
+            	usrSttlVo.setSttlCd(sttlCd);
+          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
+          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
+          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
+          		usrSttlListVo.add(usrSttlVo);
            		result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
 			}
+      		subtitleDao.insertUsrSttlDtl(usrSttlListVo);
+
     	} else {
+			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
     		for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-    			UsrSttlVo usrForiegnSttlVo = new UsrSttlVo();
-            	usrForiegnSttlVo.setUsrId(usrId);
-            	usrForiegnSttlVo.setSttlNm(fileName);
-            	usrForiegnSttlVo.setSttlCd(sttlCd);
-          		usrForiegnSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
-          		usrForiegnSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
-          		usrForiegnSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
-          		subtitleDao.insertUsrSttlDtl(usrForiegnSttlVo);
-           		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
+    			UsrSttlVo usrSttlVo = new UsrSttlVo();
+            	usrSttlVo.setUsrId(usrId);
+            	usrSttlVo.setSttlNm(fileName);
+            	usrSttlVo.setSttlCd(sttlCd);
+          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
+          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
+          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
+          		usrSttlListVo.add(usrSttlVo);
+          		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
 			}
+      		subtitleDao.insertUsrSttlDtl(usrSttlListVo);
     	}
     	return result;
     }
@@ -134,7 +135,7 @@ public class SubtitleSrv {
    	       		else motherSubtitle += list.get(i).getSttlDesc() + "\n";
    	       	}
    	       	
-   	       	System.out.println("foreignSubtitle="+foreignSubtitle);
+   	       	//System.out.println("foreignSubtitle="+foreignSubtitle);
    	       	
             result.put("isSuccess", true);
             result.put("subtitleListVo", list);

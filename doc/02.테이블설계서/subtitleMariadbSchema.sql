@@ -1,5 +1,74 @@
+    SELECT DISTINCT
+           A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , A.REG_DTM AS REG_DTM
+         , A.REG_USR_ID
+         , A.UPD_DTM AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = 'lifedomy@gmail.com'
+    AND    A.STTL_NM = (
+                        SELECT MAX(STTL_NM) 
+                        FROM   STTL.TSSCM00010 
+                        WHERE  USR_ID = 'lifedomy@gmail.com'
+                        AND    REG_DTM = (SELECT MAX(REG_DTM) 
+                                          FROM STTL.TSSCM00010 
+                                          WHERE USR_ID = 'lifedomy@gmail.com'
+                                          ) 
+                        )
+    ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
+
+
+DELIMITER
+
+BEGIN
+
+INSERT INTO STTL.TSSCM00020 VALUES ('lifedomy@gmail.com','Silicon.Valley.S01E02.720p.HDTV.x264-2HD.smi','2','1602830','1606670','- Thank you.<BR>- Sorry. Ok.',now(),NULL,now(),NULL);
+INSERT INTO STTL.TSSCM00020 VALUES ('lifedomy@gmail.com','Silicon.Valley.S01E02.720p.HDTV.x264-2HD.smi','2','1602830','1606670','- Thank you.<BR>- Sorry. Ok.',now(),NULL,now(),NULL);
+		
+END
+
+END
+
+SELECT  
+           A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , A.REG_DTM AS REG_DTM
+         , A.REG_USR_ID
+         , A.UPD_DTM AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = 'lifedomy@gmail.com'
+    AND    A.STTL_NM = (
+                        SELECT MAX(STTL_NM) 
+                        FROM STTL.TSSCM00010 
+                        WHERE USR_ID = 'lifedomy@gmail.com'
+                        AND   REG_DTM = (SELECT MAX(REG_DTM) 
+                                         FROM STTL.TSSCM00010 
+                                         WHERE USR_ID = 'lifedomy@gmail.com'
+                                         ) 
+                        )
+    ORDER BY A.REG_DTM
+
+DELETE FROM STTL.TSSCM00010 
+                        
+DELETE FROM STTL.TSSCM00020 
+    
+SELECT * FROM STTL.TSSCM00010
+    
+SELECT * FROM STTL.TSSCM00020
+
 SELECT * FROM STTL.TSYUR00010
-	
+
+
 DELETE FROM STTL.TSYUR00010
 
 INSERT INTO STTL.TSYUR00010
@@ -39,9 +108,9 @@ CREATE TABLE STTL.TSYUR00010 (
 ,USR_NM       VARCHAR(40)        NULL comment '사용자명'        
 ,USR_AGE      INT                NULL comment '사용자나이'      
 ,USE_YN       CHAR(1)            NULL comment '사용여부'        
-,REG_DTM      DATE               NULL COMMENT '등록일시'
+,REG_DTM      TIMESTAMP          NULL COMMENT '등록일시'
 ,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
-,UPD_DTM      DATE               NULL COMMENT '변경일시'
+,UPD_DTM      TIMESTAMP          NULL COMMENT '변경일시'
 ,UPD_USR_ID   VARCHAR(40)        NULL COMMENT '변경자'
 ,PRIMARY KEY (USR_EMAIL)
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='사용자';
@@ -74,9 +143,9 @@ CREATE TABLE STTL.TSSCM00010 (
 ,STTL_NM      VARCHAR(100)   NOT NULL COMMENT '자막명'      
 ,FSTTL_NM     VARCHAR(100)       NULL COMMENT '외국어자막명'      
 ,MSTTL_NM     VARCHAR(100)       NULL COMMENT '모국어자막명'      
-,REG_DTM      DATE               NULL COMMENT '등록일시'
+,REG_DTM      TIMESTAMP          NULL COMMENT '등록일시'
 ,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
-,UPD_DTM      DATE               NULL COMMENT '변경일시'
+,UPD_DTM      TIMESTAMP          NULL COMMENT '변경일시'
 ,UPD_USR_ID   VARCHAR(40)        NULL COMMENT '변경자'
 ,PRIMARY KEY (USR_ID,STTL_NM)
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='유저자막목록';
@@ -113,9 +182,9 @@ CREATE TABLE STTL.TSSCM00020 (
 ,STTL_STM     VARCHAR(50)        NOT NULL COMMENT '자막시작시각'      
 ,STTL_ETM     VARCHAR(50)            NULL COMMENT '자막종료시각'      
 ,STTL_DESC    VARCHAR(1000)      NULL COMMENT '자막문장내용'
-,REG_DTM      DATE               NULL COMMENT '등록일시'
+,REG_DTM      TIMESTAMP          NULL COMMENT '등록일시'
 ,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
-,UPD_DTM      DATE               NULL COMMENT '변경일시'
+,UPD_DTM      TIMESTAMP          NULL COMMENT '변경일시'
 ,UPD_USR_ID   VARCHAR(40)        NULL COMMENT '변경자'
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='유저자막내용';
 ;

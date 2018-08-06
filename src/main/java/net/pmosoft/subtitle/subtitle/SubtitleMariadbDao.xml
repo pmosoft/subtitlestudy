@@ -23,15 +23,58 @@
         ,#{sttlNm}       -- 자막명      
         ,#{fsttlNm}      -- 외국어자막명      
         ,#{msttlNm}      -- 모국어자막명      
-        ,curdate()       -- 등록일시
+        ,now()       -- 등록일시
         ,#{regUsrId}     -- 등록자
-        ,curdate()       -- 변경일시
+        ,now()       -- 변경일시
         ,#{updUsrId}     -- 변경자
     )
 </insert>
 
-<insert id="insertUsrSttlDtl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<insert id="insertUsrSttlDtl" parameterType="String">
+    -- SubtitleDao.insertUsrSttlDtl
+    INSERT INTO STTL.TSSCM00020
+    (
+         USR_ID          -- 사용자아이디    
+        ,STTL_NM         -- 자막명      
+        ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+        ,STTL_STM        -- 자막시작시각      
+        ,STTL_ETM        -- 자막종료시각      
+        ,STTL_DESC       -- 자막문장내용
+        ,REG_DTM         -- 등록일시
+        ,REG_USR_ID      -- 등록자 
+        ,UPD_DTM         -- 변경일시
+        ,UPD_USR_ID      -- 변경자
+    ) VALUES
+	<foreach item="usrSttlVo" index="index" collection="list" open="" separator="," close="">
+		(
+         #{usrSttlVo.usrId}        -- 사용자아이디    
+        ,#{usrSttlVo.sttlNm}       -- 자막명      
+        ,#{usrSttlVo.sttlCd}       -- 자막구분(1:외국어,2:모국어)  
+        ,#{usrSttlVo.sttlStm}      -- 자막시작시각             
+        ,#{usrSttlVo.sttlEtm}      -- 자막종료시각             
+        ,#{usrSttlVo.sttlDesc}     -- 자막문장내용             
+        ,now()       -- 등록일시
+        ,#{usrSttlVo.regUsrId}     -- 등록자
+        ,now()       -- 변경일시
+        ,#{usrSttlVo.updUsrId}     -- 변경자
+        )
+	</foreach>
+      
+</insert>
 
+
+
+<insert id="insertTestBulk2" parameterType="String">
+
+INSERT INTO STTL.TSSCM00020 VALUES 
+('lifedomy@gmail.com','Silicon.Valley.S01E02.720p.HDTV.x264-2HD.smi'
+,'2','1602830','1606670'
+,'- Thank you.- Sorry. Ok.',now(),NULL,now(),NULL);
+
+</insert>
+
+
+<insert id="insertTestBulk" parameterType="String">
     -- SubtitleDao.insertUsrSttlDtl
     INSERT INTO STTL.TSSCM00020
     (
@@ -52,16 +95,18 @@
         ,#{sttlStm}      -- 자막시작시각             
         ,#{sttlEtm}      -- 자막종료시각             
         ,#{sttlDesc}     -- 자막문장내용             
-        ,curdate()       -- 등록일시
+        ,now()           -- 등록일시
         ,#{regUsrId}     -- 등록자
-        ,curdate()       -- 변경일시
+        ,now()           -- 변경일시
         ,#{updUsrId}     -- 변경자
     )
+      
 </insert>
 
 <select id="selectUsrRecentlySttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrRecentlySttl : 유저 최근 등록 자막
-    SELECT A.USR_ID          -- 사용자아이디    
+    SELECT DISTINCT
+           A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
          , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
          , A.STTL_STM        -- 자막시작시각      
@@ -74,15 +119,15 @@
     FROM   STTL.TSSCM00020 A
     WHERE  A.USR_ID = #{usrId}
     AND    A.STTL_NM = (
-                        SELECT STTL_NM 
-                        FROM STTL.TSSCM00010 
-                        WHERE USR_ID = #{usrId}
-                        AND   REG_DTM = (SELECT MAX(REG_DTM) 
-                                         FROM STTL.TSSCM00010 
-                                         WHERE USR_ID = #{usrId}
-                                         ) 
+                        SELECT MAX(STTL_NM) 
+                        FROM   STTL.TSSCM00010 
+                        WHERE  USR_ID = #{usrId}
+                        AND    REG_DTM = (SELECT MAX(REG_DTM) 
+                                          FROM STTL.TSSCM00010 
+                                          WHERE USR_ID = #{usrId}
+                                          ) 
                         )
-    ORDER BY A.REG_DTM
+    ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
 </select>
 
 <select id="selectUsrSttlMstrList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
