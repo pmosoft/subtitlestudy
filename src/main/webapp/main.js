@@ -72,10 +72,20 @@ var map = {
 		"common",
 		"signup-signup-module"
 	],
+	"./subtitle/subtitle-list/subtitle-list.module": [
+		"./src/app/layout/subtitle/subtitle-list/subtitle-list.module.ts",
+		"common",
+		"subtitle-subtitle-list-subtitle-list-module"
+	],
 	"./subtitle/subtitle-regist/subtitle-regist.module": [
 		"./src/app/layout/subtitle/subtitle-regist/subtitle-regist.module.ts",
 		"common",
 		"subtitle-subtitle-regist-subtitle-regist-module"
+	],
+	"./subtitle/subtitle-view-mother/subtitle-view-mother.module": [
+		"./src/app/layout/subtitle/subtitle-view-mother/subtitle-view-mother.module.ts",
+		"common",
+		"subtitle-subtitle-view-mother-subtitle-view-mother-module"
 	],
 	"./subtitle/subtitle-view/subtitle-view.module": [
 		"./src/app/layout/subtitle/subtitle-view/subtitle-view.module.ts",

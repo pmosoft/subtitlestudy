@@ -1,3 +1,15 @@
+    SELECT A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.FSTTL_NM        -- 외국어자막명      
+         , A.MSTTL_NM        -- 모국어자막명      
+         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00010 A
+
+
+
     SELECT DISTINCT
            A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      

@@ -83,6 +83,33 @@ public class SubtitleSrv {
     private String insertUsrSttlDtl(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
     	
     	String result = "";
+
+//    	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+//    		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
+//    			UsrSttlVo usrSttlVo = new UsrSttlVo();
+//            	usrSttlVo.setUsrId(usrId);
+//            	usrSttlVo.setSttlNm(fileName);
+//            	usrSttlVo.setSttlCd(sttlCd);
+//          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
+//          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
+//          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
+//           		subtitleDao.insertUsrSttlDtl(usrSttlVo);
+//           		result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
+//			}
+//    	} else {
+//    		for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
+//    			UsrSttlVo usrSttlVo = new UsrSttlVo();
+//            	usrSttlVo.setUsrId(usrId);
+//            	usrSttlVo.setSttlNm(fileName);
+//            	usrSttlVo.setSttlCd(sttlCd);
+//          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
+//          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
+//          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
+//          		subtitleDao.insertUsrSttlDtl(usrSttlVo);
+//           		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
+//			}
+//    	}
+//    	
     	
     	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
 			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
@@ -98,7 +125,7 @@ public class SubtitleSrv {
           		usrSttlListVo.add(usrSttlVo);
            		result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
 			}
-      		subtitleDao.insertUsrSttlDtl(usrSttlListVo);
+      		subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
 
     	} else {
 			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
@@ -113,7 +140,7 @@ public class SubtitleSrv {
           		usrSttlListVo.add(usrSttlVo);
           		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
 			}
-      		subtitleDao.insertUsrSttlDtl(usrSttlListVo);
+      		subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
     	}
     	return result;
     }
@@ -157,10 +184,10 @@ public class SubtitleSrv {
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<UsrSttlVo> list = null;
-            list = subtitleDao.selectUsrSttlMstrList(inVo);;
+            List<UsrSttlVo> usrSttlVoList = null;
+            usrSttlVoList = subtitleDao.selectUsrSttlMstrList(inVo);;
             result.put("isSuccess", true);
-            result.put("data", list);
+            result.put("data", usrSttlVoList);
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");

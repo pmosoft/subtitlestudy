@@ -14,9 +14,9 @@ public class UsrSttlVo {
 	private String sttlEtm  ; //자막종료시각      	 
 	private String sttlDesc ; //자막문장내용	 
 	
-	private Date   regDtm   ; // 등록일시
+	private String regDtm   ; // 등록일시
 	private String regUsrId ; // 등록자
-	private Date   updDtm   ; // 변경일시
+	private String updDtm   ; // 변경일시
 	private String updUsrId ; // 변경자
 	
 	public String getUsrId() {
@@ -67,10 +67,10 @@ public class UsrSttlVo {
 	public void setSttlDesc(String sttlDesc) {
 		this.sttlDesc = sttlDesc;
 	}
-	public Date getRegDtm() {
+	public String getRegDtm() {
 		return regDtm;
 	}
-	public void setRegDtm(Date regDtm) {
+	public void setRegDtm(String regDtm) {
 		this.regDtm = regDtm;
 	}
 	public String getRegUsrId() {
@@ -79,10 +79,10 @@ public class UsrSttlVo {
 	public void setRegUsrId(String regUsrId) {
 		this.regUsrId = regUsrId;
 	}
-	public Date getUpdDtm() {
+	public String getUpdDtm() {
 		return updDtm;
 	}
-	public void setUpdDtm(Date updDtm) {
+	public void setUpdDtm(String updDtm) {
 		this.updDtm = updDtm;
 	}
 	public String getUpdUsrId() {
@@ -91,4 +91,5 @@ public class UsrSttlVo {
 	public void setUpdUsrId(String updUsrId) {
 		this.updUsrId = updUsrId;
 	}
+	
 }

@@ -168,6 +168,7 @@ public class ParseSubtitle {
     public ArrayList<SmiVo> parseSmiFile(String filePathName) {
 
     	System.out.println("parseSmiFile=="+filePathName);
+        ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
     	ArrayList<SmiVo> smiList2 = new ArrayList<SmiVo>();
     	
         Pattern p; Matcher m;
@@ -187,14 +188,13 @@ public class ParseSubtitle {
                 int rnum = 0;
                 int stime = 0;
                 int etime = 0;
-                ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
                 
                 while (true) {
                     String str = br.readLine();
                     //System.out.println(str);
                     if (str != null) {
-                        if(str.matches("<SYNC.*")) {
-                            // rnum의 기반을 산출한다.
+                        if(str.matches("(?i)<sync.*")) {
+                            // rnum의 기반을 산출한다. 
                             num++;
                             parseRule = "[0-9]+";
                             p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
@@ -209,7 +209,7 @@ public class ParseSubtitle {
                                 smiVo.stime = stime;
                                 smiVo.etime = 0;
                                 //smiList.set(rnum-2, etime).get(rnum-2).stime:333;
-                                smiVo.content = str;
+                                smiVo.content = str; 
                                 //smiVo.print();
                                 smiList.add(smiVo);
                             }   
@@ -264,7 +264,7 @@ public class ParseSubtitle {
         
         //String src2 = src.replaceAll("<br>\n", " ");
         //System.out.println(src2.substring(328+7,src2.length()));
-        return smiList2;
+        return smiList;
     }
     
     

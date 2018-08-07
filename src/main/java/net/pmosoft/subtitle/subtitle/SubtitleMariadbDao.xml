@@ -41,6 +41,37 @@
         ,STTL_ETM        -- 자막종료시각      
         ,STTL_DESC       -- 자막문장내용
         ,REG_DTM         -- 등록일시
+        ,REG_USR_ID      -- 등록자
+        ,UPD_DTM         -- 변경일시
+        ,UPD_USR_ID      -- 변경자
+    ) VALUES (
+         #{usrId}        -- 사용자아이디    
+        ,#{sttlNm}       -- 자막명      
+        ,#{sttlCd}       -- 자막구분(1:외국어,2:모국어)  
+        ,#{sttlStm}      -- 자막시작시각             
+        ,#{sttlEtm}      -- 자막종료시각             
+        ,#{sttlDesc}     -- 자막문장내용             
+        ,now()           -- 등록일시
+        ,#{regUsrId}     -- 등록자
+        ,now()           -- 변경일시
+        ,#{updUsrId}     -- 변경자
+    )
+      
+</insert>
+
+
+<insert id="insertUsrSttlDtlBulk" parameterType="String">
+
+    -- SubtitleDao.insertUsrSttlDtl
+    INSERT INTO STTL.TSSCM00020
+    (
+         USR_ID          -- 사용자아이디    
+        ,STTL_NM         -- 자막명      
+        ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+        ,STTL_STM        -- 자막시작시각      
+        ,STTL_ETM        -- 자막종료시각      
+        ,STTL_DESC       -- 자막문장내용
+        ,REG_DTM         -- 등록일시
         ,REG_USR_ID      -- 등록자 
         ,UPD_DTM         -- 변경일시
         ,UPD_USR_ID      -- 변경자
@@ -59,9 +90,9 @@
         ,#{usrSttlVo.updUsrId}     -- 변경자
         )
 	</foreach>
+
       
 </insert>
-
 
 
 <insert id="insertTestBulk2" parameterType="String">
@@ -73,35 +104,6 @@ INSERT INTO STTL.TSSCM00020 VALUES
 
 </insert>
 
-
-<insert id="insertTestBulk" parameterType="String">
-    -- SubtitleDao.insertUsrSttlDtl
-    INSERT INTO STTL.TSSCM00020
-    (
-         USR_ID          -- 사용자아이디    
-        ,STTL_NM         -- 자막명      
-        ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
-        ,STTL_STM        -- 자막시작시각      
-        ,STTL_ETM        -- 자막종료시각      
-        ,STTL_DESC       -- 자막문장내용
-        ,REG_DTM         -- 등록일시
-        ,REG_USR_ID      -- 등록자
-        ,UPD_DTM         -- 변경일시
-        ,UPD_USR_ID      -- 변경자
-    ) VALUES (
-         #{usrId}        -- 사용자아이디    
-        ,#{sttlNm}       -- 자막명      
-        ,#{sttlCd}       -- 자막구분(1:외국어,2:모국어)  
-        ,#{sttlStm}      -- 자막시작시각             
-        ,#{sttlEtm}      -- 자막종료시각             
-        ,#{sttlDesc}     -- 자막문장내용             
-        ,now()           -- 등록일시
-        ,#{regUsrId}     -- 등록자
-        ,now()           -- 변경일시
-        ,#{updUsrId}     -- 변경자
-    )
-      
-</insert>
 
 <select id="selectUsrRecentlySttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrRecentlySttl : 유저 최근 등록 자막
@@ -140,7 +142,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.REG_USR_ID
          , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
          , A.UPD_USR_ID
-    FROM   STTL.TSSCM00020 A
+    FROM   STTL.TSSCM00010 A
     WHERE  A.USR_ID = #{usrId}
     ORDER BY A.REG_DTM
 </select>

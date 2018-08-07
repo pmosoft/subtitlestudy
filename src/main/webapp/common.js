@@ -38,6 +38,9 @@ var SubtitleService = /** @class */ (function () {
     SubtitleService.prototype.selectRecentlySubtitle = function (usrId) {
         return this.http.post('/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
     };
+    SubtitleService.prototype.selectUsrSttlDtlList = function (usrId) {
+        return this.http.post('/subtitle/selectUsrSttlDtlList', usrId, httpOptions);
+    };
     SubtitleService.prototype.saveUsrSubtitles = function (fd) {
         return this.http.post('/subtitle/saveUsrSubtitles', fd);
     };
