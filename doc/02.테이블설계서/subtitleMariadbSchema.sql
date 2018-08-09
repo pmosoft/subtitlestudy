@@ -8,8 +8,8 @@
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00010 A
 
-
-
+select 3600*24*365
+31536000
     SELECT DISTINCT
            A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
