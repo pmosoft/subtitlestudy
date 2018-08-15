@@ -44,21 +44,21 @@ public class UsrTest {
 	public void testUsrCtl() { 
 		Usr usr = new Usr();
 		usr.setUsrEmail("lifedomy@gmail.com");
-		UsrSrv.selectUsr(usr.getUsrEmail());
+		UsrSrv.selectUsr(usr);
 	}
 		
 	@Test @Ignore
 	public void testUsrSrv() { 
 		Usr usr = new Usr();
 		usr.setUsrEmail("lifedomy@gmail.com");
-		UsrSrv.selectUsr(usr.getUsrEmail());
+		UsrSrv.selectUsr(usr);
 	}
 		
 	@Test @Ignore
 	public void testUsrDao() { 
 		Usr usr = new Usr();
 		usr.setUsrEmail("lifedomy@gmail.com");
-		UsrDao.selectUsr(usr.getUsrEmail());
+		UsrDao.selectUsr(usr);
 	}
 	
 //	@Test @Ignore

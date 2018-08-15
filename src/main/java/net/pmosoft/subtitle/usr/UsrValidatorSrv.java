@@ -30,7 +30,7 @@ public class UsrValidatorSrv {
 	public Map<String, String> validateInsertUsr(Usr usr) {
 
 		Map<String, String> errors = new HashMap<String, String>();
-		Usr dbUsr = usrDao.selectUsr(usr.getUsrEmail());
+		Usr dbUsr = usrDao.selectUsr(usr);
 		if (dbUsr == null) {
 			return errors;
 		} else if (dbUsr.getUsrEmail().equals(usr.getUsrEmail())) {
@@ -54,7 +54,7 @@ public class UsrValidatorSrv {
 	public Map<String, String> validateUsrLogin(Usr usr) {
 
 		Map<String, String> errors = new HashMap<String, String>();
-		Usr dbUsr = usrDao.selectUsr(usr.getUsrEmail());
+		Usr dbUsr = usrDao.selectUsr(usr);
 		if (dbUsr == null) {
 			errors.put("errUsrMsg", "유저이메일 확인하시거나 유저를 신규 등록 하시기 바랍니다.");
 		} else if (!dbUsr.getUsrPw().equals(usr.getUsrPw())) {
@@ -68,7 +68,7 @@ public class UsrValidatorSrv {
 	public Map<String, String> validateSaveUsr(Usr usr) {
 
 		Map<String, String> errors = new HashMap<String, String>();
-		Usr dbUsr = usrDao.selectUsr(usr.getUsrEmail());
+		Usr dbUsr = usrDao.selectUsr(usr);
 		if (dbUsr == null) {
 			return errors;
 		} else if (dbUsr.getUsrEmail().equals(usr.getUsrEmail())) {

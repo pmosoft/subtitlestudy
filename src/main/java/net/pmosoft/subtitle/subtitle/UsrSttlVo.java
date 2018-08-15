@@ -5,6 +5,7 @@ import java.sql.Date;
 public class UsrSttlVo {
 
   	private String usrId    ; // 사용자아이디    
+  	private String usrEmail ; // 사용자이메일    
 	private String sttlNm   ; // 자막명      
 	private String fsttlNm  ; // 외국어자막명      
 	private String msttlNm  ; // 모국어자막명
@@ -18,7 +19,7 @@ public class UsrSttlVo {
 	private String regUsrId ; // 등록자
 	private String updDtm   ; // 변경일시
 	private String updUsrId ; // 변경자
-	
+
 	public String getUsrId() {
 		return usrId;
 	}
@@ -90,6 +91,12 @@ public class UsrSttlVo {
 	}
 	public void setUpdUsrId(String updUsrId) {
 		this.updUsrId = updUsrId;
+	}
+	public String getUsrEmail() {
+		return usrEmail;
+	}
+	public void setUsrEmail(String usrEmail) {
+		this.usrEmail = usrEmail;
 	}
 	
 }

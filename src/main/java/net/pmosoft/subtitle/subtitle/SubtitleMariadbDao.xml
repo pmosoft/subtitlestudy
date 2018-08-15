@@ -135,6 +135,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
 <select id="selectUsrSttlMstrList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
     SELECT A.USR_ID          -- 사용자아이디    
+         , A.USR_EMAIL       -- 자막명      
          , A.STTL_NM         -- 자막명      
          , A.FSTTL_NM        -- 외국어자막명      
          , A.MSTTL_NM        -- 모국어자막명      

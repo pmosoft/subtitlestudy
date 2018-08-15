@@ -51,7 +51,7 @@ var SubtitleViewMotherRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"20\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
+module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"20\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
 
 /***/ }),
 
@@ -92,7 +92,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var SubtitleViewMotherComponent = /** @class */ (function () {
     function SubtitleViewMotherComponent(subtitleService) {
         this.subtitleService = subtitleService;
-        this.usrId = 'lifedomy@gmail.com';
+        //usrId = 'lifedomy@gmail.com';
+        this.usrId = localStorage.getItem('usrId');
         this.foreignSubtitle = "";
         this.motherSubtitle = "";
     }

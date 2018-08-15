@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,8 @@ import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
 @Service
 public class SubtitleSrv {
 
+	private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
+	
     @Autowired
     private SubtitleDao subtitleDao;
 
@@ -65,8 +69,11 @@ public class SubtitleSrv {
         	
         	// 유저 외국어 자막 내용  저장
         	subtitleDao.deleteUsrSttlDtl(usrSttlVo);
-        	String foreignSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
-        	String motherSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
+        	String foreignSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
+        	String motherSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
+
+        	//String foreignSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
+        	//String motherSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
         	
            	result.put("isSuccess", true);
    	       	result.put("usrMsg", "정상 처리 되었습니다");
@@ -84,38 +91,45 @@ public class SubtitleSrv {
     	
     	String result = "";
 
-//    	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
-//    		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-//    			UsrSttlVo usrSttlVo = new UsrSttlVo();
-//            	usrSttlVo.setUsrId(usrId);
-//            	usrSttlVo.setSttlNm(fileName);
-//            	usrSttlVo.setSttlCd(sttlCd);
-//          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
-//          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
-//          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
-//           		subtitleDao.insertUsrSttlDtl(usrSttlVo);
-//           		result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
-//			}
-//    	} else {
-//    		for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-//    			UsrSttlVo usrSttlVo = new UsrSttlVo();
-//            	usrSttlVo.setUsrId(usrId);
-//            	usrSttlVo.setSttlNm(fileName);
-//            	usrSttlVo.setSttlCd(sttlCd);
-//          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
-//          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
-//          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
-//          		subtitleDao.insertUsrSttlDtl(usrSttlVo);
-//           		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
-//			}
-//    	}
-//    	
-    	
     	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+    		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
+    			UsrSttlVo usrSttlVo = new UsrSttlVo();
+            	usrSttlVo.setUsrId(usrId);
+            	usrSttlVo.setSttlNm(fileName);
+            	usrSttlVo.setSttlCd(sttlCd);
+          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
+          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
+          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
+           		subtitleDao.insertUsrSttlDtl(usrSttlVo);
+           		result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
+			}
+    	} else {
+    		for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
+    			UsrSttlVo usrSttlVo = new UsrSttlVo();
+            	usrSttlVo.setUsrId(usrId);
+            	usrSttlVo.setSttlNm(fileName);
+            	usrSttlVo.setSttlCd(sttlCd);
+          		usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
+          		usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
+          		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
+          		subtitleDao.insertUsrSttlDtl(usrSttlVo);
+           		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
+			}
+    	}
+    	
+    	return result;
+    }
+
+    private String insertUsrSttlDtlBulk(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
+    	
+    	String result = "";
+    	int rowCnt = 0;
+    	int commitCnt = 5000;
+    	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+   			logger.info("smi start");
 			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
     		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
     			UsrSttlVo usrSttlVo = new UsrSttlVo();
-    			
             	usrSttlVo.setUsrId(usrId);
             	usrSttlVo.setSttlNm(fileName);
             	usrSttlVo.setSttlCd(sttlCd);
@@ -124,10 +138,23 @@ public class SubtitleSrv {
           		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
           		usrSttlListVo.add(usrSttlVo);
            		result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
+				
+           		rowCnt++;	
+           		if(i%commitCnt == 0) {
+           			logger.debug("rowCnt1=========="+rowCnt);
+              		subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
+              		usrSttlListVo.clear();
+              		rowCnt = 0;
+           		}
 			}
-      		subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
+    		
+       		if(rowCnt < commitCnt) {
+       			logger.debug("rowCnt2=========="+rowCnt);
+          		subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
+       		}
 
     	} else {
+   			logger.info("srt start");
 			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
     		for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
     			UsrSttlVo usrSttlVo = new UsrSttlVo();
@@ -139,12 +166,25 @@ public class SubtitleSrv {
           		usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
           		usrSttlListVo.add(usrSttlVo);
           		result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
+          		
+           		rowCnt++;	
+           		if(i%commitCnt == 0) {
+         			logger.debug("rowCnt1=========="+rowCnt);
+         	        subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
+              		usrSttlListVo.clear();
+              		rowCnt = 0;
+           		}
 			}
-      		subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
-    	}
+    		
+       		if(rowCnt < commitCnt) {
+       			logger.debug("rowCnt2=========="+rowCnt);
+       			subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
+       		}
+       	}
     	return result;
     }
-
+    
+    
     public Map<String, Object> selectUsrRecentlySttl(String usrId){
 
         Map<String, Object> result = new HashMap<String, Object>();
@@ -187,7 +227,7 @@ public class SubtitleSrv {
             List<UsrSttlVo> usrSttlVoList = null;
             usrSttlVoList = subtitleDao.selectUsrSttlMstrList(inVo);;
             result.put("isSuccess", true);
-            result.put("data", usrSttlVoList);
+            result.put("usrSttlVoList", usrSttlVoList);
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");

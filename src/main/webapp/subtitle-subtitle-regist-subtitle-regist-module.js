@@ -51,7 +51,7 @@ var SubtitleRegistRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-group\">\n      <label for=\"inputAddress\">외국어 자막과 모국어 자막을 합성하여 출력합니다</label>\n    </div>\n    <div class=\"form-row\">\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Foreign Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\" name=\"foreignFile\" (change)=\"onForeignFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{foreignFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row\">\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Mother Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\"  name=\"motherFile\" (change)=\"onMotherFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{motherFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onUpload()\">Upload</button> \n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onTest()\">test1</button>\n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onTest2()\">test2</button>\n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onTest3()\">test2</button>\n      <button type=\"button\" class=\"btn btn-success\" (click)=\"onTest4()\">test4</button>\n    </div>\n    \n    <div class=\"form-row\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
+module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"mb-3\"></div>\n    <div class=\"form-group\">\n      <label for=\"inputAddress\">외국어 자막과 모국어 자막의 내용을 출력합니다.</label>\n    </div>\n    <div class=\"form-row mb-3\" >\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Foreign Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\" name=\"foreignFile\" (change)=\"onForeignFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{foreignFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row mb-3\">\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Mother Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\"  name=\"motherFile\" (change)=\"onMotherFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{motherFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row align-items-center mb-5 \">\n        <button type=\"button\" class=\"btn btn-outline-primary\" (click)=\"onUpload()\">Upload</button> \n    </div>\n    <div class=\"form-row mb-3\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
 
 /***/ }),
 
@@ -77,8 +77,8 @@ module.exports = ""
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubtitleRegistComponent", function() { return SubtitleRegistComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _subtitle_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../subtitle.service */ "./src/app/layout/subtitle/subtitle.service.ts");
+/* harmony import */ var _subtitle_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../subtitle.service */ "./src/app/layout/subtitle/subtitle.service.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -91,15 +91,14 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var httpOptions = {
-    headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Content-Type': 'application/json' })
+    headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({ 'Content-Type': 'application/json' })
 };
 var SubtitleRegistComponent = /** @class */ (function () {
-    function SubtitleRegistComponent(http, subtitleService) {
-        this.http = http;
+    function SubtitleRegistComponent(subtitleService) {
         this.subtitleService = subtitleService;
-        this.usrId = 'lifedomy@gmail.com';
+        //usrId = 'lifedomy@gmail.com';
+        this.usrId = localStorage.getItem('usrId');
         this.foreignFile = null;
         this.foreignFileNm = "Choose Srt or Smi File";
         this.foreignSubtitle = "";
@@ -145,85 +144,13 @@ var SubtitleRegistComponent = /** @class */ (function () {
             }
         });
     };
-    SubtitleRegistComponent.prototype.onSelectRecentlySubtitle = function () {
-        var _this = this;
-        this.subtitleService.selectRecentlySubtitle(this.usrId)
-            .subscribe(function (result) {
-            if (!result.isSuccess)
-                alert(result.errUsrMsg);
-            else {
-                _this.foreignSubtitle = result.foreignSubtitle;
-                _this.motherSubtitle = result.motherSubtitle;
-                console.log(result.subtitleListVo);
-            }
-        });
-    };
-    SubtitleRegistComponent.prototype.getHeroes = function () {
-        var _this = this;
-        this.subtitleService.getHeroes()
-            .subscribe(function (data) {
-            _this.subtitle = data;
-            console.log(data);
-            console.log(_this.subtitle.name);
-        });
-    };
-    SubtitleRegistComponent.prototype.onTest2 = function () {
-        var _this = this;
-        this.subtitleService.getHeroes()
-            .subscribe(function (data) {
-            _this.subtitle = data;
-            console.log(data);
-            console.log(_this.subtitle.name);
-        });
-    };
-    SubtitleRegistComponent.prototype.onTest3 = function () {
-        //this.getHeroes();
-        //const params = new HttpParams().set('lang', lang); 
-        var fd = new FormData();
-        fd.append('name', "lifedomy");
-        fd.append('id', "123");
-        this.http.post('http://localhost:8085/subtitle/test4', fd)
-            .subscribe(function (res) {
-            console.log("1111111111111111111");
-            console.log(res);
-        });
-    };
-    SubtitleRegistComponent.prototype.onTest4 = function () {
-        this.http.get('http://localhost:8085/subtitle/test4/?name=abc&id=10')
-            .subscribe(function (res) {
-            console.log("1111111111111111111");
-            console.log(res);
-        });
-    };
-    SubtitleRegistComponent.prototype.onTest = function () {
-        this.getHeroes();
-        // const fd = new FormData();
-        // fd.append('uploadFile', this.foreignFile);
-        // fd.append('uploadFile2', this.motherFile);
-        // fd.append('usr', "lifedomy");
-        // console.log("1111111111111111111");
-        //console.log(this.http.get('http://localhost:8085/subtitle/test3',{responseType: 'json'}));
-        // this.http.get('http://localhost:8085/subtitle/test3')
-        // .subscribe(res => {
-        //   console.log("1111111111111111111");
-        //   console.log(res);
-        //});   
-        // this.http.post('http://localhost:8080/order/addtocart', 
-        // '', 
-        // httpOptions)
-        // .subscribe(data => {
-        //     // Handle the updated data here.
-        //     console.log(data);
-        // });
-    };
     SubtitleRegistComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-subtitle-regist',
             template: __webpack_require__(/*! ./subtitle-regist.component.html */ "./src/app/layout/subtitle/subtitle-regist/subtitle-regist.component.html"),
             styles: [__webpack_require__(/*! ./subtitle-regist.component.scss */ "./src/app/layout/subtitle/subtitle-regist/subtitle-regist.component.scss")]
         }),
-        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"],
-            _subtitle_service__WEBPACK_IMPORTED_MODULE_2__["SubtitleService"]])
+        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"]])
     ], SubtitleRegistComponent);
     return SubtitleRegistComponent;
 }());

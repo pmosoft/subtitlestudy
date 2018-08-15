@@ -120,10 +120,16 @@ var LoginComponent = /** @class */ (function () {
             }
             else {
                 console.log("result.isSuccess==" + result.isSuccess);
+                console.log('usrId==', result.usr.usrId);
+                console.log('usrEmail==', result.usr.usrEmail);
+                console.log('usrNm==', result.usr.usrNm);
+                localStorage.setItem('isLoggedin', 'true');
+                localStorage.setItem('usrId', result.usr.usrId);
+                localStorage.setItem('usrEmail', result.usr.usrEmail);
+                localStorage.setItem('usrNm', result.usr.usrNm);
                 _this.router.navigate(['/subtitle-regist']);
             }
         });
-        localStorage.setItem('isLoggedin', 'true');
     };
     LoginComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

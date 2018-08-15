@@ -24,7 +24,7 @@
          #{usrEmail}
         ,#{usrEmail}
         ,#{usrPw}
-        ,#{usrNm}
+        ,SUBSTRING(#{usrEmail},1,INSTR(#{usrEmail},'@')-1)
         ,CAST(#{usrAge} as INT)
         ,'Y'
         ,CURDATE()

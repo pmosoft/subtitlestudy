@@ -35,6 +35,9 @@ var SubtitleService = /** @class */ (function () {
     SubtitleService.prototype.getHeroes = function () {
         return this.http.get('/subtitle/test5');
     };
+    SubtitleService.prototype.selectUsrSttlMstrList = function (usrId) {
+        return this.http.post('/subtitle/selectUsrSttlMstrList', usrId, httpOptions);
+    };
     SubtitleService.prototype.selectRecentlySubtitle = function (usrId) {
         return this.http.post('/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
     };

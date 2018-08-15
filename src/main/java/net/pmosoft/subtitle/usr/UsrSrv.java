@@ -1,4 +1,4 @@
-package net.pmosoft.subtitle.usr;
+ package net.pmosoft.subtitle.usr;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,24 +84,28 @@ public class UsrSrv {
 
 	public Map<String, Object> selectUsrLogin(Usr usr){
 		
-		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, String> errors = new HashMap<String, String>();
+		System.out.println("start UsrSrv selectUsrList");
 
-		errors = usrValidatorSrv.validateUsrLogin(usr);
-		if(errors.size()>0){
-			result.put("isSuccess", false);
-			result.put("errUsrMsg", errors.get("errUsrMsg"));
-			return result;
-		} else {	 
-			try{
-		    	result.put("isSuccess", true);
-			} catch (Exception e){
-				e.printStackTrace();
-				result.put("errUsrMsg", "시스템 장애가 발생되었습니다.");
-				//result.put("errSysMsg", e.toString());
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		Usr usrOutVo = new Usr();
+		try{
+			usrOutVo = usrDao.selectUsr(usr);
+			if(usrOutVo != null) {
+				result.put("isSuccess", true);
+				result.put("usr", usrOutVo);
+			} else {
+				result.put("isSuccess", false);
+				result.put("errUsrMsg", "계정정보가 존재하지 않습니다.");
+				
 			}
-			return result;
-		}	
+		} catch (Exception e){
+			result.put("isSuccess", false);
+			result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+			result.put("errSysMsg", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
 	}
  	
 	
@@ -128,14 +132,14 @@ public class UsrSrv {
 		return result;		
 	}
  
-	public Map<String, Object> selectUsr(String usrEmail){
+	public Map<String, Object> selectUsr(Usr usr){
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		try{
-			Usr usr = usrDao.selectUsr(usrEmail);;
+			Usr usrOutVo = usrDao.selectUsr(usr);
 			result.put("isSuccess", true);
-			result.put("data", usr);
+			result.put("data", usrOutVo);
             result.put("total", 1);			
 		} catch (Exception e){
 			result.put("isSuccess", false);

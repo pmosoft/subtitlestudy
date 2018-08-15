@@ -96,13 +96,15 @@ var SubtitleListComponent = /** @class */ (function () {
     }
     SubtitleListComponent.prototype.ngOnInit = function () {
     };
-    SubtitleListComponent.prototype.onSelectUsrSttlDtlList = function () {
-        this.subtitleService.selectUsrSttlDtlList(this.usrId)
+    SubtitleListComponent.prototype.onSelectUsrSttlMstrList = function () {
+        var _this = this;
+        this.subtitleService.selectUsrSttlMstrList(this.usrId)
             .subscribe(function (result) {
             if (!result.isSuccess)
                 alert(result.errUsrMsg);
             else {
-                console.log(result.subtitleListVo);
+                _this.usrSttlVoList = result.usrSttlVoList;
+                console.log(result.usrSttlVoList);
             }
         });
     };

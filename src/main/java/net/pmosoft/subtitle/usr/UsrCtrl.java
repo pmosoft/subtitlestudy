@@ -69,8 +69,8 @@ public class UsrCtrl {
 	}
 
 	@RequestMapping(value = "/usr/selectUsr")
-	public Map<String, Object> selectUsr(@RequestParam String usrId) {
-		return usrSrv.selectUsr(usrId);
+	public Map<String, Object> selectUsr(@RequestParam Usr usr) {
+		return usrSrv.selectUsr(usr);
 	}
 	
 	

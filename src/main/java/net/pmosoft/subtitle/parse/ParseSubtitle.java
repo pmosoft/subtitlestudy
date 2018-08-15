@@ -11,17 +11,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.mozilla.universalchardet.UniversalDetector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.pmosoft.subtitle.file.FileUtil;
 
 
 public class ParseSubtitle {
 
+	private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
+	 	
+	
     public static void main(String[] args) {
         // TODO Auto-generated method stub
         //String s1 = "<i>Metal </i>";
         
-        //System.out.println(s1.matches("<i>")
+        //logger.debug(s1.matches("<i>")
         
         ParseSubtitle parseSubtitle = new ParseSubtitle();
         parseSubtitle.test02();
@@ -35,7 +40,7 @@ public class ParseSubtitle {
     	String filePathName="C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Silicon.Valley.S01E01.720p.HDTV.x264-2HD.smi";
     	SmiSrtSubtitleVo smiSrtSubtitleVo = getSubtitleVo(filePathName);
     	
-    	System.out.println(smiSrtSubtitleVo.getFilePathNm());
+    	logger.debug(smiSrtSubtitleVo.getFilePathNm());
     } 
     
     
@@ -44,16 +49,16 @@ public class ParseSubtitle {
      */
     public SmiSrtSubtitleVo getSubtitleVo(String subtitleFilePath) {
     	SmiSrtSubtitleVo smiSrtSubtitleVo = new SmiSrtSubtitleVo(); 
-    	System.out.println(subtitleFilePath +":"+ verifySrtSmi(subtitleFilePath));
+    	logger.info(subtitleFilePath +":"+ verifySrtSmi(subtitleFilePath));
     	smiSrtSubtitleVo.setExtention(verifySrtSmi(subtitleFilePath));
     	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
-    		System.out.println("smi");
+    		logger.info("smi");
     		smiSrtSubtitleVo.setSmiList(parseSmiFile(subtitleFilePath));
             for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
             	//smiSrtSubtitleVo.getSmiList().get(i).print();
     		}
     	} else {
-    		System.out.println("srt");
+    		logger.info("srt");
     		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
             for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
             	//smiSrtSubtitleVo.getSrtList().get(i).print();
@@ -84,7 +89,6 @@ public class ParseSubtitle {
             
             if (file.isFile()) {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
-                //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName)));
                 
                 int num = 0;
                 int bnum = 0;
@@ -96,21 +100,21 @@ public class ParseSubtitle {
                 
                 while (true) {
                     String str = br.readLine();
-                    System.out.println("str="+str);
+                    logger.debug("str="+str);
                     if (str != null) {
                         if(str.matches("[0-9]+$")) {
                         } else if(str.matches(timeParseRule)) {
-                        	//System.out.println("str="+str);
+                        	//logger.debug("str="+str);
                         	num++;
                             parseRule = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
                             p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
                             stime = m.group();
-                            //System.out.println(stime);
+                            //logger.debug(stime);
 
                             parseRule = "--> [0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
                             p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
                             etime = m.group().substring(4);
-                            //System.out.println(num + " "+ stime + " " + etime);
+                            //logger.debug(num + " "+ stime + " " + etime);
                         } else {
                             if(num>0){
                                 // rnum별로 내용을 산출한다.
@@ -134,10 +138,10 @@ public class ParseSubtitle {
                 // stime별로 content를 합친다
                 String content2 = "";
                 for (int i = 0; i < srtList.size()-1; i++) {
-                	//System.out.println(srtList.size() +":"+ i);
-                	//System.out.println(srtList.get(i).getContent());
+                	//logger.debug(srtList.size() +":"+ i);
+                	//logger.debug(srtList.get(i).getContent());
                 	if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
-                        //System.out.println(srtList.get(i).getContent());
+                        //logger.debug(srtList.get(i).getContent());
                     	content2 += srtList.get(i).getContent();
                     } else {
                         SrtVo tvo = new SrtVo(); 
@@ -152,12 +156,12 @@ public class ParseSubtitle {
                 }                     
             }
         } catch (Exception e) {
-            System.out.println("parseSrtFile Exception=" + e.getMessage());
+            logger.debug("parseSrtFile Exception=" + e.getMessage());
         }
         
         return srtList;
         //String src2 = src.replaceAll("<br>\n", " ");
-        //System.out.println(src2.substring(328+7,src2.length()));
+        //logger.debug(src2.substring(328+7,src2.length()));
         
     }
 
@@ -167,7 +171,7 @@ public class ParseSubtitle {
      */    
     public ArrayList<SmiVo> parseSmiFile(String filePathName) {
 
-    	System.out.println("parseSmiFile=="+filePathName);
+    	logger.info("parseSmiFile=="+filePathName);
         ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
     	ArrayList<SmiVo> smiList2 = new ArrayList<SmiVo>();
     	
@@ -182,7 +186,7 @@ public class ParseSubtitle {
             if (file.isFile()) {
                 //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),"EUC-KR"));
                 //br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName)));
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
+            	br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
                 int num = 0;
                 int bnum = 0;
                 int rnum = 0;
@@ -191,15 +195,16 @@ public class ParseSubtitle {
                 
                 while (true) {
                     String str = br.readLine();
-                    //System.out.println(str);
+                    logger.debug(str);
                     if (str != null) {
-                        if(str.matches("(?i)<sync.*")) {
+                        if(str.matches("(?i)<sync.*=[0-9]+.*")) {
                             // rnum의 기반을 산출한다. 
                             num++;
                             parseRule = "[0-9]+";
                             p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
                             stime = Integer.parseInt(m.group());
-                            //System.out.println(str+" "+stime);
+                            logger.debug(str+" "+stime);
+                        } else if(str.matches("(?i)<sync.*=>.*")) {
                         } else {
                             if(num>0){
                                 // rnum별로 내용을 산출한다.
@@ -219,10 +224,9 @@ public class ParseSubtitle {
                     }    
                 }
                 br.close();
-                
-                //System.out.println("smiList.size()=="+smiList.size());
-                
-                
+
+                logger.info("smiList.size()=="+smiList.size());
+
                 // etime를 세팅한다
                 for (int i = 0; i < smiList.size(); i++) {
                     if(i < smiList.size()-1) {
@@ -241,7 +245,7 @@ public class ParseSubtitle {
                 // stime별로 content를 합친다
                 String content2 = "";
                 for (int i = 0; i < smiList.size()-1; i++) {
-                	//System.out.println(smiList.get(i).getContent());
+                	//logger.debug(smiList.get(i).getContent());
                     if(smiList.get(i).getStime() == smiList.get(i+1).getStime()) {
                         content2 += smiList.get(i).getContent();
                     } else {
@@ -259,11 +263,11 @@ public class ParseSubtitle {
             
             }
         } catch (Exception e) {
-            System.out.println("e=" + e.getMessage());
+            logger.debug("exception===" + e.getMessage());
         }
         
         //String src2 = src.replaceAll("<br>\n", " ");
-        //System.out.println(src2.substring(328+7,src2.length()));
+        //logger.debug(src2.substring(328+7,src2.length()));
         return smiList;
     }
     
@@ -272,9 +276,9 @@ public class ParseSubtitle {
      * 유틸 : 샘파일의 확장자(리턴:smi, srt)
      */
     String verifySrtSmi(String subtitleFilePath) {
-    	//System.out.println("subtitleFilePath=="+subtitleFilePath);
-    	//System.out.println("subtitleFilePath=="+subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()));
-    	//System.out.println("subtitleFilePath=="+subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()).toLowerCase());
+    	//logger.debug("subtitleFilePath=="+subtitleFilePath);
+    	//logger.debug("subtitleFilePath=="+subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()));
+    	//logger.debug("subtitleFilePath=="+subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()).toLowerCase());
     	return subtitleFilePath.substring(subtitleFilePath.length()-3,subtitleFilePath.length()).toLowerCase();
     }   
         
@@ -289,18 +293,18 @@ public class ParseSubtitle {
 			byte[] buf = new byte[4096];
 			//String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
 	    	java.io.FileInputStream fis;
-			fis = new FileInputStream(filePathName);
-			UniversalDetector detector = new UniversalDetector(null);
-			int nread;
+	    	fis = new FileInputStream(filePathName);
+	    	UniversalDetector detector = new UniversalDetector(null);
+	    	int nread;
 			while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
-				detector.handleData(buf, 0, nread);
+	    		detector.handleData(buf, 0, nread);
 			}
 			detector.dataEnd();
 			String encoding = detector.getDetectedCharset();
 			if (encoding != null) {
-				System.out.println("Detected encoding = " + encoding);
+				logger.info("Detected encoding = " + encoding);
 			} else {
-				System.out.println("No encoding detected.");
+				logger.info("No encoding detected.");
 			}
 			detector.reset();
 			
@@ -317,7 +321,7 @@ public class ParseSubtitle {
      * 테스트     
      */
     public void test3(){
-        System.out.println("test3");
+        logger.debug("test3");
         ArrayList<SmiVo> sl = new ArrayList<SmiVo>();
         SmiVo svo01 = new SmiVo(); svo01.setStime(111); sl.add(svo01);
         SmiVo svo02 = new SmiVo(); svo02.setStime(222); sl.add(svo02);
@@ -331,7 +335,7 @@ public class ParseSubtitle {
      * 테스트     
      */
     public void test2(){
-        System.out.println("test2");
+        logger.debug("test2");
         Pattern p; Matcher m;
         String parseRule; boolean a;
         
@@ -339,7 +343,7 @@ public class ParseSubtitle {
         parseRule = "[0-9]+";
         p = Pattern.compile(parseRule); m = p.matcher(src); a = false;
         m.find();
-        System.out.println(m.group());
+        logger.debug(m.group());
     }    
 
     /*
@@ -363,20 +367,19 @@ public class ParseSubtitle {
             map.put("time"     ,m.group());
   
             parseList.add(map);
-            System.out.println(String.valueOf(m.start()));
-            System.out.println(String.valueOf(m.end()));
-            System.out.println(m.group());
+            logger.debug(String.valueOf(m.start()));
+            logger.debug(String.valueOf(m.end()));
+            logger.debug(m.group());
         }
         
-        System.out.println(parseList);
         
         for (int i = 0; i < parseList.size(); i++) {
-            System.out.println(parseList.get(i).get("time"));
+            logger.debug(parseList.get(i).get("time"));
             if(i<parseList.size()-1) {
-                System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                logger.debug(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
                         ,Integer.parseInt(parseList.get(i+1).get("timeStart"))));
             } else {
-                System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                logger.debug(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
                         ,src.length()));
                 
             }
@@ -402,13 +405,13 @@ public class ParseSubtitle {
         smiList = parseSmiFile(smifilePathName);
         
         for (int i = 0; i < smiList.size(); i++) {
-        	System.out.println(smiList.get(i).getContent());
+        	logger.debug(smiList.get(i).getContent());
 		}
 
         for (int i = 0; i < srtList.size(); i++) {
-        	//System.out.println(srtList.get(i).getNum());
-        	//System.out.println(srtList.get(i).getContent());
-        	System.out.println(smiList.get(i).getContent());
+        	//logger.debug(srtList.get(i).getNum());
+        	//logger.debug(srtList.get(i).getContent());
+        	logger.debug(smiList.get(i).getContent());
 		}
         //parseSubtitle.test3();
     } 
@@ -418,7 +421,7 @@ public class ParseSubtitle {
      * 테스트     
      */
     public void parseSrtFile2(String filePathName) {
-        //System.out.println(parseSrt.readFile(filePathName));
+        //logger.debug(parseSrt.readFile(filePathName));
         String src = FileUtil.readFile(filePathName);
         
         Pattern p; Matcher m;
@@ -436,20 +439,20 @@ public class ParseSubtitle {
             map.put("time"     ,m.group());
   
             parseList.add(map);
-            //System.out.println(String.valueOf(m.start()));
-            //System.out.println(String.valueOf(m.end()));
-            //System.out.println(m.group());
+            //logger.debug(String.valueOf(m.start()));
+            //logger.debug(String.valueOf(m.end()));
+            //logger.debug(m.group());
         }
         
-        //System.out.println(parseList);
+        //logger.debug(parseList);
         
         for (int i = 0; i < parseList.size(); i++) {
-            System.out.println(parseList.get(i).get("time"));
+            logger.debug(parseList.get(i).get("time"));
             if(i<parseList.size()-1) {
-                System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                logger.debug(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
                         ,Integer.parseInt(parseList.get(i+1).get("timeStart"))));
             } else {
-                System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                logger.debug(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
                         ,src.length()));
                 
             }
@@ -466,7 +469,7 @@ public class ParseSubtitle {
         List<SmiVo> smiList = new ArrayList<SmiVo>();
         
         //String src = FileUtil.readFile(filePathName);
-        //System.out.println("src===\n"+src);
+        //logger.debug("src===\n"+src);
         String src = FileUtil.readFileEucKr(filePathName);
         
         Pattern p; Matcher m;
@@ -483,20 +486,18 @@ public class ParseSubtitle {
             map.put("time"     ,m.group());
   
             parseList.add(map);
-            //System.out.println(String.valueOf(m.start()));
-            //System.out.println(String.valueOf(m.end()));
-            //System.out.println(m.group());
+            //logger.debug(String.valueOf(m.start()));
+            //logger.debug(String.valueOf(m.end()));
+            //logger.debug(m.group());
         }
         
-        System.out.println(parseList);
-        
         for (int i = 0; i < parseList.size(); i++) {
-            //System.out.println(parseList.get(i).get("time"));
+            //logger.debug(parseList.get(i).get("time"));
             if(i<parseList.size()-1) {
-                //System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                //logger.debug(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
                 //        ,Integer.parseInt(parseList.get(i+1).get("timeStart"))));
             } else {
-                //System.out.println(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
+                //logger.debug(src.substring( Integer.parseInt(parseList.get(i).get("timeEnd")) 
                 //        ,src.length()));
             }
         }
@@ -527,31 +528,31 @@ public class ParseSubtitle {
                 br.close();
             }
         } catch (Exception e) {
-            System.out.println("e=" + e.getMessage());
+            logger.debug("e=" + e.getMessage());
         }
         
-        //System.out.println(src);
-        //System.out.println(src.replaceAll("<br>\n", " "));
+        //logger.debug(src);
+        //logger.debug(src.replaceAll("<br>\n", " "));
         String src2 = src.replaceAll("<br>\n", " ");
         //String src3 = src2.substring(src2.indexOf("<body>"),src2.length()-1);
-        //System.out.println(src3);
-        //System.out.println(src2.indexOf("<body>"));
-        System.out.println(src2.substring(328+7,src2.length()));
+        //logger.debug(src3);
+        //logger.debug(src2.indexOf("<body>"));
+        logger.debug(src2.substring(328+7,src2.length()));
         
         
         //String src2 = src.replaceAll("<br>\n", " ");        
         //String src2 = src.replaceAll("<br>\n", " ");
         String aa = "123456778";
-        System.out.println(aa.substring(2, 4));
+        logger.debug(aa.substring(2, 4));
         
-        //        //System.out.println(parseSrt.readFile(filePathName));
+        //        //logger.debug(parseSrt.readFile(filePathName));
 //        String src = FileUtil.readFileEucKr(filePathName);
-//        System.out.println(src);
+//        logger.debug(src);
 //        
 //        src = src.replaceAll("<br>","\n");
-//        System.out.println(src);
+//        logger.debug(src);
         
-        //System.out.println(StringUtil.uniCodeConvertor(src));
+        //logger.debug(StringUtil.uniCodeConvertor(src));
 
 //        
 //        String originalStr = FileUtil.readFileEucKr(filePathName); // 테스트 
@@ -560,7 +561,7 @@ public class ParseSubtitle {
 //        for (int i=0; i<charSet.length; i++) {
 //         for (int j=0; j<charSet.length; j++) {
 //          try {
-//           System.out.println("[" + charSet[i] +"," + charSet[j] +"] = " + new String(originalStr.getBytes(charSet[i]), charSet[j]));
+//           logger.debug("[" + charSet[i] +"," + charSet[j] +"] = " + new String(originalStr.getBytes(charSet[i]), charSet[j]));
 //          } catch (UnsupportedEncodingException e) {
 //           e.printStackTrace();
 //          }
@@ -576,7 +577,7 @@ public class ParseSubtitle {
 //        parseRule = "<br>.*";
 //        p = Pattern.compile(parseRule); m = p.matcher(src); a = false;
 //        while (a = m.find()) { 
-//            System.out.println(m.group().replace("<i>","").replace("</i>",""));
+//            logger.debug(m.group().replace("<i>","").replace("</i>",""));
 //        }
     }
 
@@ -584,7 +585,7 @@ public class ParseSubtitle {
      * 테스트     
      */
     public void parseSrtFile4(String filePathName) {
-        //System.out.println(parseSrt.readFile(filePathName));
+        //logger.debug(parseSrt.readFile(filePathName));
         String src = FileUtil.readFile(filePathName);
         
         Pattern p; Matcher m;
@@ -593,7 +594,7 @@ public class ParseSubtitle {
         parseRule = "<i>.*";
         p = Pattern.compile(parseRule); m = p.matcher(src); a = false;
         while (a = m.find()) { 
-            System.out.println(m.group().replace("<i>","").replace("</i>",""));
+            logger.debug(m.group().replace("<i>","").replace("</i>",""));
         }
     }
     

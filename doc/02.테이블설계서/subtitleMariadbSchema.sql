@@ -1,4 +1,9 @@
-    SELECT A.USR_ID          -- 사용자아이디    
+SELECT SUBSTRING('lifedomy@gmail.com',1,INSTR('lifedomy@gmail.com','@')-1)
+
+UPDATE STTL.TSYUR00010 SET USR_NM = 'lifedomy'
+
+
+SELECT A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
          , A.FSTTL_NM        -- 외국어자막명      
          , A.MSTTL_NM        -- 모국어자막명      
@@ -8,6 +13,12 @@
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00010 A
 
+SELECT * FROM STTL.TSSCM00010
+    
+SELECT USR_ID, STTL_NM, COUNT(*)
+FROM STTL.TSSCM00020
+GROUP BY USR_ID, STTL_NM
+    
 select 3600*24*365
 31536000
     SELECT DISTINCT
