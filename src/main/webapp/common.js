@@ -33,19 +33,19 @@ var SubtitleService = /** @class */ (function () {
     }
     /** GET heroes from the server */
     SubtitleService.prototype.getHeroes = function () {
-        return this.http.get('/subtitle/test5');
+        return this.http.get('http://localhost:8085/subtitle/test5');
     };
     SubtitleService.prototype.selectUsrSttlMstrList = function (usrId) {
-        return this.http.post('/subtitle/selectUsrSttlMstrList', usrId, httpOptions);
+        return this.http.post('http://localhost:8085/subtitle/selectUsrSttlMstrList', usrId, httpOptions);
     };
     SubtitleService.prototype.selectRecentlySubtitle = function (usrId) {
-        return this.http.post('/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
+        return this.http.post('http://localhost:8085/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
     };
     SubtitleService.prototype.selectUsrSttlDtlList = function (usrId) {
-        return this.http.post('/subtitle/selectUsrSttlDtlList', usrId, httpOptions);
+        return this.http.post('http://localhost:8085/subtitle/selectUsrSttlDtlList', usrId, httpOptions);
     };
     SubtitleService.prototype.saveUsrSubtitles = function (fd) {
-        return this.http.post('/subtitle/saveUsrSubtitles', fd);
+        return this.http.post('http://localhost:8085/subtitle/saveUsrSubtitles', fd);
     };
     SubtitleService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: 'root' }),
@@ -222,16 +222,16 @@ var UsrService = /** @class */ (function () {
         this.http = http;
     }
     UsrService.prototype.insertUsr = function (usr) {
-        return this.http.post('/usr/insertUsr', usr, httpOptions);
+        return this.http.post('http://localhost:8085/usr/insertUsr', usr, httpOptions);
     };
     UsrService.prototype.selectUsrLogin = function (usr) {
-        return this.http.post('/usr/selectUsrLogin', usr, httpOptions);
+        return this.http.post('http://localhost:8085/usr/selectUsrLogin', usr, httpOptions);
     };
     UsrService.prototype.saveUsr = function (usr) {
-        return this.http.post('/usr/saveUsr', usr, httpOptions);
+        return this.http.post('http://localhost:8085/usr/saveUsr', usr, httpOptions);
     };
     UsrService.prototype.addUsr2 = function (usr) {
-        return this.http.post('/usr/saveUsr', usr, httpOptions);
+        return this.http.post('http://localhost:8085/usr/saveUsr', usr, httpOptions);
     };
     UsrService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

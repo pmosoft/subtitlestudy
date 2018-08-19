@@ -44,10 +44,10 @@ public class SubtitleCtrl {
      * 자막목록 조회
      */
     @RequestMapping(value = "/subtitle/selectUsrSttlMstrList")
-    public Map<String, Object> selectUsrSttlMstrList(@RequestParam UsrSttlVo inVo) {
-        return subtitleSrv.selectUsrSttlMstrList(inVo);
+    public Map<String, Object> selectUsrSttlMstrList(@RequestBody String usrId) {
+        return subtitleSrv.selectUsrSttlMstrList(usrId);
     }
-
+    		 
     /**
      * 유저 최근 등록 자막 조회
      */                       

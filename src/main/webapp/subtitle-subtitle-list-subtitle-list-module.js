@@ -51,7 +51,7 @@ var SubtitleListRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"card mb-12\">\n    <div class=\"card-header\">My Subtitle List</div>\n    <table class=\"card-body table table-hover\">\n      <tbody>\n      <tr>\n          <th scope=\"row\">1</th>\n          <td>Mark11111111111111111111111111111111111111111111</td>\n      </tr>\n      <tr>\n          <th scope=\"row\">2</th>\n          <td>Jacob</td>\n      </tr>\n      </tbody>\n    </table>\n  </div>\n</div>\n"
+module.exports = "<h2>My Subtitle List</h2>\n<ul class=\"usrSttlVoList\">\n  <li *ngFor=\"let usrSttlVo of usrSttlVoList\"\n    [class.selected]=\"usrSttlVo === selectedUsrSttlVo\"\n    (click)=\"onSelect(usrSttlVo)\">\n    <span class=\"badge\">{{usrSttlVo.usrId}}</span> {{usrSttlVo.usrId}}\n  </li>\n</ul>"
 
 /***/ }),
 
@@ -92,9 +92,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var SubtitleListComponent = /** @class */ (function () {
     function SubtitleListComponent(subtitleService) {
         this.subtitleService = subtitleService;
-        this.usrId = 'lifedomy@gmail.com';
+        this.usrId = localStorage.getItem('usrId');
     }
     SubtitleListComponent.prototype.ngOnInit = function () {
+        this.onSelectUsrSttlMstrList();
     };
     SubtitleListComponent.prototype.onSelectUsrSttlMstrList = function () {
         var _this = this;

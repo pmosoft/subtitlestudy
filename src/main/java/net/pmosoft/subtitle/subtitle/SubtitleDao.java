@@ -13,7 +13,7 @@ public interface SubtitleDao {
     void insertTestBulk(String qry);
     void insertTestBulk2(String qry);
     List<UsrSttlVo> selectUsrRecentlySttl(String usrId);
-    List<UsrSttlVo> selectUsrSttlMstrList(UsrSttlVo inVo);
+    List<UsrSttlVo> selectUsrSttlMstrList(String usrId);
     List<UsrSttlVo> selectUsrSttlDtlList(UsrSttlVo inVo);
     void deleteUsrSttlMstr(UsrSttlVo inVo);
     void deleteUsrSttlDtl(UsrSttlVo inVo);

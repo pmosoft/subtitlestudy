@@ -19,7 +19,7 @@ import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
 @Service
 public class SubtitleSrv {
 
-	private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
+	private static Logger logger = LoggerFactory.getLogger(SubtitleSrv.class);
 	
     @Autowired
     private SubtitleDao subtitleDao;
@@ -41,11 +41,15 @@ public class SubtitleSrv {
             map = fileSave.saveUsrSubtitles(usrId, foreignSubtitleFile, motherSubtitleFile);
            
             /************************************************
-             * 파싱 자막 Vo
+             * 외국어 파싱후 자막 Vo 리턴
              ************************************************/
             ParseSubtitle parseSubtitle1 = new ParseSubtitle();
-            ParseSubtitle parseSubtitle2 = new ParseSubtitle();
         	SmiSrtSubtitleVo foreignSubtitleVo = parseSubtitle1.getSubtitleVo(map.get("subtitleFilePathList").get(0));
+
+            /************************************************
+             * 모국어 파싱후 자막 Vo 리턴
+             ************************************************/
+            ParseSubtitle parseSubtitle2 = new ParseSubtitle();
         	SmiSrtSubtitleVo motherSubtitleVo = parseSubtitle2.getSubtitleVo(map.get("subtitleFilePathList").get(1));
 
 //        	System.out.println(map.get("subtitleFilePathList").get(0));
@@ -69,8 +73,9 @@ public class SubtitleSrv {
         	
         	// 유저 외국어 자막 내용  저장
         	subtitleDao.deleteUsrSttlDtl(usrSttlVo);
-        	String foreignSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
-        	String motherSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
+        	String foreignSubtitle = "", motherSubtitle="";
+        	foreignSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
+        	motherSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
 
         	//String foreignSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
         	//String motherSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
@@ -82,7 +87,7 @@ public class SubtitleSrv {
 		} catch (Exception e){
 			e.printStackTrace();
 			result.put("errUsrMsg", "시스템 장애가 발생되었습니다.");
-			//result.put("errSysMsg", e.toString());
+			result.put("errSysMsg", e.toString());
 		}
 		return result;
     }  
@@ -124,9 +129,9 @@ public class SubtitleSrv {
     	
     	String result = "";
     	int rowCnt = 0;
-    	int commitCnt = 5000;
+    	int commitCnt = 500;
     	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
-   			logger.info("smi start");
+   			logger.info("smi start cnt="+smiSrtSubtitleVo.getSmiList().size());
 			List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
     		for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
     			UsrSttlVo usrSttlVo = new UsrSttlVo();
@@ -219,13 +224,13 @@ public class SubtitleSrv {
     }
     
     
-    public Map<String, Object> selectUsrSttlMstrList(UsrSttlVo inVo){
+    public Map<String, Object> selectUsrSttlMstrList(String usrId){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
             List<UsrSttlVo> usrSttlVoList = null;
-            usrSttlVoList = subtitleDao.selectUsrSttlMstrList(inVo);;
+            usrSttlVoList = subtitleDao.selectUsrSttlMstrList(usrId);;
             result.put("isSuccess", true);
             result.put("usrSttlVoList", usrSttlVoList);
         } catch (Exception e){

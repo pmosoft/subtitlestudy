@@ -22,7 +22,7 @@ public class ParseSubtitle {
 	private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
 	 	
 	
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // TODO Auto-generated method stub
         //String s1 = "<i>Metal </i>";
         
@@ -35,7 +35,7 @@ public class ParseSubtitle {
     /*
      * 테스트     
      */
-    void test02(){
+    void test02() throws Exception{
         //String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
     	String filePathName="C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Silicon.Valley.S01E01.720p.HDTV.x264-2HD.smi";
     	SmiSrtSubtitleVo smiSrtSubtitleVo = getSubtitleVo(filePathName);
@@ -47,32 +47,35 @@ public class ParseSubtitle {
     /*
      * 메인 : 샘파일를 파싱하여 VO로 리턴
      */
-    public SmiSrtSubtitleVo getSubtitleVo(String subtitleFilePath) {
+    public SmiSrtSubtitleVo getSubtitleVo(String subtitleFilePath) throws Exception {
     	SmiSrtSubtitleVo smiSrtSubtitleVo = new SmiSrtSubtitleVo(); 
-    	logger.info(subtitleFilePath +":"+ verifySrtSmi(subtitleFilePath));
-    	smiSrtSubtitleVo.setExtention(verifySrtSmi(subtitleFilePath));
-    	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
-    		logger.info("smi");
-    		smiSrtSubtitleVo.setSmiList(parseSmiFile(subtitleFilePath));
-            for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-            	//smiSrtSubtitleVo.getSmiList().get(i).print();
-    		}
-    	} else {
-    		logger.info("srt");
-    		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
-            for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-            	//smiSrtSubtitleVo.getSrtList().get(i).print();
-    		}
-    	}
+    	try {
+        	logger.info(subtitleFilePath +":"+ verifySrtSmi(subtitleFilePath));
+        	smiSrtSubtitleVo.setExtention(verifySrtSmi(subtitleFilePath));
+        	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+        		logger.info("smi");
+        		smiSrtSubtitleVo.setSmiList(parseSmiFile(subtitleFilePath));
+                for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
+                	//smiSrtSubtitleVo.getSmiList().get(i).print();
+        		}
+        	} else {
+        		logger.info("srt");
+        		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
+                for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
+                	//smiSrtSubtitleVo.getSrtList().get(i).print();
+        		}
+        	}
+        	return smiSrtSubtitleVo;
+			
+		} catch(Exception e) { e.printStackTrace(); throw e; }
     	
-    	return smiSrtSubtitleVo;
     }	
 
 
     /*
      * 메인 : Srt 파싱하여 Vo로 리턴
      */
-    public ArrayList<SrtVo> parseSrtFile(String filePathName) {
+    public ArrayList<SrtVo> parseSrtFile(String filePathName) throws Exception {
 
     	ArrayList<SrtVo> srtList2 = new ArrayList<SrtVo>();
             	
@@ -155,9 +158,8 @@ public class ParseSubtitle {
                     }
                 }                     
             }
-        } catch (Exception e) {
-            logger.debug("parseSrtFile Exception=" + e.getMessage());
-        }
+        } catch(Exception e) { e.printStackTrace(); throw e; }
+    	
         
         return srtList;
         //String src2 = src.replaceAll("<br>\n", " ");
@@ -169,7 +171,7 @@ public class ParseSubtitle {
     /*
      * 메인 : Smi 파싱하여 Vo로 리턴
      */    
-    public ArrayList<SmiVo> parseSmiFile(String filePathName) {
+    public ArrayList<SmiVo> parseSmiFile(String filePathName) throws Exception {
 
     	logger.info("parseSmiFile=="+filePathName);
         ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
@@ -262,9 +264,8 @@ public class ParseSubtitle {
                 }            
             
             }
-        } catch (Exception e) {
-            logger.debug("exception===" + e.getMessage());
-        }
+        } catch(Exception e) { e.printStackTrace(); throw e; }
+    	
         
         //String src2 = src.replaceAll("<br>\n", " ");
         //logger.debug(src2.substring(328+7,src2.length()));
@@ -287,7 +288,7 @@ public class ParseSubtitle {
      * 유틸 : 샘파일의 인코딩을 판단(리턴:UTF-8, EUC-KR...)
      */
     @SuppressWarnings("resource")
-	String detectEncoding(String filePathName) {
+	String detectEncoding(String filePathName) throws Exception {
     	
 		try {
 			byte[] buf = new byte[4096];
@@ -305,15 +306,13 @@ public class ParseSubtitle {
 				logger.info("Detected encoding = " + encoding);
 			} else {
 				logger.info("No encoding detected.");
+				encoding = "EUC-KR";
 			}
 			detector.reset();
 			
 			return encoding;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		} catch(Exception e) { e.printStackTrace(); throw e; }
+    	
 	}	
     
     
@@ -392,7 +391,7 @@ public class ParseSubtitle {
     /*
      * 테스트     
      */
-    void test01(){
+    void test01() throws Exception{
         //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Valerian.and.the.City.of.a.Thousand.Planets.smi";
         String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/[VIP] Demon City Shinjuku.smi";
         //String smifilePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy/Star Wars Rebels S02E01 - The Siege of Lothal.smi";
