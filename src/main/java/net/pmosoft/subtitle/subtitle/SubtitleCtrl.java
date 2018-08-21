@@ -55,7 +55,15 @@ public class SubtitleCtrl {
     public Map<String, Object> selectUsrRecentlySttl(@RequestBody String usrId) {
         return subtitleSrv.selectUsrRecentlySttl(usrId);
     }
-    
+
+    /**
+     * 유저 목록에서 선택된 자막 조회
+     */                       
+    @RequestMapping(value = "/subtitle/selectUsrSttl")
+    public Map<String, Object> selectUsrSttl(@RequestParam UsrSttlVo inVo) {
+        return subtitleSrv.selectUsrSttl(inVo);
+    }
+        
     
     /**
      * 자막상세 조회

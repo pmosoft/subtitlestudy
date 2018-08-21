@@ -105,6 +105,21 @@ INSERT INTO STTL.TSSCM00020 VALUES
 </insert>
 
 
+<select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
+    SELECT A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.FSTTL_NM        -- 외국어자막명      
+         , A.MSTTL_NM        -- 모국어자막명      
+         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00010 A
+    WHERE  A.USR_ID = #{usrId}
+    ORDER BY A.REG_DTM DESC
+</select>
+
 <select id="selectUsrRecentlySttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrRecentlySttl : 유저 최근 등록 자막
     SELECT DISTINCT
@@ -132,19 +147,23 @@ INSERT INTO STTL.TSSCM00020 VALUES
     ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
 </select>
 
-<select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
-    -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
-    SELECT A.USR_ID          -- 사용자아이디    
+<select id="selectUsrSttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.selectUsrSttl : 유저 최근 등록 자막
+    SELECT DISTINCT
+           A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
-         , A.FSTTL_NM        -- 외국어자막명      
-         , A.MSTTL_NM        -- 모국어자막명      
-         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , A.REG_DTM AS REG_DTM
          , A.REG_USR_ID
-         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_DTM AS UPD_DTM
          , A.UPD_USR_ID
-    FROM   STTL.TSSCM00010 A
+    FROM   STTL.TSSCM00020 A
     WHERE  A.USR_ID = #{usrId}
-    ORDER BY A.REG_DTM
+    AND    A.STTL_NM = #{sttlNm}
+    ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
 </select>
 
 <select id="selectUsrSttlDtlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">

@@ -12,6 +12,7 @@ public interface SubtitleDao {
     void insertUsrSttlDtlBulk(List<UsrSttlVo> inVo);
     void insertTestBulk(String qry);
     void insertTestBulk2(String qry);
+    List<UsrSttlVo> selectUsrSttl(UsrSttlVo inVo);
     List<UsrSttlVo> selectUsrRecentlySttl(String usrId);
     List<UsrSttlVo> selectUsrSttlMstrList(String usrId);
     List<UsrSttlVo> selectUsrSttlDtlList(UsrSttlVo inVo);
