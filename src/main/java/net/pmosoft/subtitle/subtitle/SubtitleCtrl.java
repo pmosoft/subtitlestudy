@@ -60,9 +60,9 @@ public class SubtitleCtrl {
      * 유저 목록에서 선택된 자막 조회
      */                       
     @RequestMapping(value = "/subtitle/selectUsrSttl")
-    public Map<String, Object> selectUsrSttl(@RequestParam UsrSttlVo inVo) {
+    public Map<String, Object> selectUsrSttl(@RequestBody UsrSttlVo inVo) {
         return subtitleSrv.selectUsrSttl(inVo);
-    }
+     }
         
     
     /**

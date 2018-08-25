@@ -12,6 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubtitleService", function() { return SubtitleService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,35 +22,41 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
 
 
 var httpOptions = {
     headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Content-Type': 'application/json' })
 };
 var SubtitleService = /** @class */ (function () {
-    function SubtitleService(http) {
+    function SubtitleService(http, document) {
         this.http = http;
+        this.document = document;
         this.heroesUrl = '/subtitle/test3'; // URL to web api
     }
     /** GET heroes from the server */
     SubtitleService.prototype.getHeroes = function () {
-        return this.http.get('http://localhost:8085/subtitle/test5');
+        return this.http.get('http://' + this.document.location.hostname + ':8085/subtitle/test5');
     };
     SubtitleService.prototype.selectUsrSttlMstrList = function (usrId) {
-        return this.http.post('http://localhost:8085/subtitle/selectUsrSttlMstrList', usrId, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlMstrList', usrId, httpOptions);
     };
     SubtitleService.prototype.selectRecentlySubtitle = function (usrId) {
-        return this.http.post('http://localhost:8085/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
     };
     SubtitleService.prototype.selectUsrSttlDtlList = function (usrId) {
-        return this.http.post('http://localhost:8085/subtitle/selectUsrSttlDtlList', usrId, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlDtlList', usrId, httpOptions);
     };
     SubtitleService.prototype.saveUsrSubtitles = function (fd) {
-        return this.http.post('http://localhost:8085/subtitle/saveUsrSubtitles', fd);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/saveUsrSubtitles', fd);
     };
     SubtitleService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: 'root' }),
-        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+        __param(1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])(_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DOCUMENT"])),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], Object])
     ], SubtitleService);
     return SubtitleService;
 }());
@@ -203,6 +210,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UsrService", function() { return UsrService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -212,32 +220,38 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
 
 
 var httpOptions = {
     headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Content-Type': 'application/json' })
 };
 var UsrService = /** @class */ (function () {
-    function UsrService(http) {
+    function UsrService(http, document) {
         this.http = http;
+        this.document = document;
     }
     UsrService.prototype.insertUsr = function (usr) {
-        return this.http.post('http://localhost:8085/usr/insertUsr', usr, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/usr/insertUsr', usr, httpOptions);
     };
     UsrService.prototype.selectUsrLogin = function (usr) {
-        return this.http.post('http://localhost:8085/usr/selectUsrLogin', usr, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/usr/selectUsrLogin', usr, httpOptions);
     };
     UsrService.prototype.saveUsr = function (usr) {
-        return this.http.post('http://localhost:8085/usr/saveUsr', usr, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/usr/saveUsr', usr, httpOptions);
     };
     UsrService.prototype.addUsr2 = function (usr) {
-        return this.http.post('http://localhost:8085/usr/saveUsr', usr, httpOptions);
+        return this.http.post('http://' + this.document.location.hostname + ':8085/usr/saveUsr', usr, httpOptions);
     };
     UsrService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+        __param(1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])(_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DOCUMENT"])),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], Object])
     ], UsrService);
     return UsrService;
 }());
