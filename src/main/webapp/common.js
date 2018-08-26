@@ -41,14 +41,17 @@ var SubtitleService = /** @class */ (function () {
     SubtitleService.prototype.getHeroes = function () {
         return this.http.get('http://' + this.document.location.hostname + ':8085/subtitle/test5');
     };
-    SubtitleService.prototype.selectUsrSttlMstrList = function (usrId) {
-        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlMstrList', usrId, httpOptions);
+    SubtitleService.prototype.selectUsrSttlMstrList = function (subtitle) {
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlMstrList', subtitle, httpOptions);
     };
-    SubtitleService.prototype.selectRecentlySubtitle = function (usrId) {
-        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrRecentlySttl', usrId, httpOptions);
+    SubtitleService.prototype.selectUsrSttl = function (subtitle) {
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttl', subtitle, httpOptions);
     };
-    SubtitleService.prototype.selectUsrSttlDtlList = function (usrId) {
-        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlDtlList', usrId, httpOptions);
+    SubtitleService.prototype.selectRecentlySubtitle = function (subtitle) {
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrRecentlySttl', subtitle, httpOptions);
+    };
+    SubtitleService.prototype.selectUsrSttlDtlList = function (subtitle) {
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlDtlList', subtitle, httpOptions);
     };
     SubtitleService.prototype.saveUsrSubtitles = function (fd) {
         return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/saveUsrSubtitles', fd);
@@ -59,6 +62,26 @@ var SubtitleService = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], Object])
     ], SubtitleService);
     return SubtitleService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/layout/subtitle/subtitle.ts":
+/*!*********************************************!*\
+  !*** ./src/app/layout/subtitle/subtitle.ts ***!
+  \*********************************************/
+/*! exports provided: Subtitle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Subtitle", function() { return Subtitle; });
+var Subtitle = /** @class */ (function () {
+    function Subtitle() {
+    }
+    return Subtitle;
 }());
 
 

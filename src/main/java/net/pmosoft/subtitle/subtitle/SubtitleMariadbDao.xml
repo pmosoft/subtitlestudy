@@ -144,6 +144,8 @@ INSERT INTO STTL.TSSCM00020 VALUES
                                           WHERE USR_ID = #{usrId}
                                           ) 
                         )
+    AND    LENGTH(TRIM(A.STTL_DESC)) > 0
+    AND    A.STTL_CD = IFNULL(#{sttlCd},A.STTL_CD)  
     ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
 </select>
 

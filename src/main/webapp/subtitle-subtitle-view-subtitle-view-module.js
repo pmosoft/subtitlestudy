@@ -51,7 +51,7 @@ var SubtitleViewRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
+module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-list']\">Back to List</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
 
 /***/ }),
 
@@ -78,6 +78,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubtitleViewComponent", function() { return SubtitleViewComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _subtitle_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../subtitle.service */ "./src/app/layout/subtitle/subtitle.service.ts");
+/* harmony import */ var _subtitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../subtitle */ "./src/app/layout/subtitle/subtitle.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -89,19 +91,48 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
+
 var SubtitleViewComponent = /** @class */ (function () {
-    function SubtitleViewComponent(subtitleService) {
+    function SubtitleViewComponent(subtitleService, route) {
         this.subtitleService = subtitleService;
+        this.route = route;
+        this.subtitle = new _subtitle__WEBPACK_IMPORTED_MODULE_2__["Subtitle"]();
+        //subtitle : Subtitle = [];
         //usrId = 'lifedomy@gmail.com';
-        this.usrId = localStorage.getItem('usrId');
+        //usrId = localStorage.getItem('usrId');
         this.foreignSubtitle = "";
         this.motherSubtitle = "";
     }
     SubtitleViewComponent.prototype.ngOnInit = function () {
+        this.usrId = localStorage.getItem('usrId');
+        this.subtitle.usrId = this.usrId;
+        console.log("this.subtitle.usrId==" + this.subtitle.usrId);
+        this.onSelectUsrSttl();
+    };
+    SubtitleViewComponent.prototype.onSelectUsrSttl = function () {
+        var _this = this;
+        var sttlNm = this.route.snapshot.paramMap.get('sttlNm');
+        console.log("sttlNm==" + sttlNm);
+        console.log("usrId1==" + localStorage.getItem('usrId'));
+        console.log("usrId2==" + this.usrId);
+        this.subtitle.usrId = this.usrId;
+        this.subtitle.sttlNm = sttlNm;
+        this.subtitleService.selectUsrSttl(this.subtitle)
+            .subscribe(function (result) {
+            if (!result.isSuccess)
+                alert(result.errUsrMsg);
+            else {
+                _this.foreignSubtitle = result.foreignSubtitle;
+                _this.motherSubtitle = result.motherSubtitle;
+                console.log(result.subtitleListVo);
+            }
+        });
     };
     SubtitleViewComponent.prototype.onSelectRecentlySubtitle = function () {
         var _this = this;
-        this.subtitleService.selectRecentlySubtitle(this.usrId)
+        this.subtitle.usrId = this.usrId;
+        this.subtitleService.selectRecentlySubtitle(this.subtitle)
             .subscribe(function (result) {
             if (!result.isSuccess)
                 alert(result.errUsrMsg);
@@ -118,7 +149,8 @@ var SubtitleViewComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./subtitle-view.component.html */ "./src/app/layout/subtitle/subtitle-view/subtitle-view.component.html"),
             styles: [__webpack_require__(/*! ./subtitle-view.component.scss */ "./src/app/layout/subtitle/subtitle-view/subtitle-view.component.scss")]
         }),
-        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"]])
+        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"]])
     ], SubtitleViewComponent);
     return SubtitleViewComponent;
 }());

@@ -51,7 +51,7 @@ var SubtitleListRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>My Subtitle List</h2>\n<ul class=\"usrSttlVoList\">\n  <li *ngFor=\"let usrSttlVo of usrSttlVoList\"\n    [class.selected]=\"usrSttlVo === selectedUsrSttlVo\"\n    (click)=\"onSelect(usrSttlVo)\">\n    <span class=\"badge\">{{usrSttlVo.usrId}}</span> {{usrSttlVo.usrId}}\n  </li>\n</ul>"
+module.exports = "<h2>My Subtitle List</h2>\n<ul class=\"usrSttlVoList\">\n  <li *ngFor=\"let usrSttlVo of usrSttlVoList\"\n    [class.selected]=\"usrSttlVo === selectedUsrSttlVo\"\n    (click)=\"onClick(usrSttlVo)\">\n    <span class=\"badge\">{{usrSttlVo.sttlNm}}</span> {{usrSttlVo.sttlNm}}\n  </li>\n</ul>"
 
 /***/ }),
 
@@ -78,6 +78,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubtitleListComponent", function() { return SubtitleListComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _subtitle_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../subtitle.service */ "./src/app/layout/subtitle/subtitle.service.ts");
+/* harmony import */ var _subtitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../subtitle */ "./src/app/layout/subtitle/subtitle.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -89,9 +91,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
+
 var SubtitleListComponent = /** @class */ (function () {
-    function SubtitleListComponent(subtitleService) {
+    function SubtitleListComponent(subtitleService, router) {
         this.subtitleService = subtitleService;
+        this.router = router;
+        this.subtitleInVo = new _subtitle__WEBPACK_IMPORTED_MODULE_2__["Subtitle"]();
         this.usrId = localStorage.getItem('usrId');
     }
     SubtitleListComponent.prototype.ngOnInit = function () {
@@ -99,7 +105,8 @@ var SubtitleListComponent = /** @class */ (function () {
     };
     SubtitleListComponent.prototype.onSelectUsrSttlMstrList = function () {
         var _this = this;
-        this.subtitleService.selectUsrSttlMstrList(this.usrId)
+        this.subtitleInVo.usrId = this.usrId;
+        this.subtitleService.selectUsrSttlMstrList(this.subtitleInVo)
             .subscribe(function (result) {
             if (!result.isSuccess)
                 alert(result.errUsrMsg);
@@ -109,13 +116,18 @@ var SubtitleListComponent = /** @class */ (function () {
             }
         });
     };
+    SubtitleListComponent.prototype.onClick = function (subtitle) {
+        console.log("subtitle.sttlNm==" + subtitle.sttlNm);
+        this.router.navigate(['/subtitle-view/' + subtitle.sttlNm]);
+    };
     SubtitleListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-subtitle-list',
             template: __webpack_require__(/*! ./subtitle-list.component.html */ "./src/app/layout/subtitle/subtitle-list/subtitle-list.component.html"),
             styles: [__webpack_require__(/*! ./subtitle-list.component.scss */ "./src/app/layout/subtitle/subtitle-list/subtitle-list.component.scss")]
         }),
-        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"]])
+        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
     ], SubtitleListComponent);
     return SubtitleListComponent;
 }());

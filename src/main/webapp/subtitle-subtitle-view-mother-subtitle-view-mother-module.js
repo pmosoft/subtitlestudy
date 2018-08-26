@@ -51,7 +51,7 @@ var SubtitleViewMotherRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"20\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
+module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-view/blank']\">View</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-list']\">Back to List</button>\n    </div>\n    <!--\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"20\">{{motherSubtitle}}</textarea>\n    </div>\n    -->\n    \n    <div class=\"form-row\">\n      <ul class=\"subtitleListVo\">\n        <li *ngFor=\"let subtitle of subtitleListVo\"\n          [class.selected]=\"subtitle === selectedSubtitle\"\n          (click)=\"onClick(subtitle)\">\n          <h5><span class=\"badge\">{{subtitle.sttlDesc}}</span></h5>\n        </li>\n      </ul>\n    </div>\n\n  </form>\n</div>"
 
 /***/ }),
 
@@ -78,6 +78,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubtitleViewMotherComponent", function() { return SubtitleViewMotherComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _subtitle_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../subtitle.service */ "./src/app/layout/subtitle/subtitle.service.ts");
+/* harmony import */ var _subtitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../subtitle */ "./src/app/layout/subtitle/subtitle.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -89,9 +90,11 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var SubtitleViewMotherComponent = /** @class */ (function () {
     function SubtitleViewMotherComponent(subtitleService) {
         this.subtitleService = subtitleService;
+        this.subtitleInVo = new _subtitle__WEBPACK_IMPORTED_MODULE_2__["Subtitle"]();
         //usrId = 'lifedomy@gmail.com';
         this.usrId = localStorage.getItem('usrId');
         this.foreignSubtitle = "";
@@ -101,16 +104,22 @@ var SubtitleViewMotherComponent = /** @class */ (function () {
     };
     SubtitleViewMotherComponent.prototype.onSelectRecentlySubtitle = function () {
         var _this = this;
-        this.subtitleService.selectRecentlySubtitle(this.usrId)
+        this.subtitleInVo.usrId = this.usrId;
+        this.subtitleInVo.sttlCd = "2";
+        this.subtitleService.selectRecentlySubtitle(this.subtitleInVo)
             .subscribe(function (result) {
             if (!result.isSuccess)
                 alert(result.errUsrMsg);
             else {
                 _this.foreignSubtitle = result.foreignSubtitle;
                 _this.motherSubtitle = result.motherSubtitle;
+                _this.subtitleListVo = result.subtitleListVo;
                 console.log(result.subtitleListVo);
             }
         });
+    };
+    SubtitleViewMotherComponent.prototype.onClick = function () {
+        this.subtitleInVo.usrId = this.usrId;
     };
     SubtitleViewMotherComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

@@ -1,3 +1,30 @@
+
+    SELECT DISTINCT
+           A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , A.REG_DTM AS REG_DTM
+         , A.REG_USR_ID
+         , A.UPD_DTM AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = 'lifedomy@gmail.com'
+    AND    A.STTL_NM = (
+                        SELECT MAX(STTL_NM) 
+                        FROM   STTL.TSSCM00010 
+                        WHERE  USR_ID = 'lifedomy@gmail.com'
+                        AND    REG_DTM = (SELECT MAX(REG_DTM) 
+                                          FROM STTL.TSSCM00010 
+                                          WHERE USR_ID = 'lifedomy@gmail.com'
+                                          ) 
+                        )
+    AND    LENGTH(TRIM(A.STTL_DESC)) > 0
+    ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
+
+
 SELECT SUBSTRING('lifedomy@gmail.com',1,INSTR('lifedomy@gmail.com','@')-1)
 
 UPDATE STTL.TSYUR00010 SET USR_NM = 'lifedomy'

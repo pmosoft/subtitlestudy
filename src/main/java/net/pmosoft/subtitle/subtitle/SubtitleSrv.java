@@ -190,13 +190,13 @@ public class SubtitleSrv {
     }
     
     
-    public Map<String, Object> selectUsrRecentlySttl(String usrId){
+    public Map<String, Object> selectUsrRecentlySttl(UsrSttlVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
             List<UsrSttlVo> list = null;
-            list = subtitleDao.selectUsrRecentlySttl(usrId);
+            list = subtitleDao.selectUsrRecentlySttl(inVo);
             
             String foreignSubtitle = "";
    	       	String motherSubtitle = "";
@@ -231,7 +231,7 @@ public class SubtitleSrv {
             List<UsrSttlVo> list = null;
             list = subtitleDao.selectUsrSttl(inVo);
             
-            String foreignSubtitle = "";
+             String foreignSubtitle = "";
    	       	String motherSubtitle = "";
             
    	       	for (int i = 0; i < list.size(); i++) {
@@ -256,13 +256,13 @@ public class SubtitleSrv {
         return result;
     }    
     
-    public Map<String, Object> selectUsrSttlMstrList(String usrId){
+    public Map<String, Object> selectUsrSttlMstrList(UsrSttlVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
             List<UsrSttlVo> usrSttlVoList = null;
-            usrSttlVoList = subtitleDao.selectUsrSttlMstrList(usrId);;
+            usrSttlVoList = subtitleDao.selectUsrSttlMstrList(inVo);
             result.put("isSuccess", true);
             result.put("usrSttlVoList", usrSttlVoList);
         } catch (Exception e){
