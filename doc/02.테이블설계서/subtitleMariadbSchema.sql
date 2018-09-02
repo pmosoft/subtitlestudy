@@ -30,6 +30,8 @@ SELECT SUBSTRING('lifedomy@gmail.com',1,INSTR('lifedomy@gmail.com','@')-1)
 UPDATE STTL.TSYUR00010 SET USR_NM = 'lifedomy'
 
 
+SELECT * FROM STTL.TSYUR00010
+
 SELECT A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
          , A.FSTTL_NM        -- 외국어자막명      
