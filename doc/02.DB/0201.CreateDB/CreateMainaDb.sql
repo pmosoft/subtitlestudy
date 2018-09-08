@@ -94,3 +94,4 @@ vi /etc/my.cnf
 [mysqld]
 wait_timeout=31536000
 
+ 

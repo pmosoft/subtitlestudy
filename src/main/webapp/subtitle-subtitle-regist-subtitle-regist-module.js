@@ -51,7 +51,7 @@ var SubtitleRegistRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"mb-3\"></div>\n    <div class=\"form-group\">\n      <label for=\"inputAddress\">외국어 자막과 모국어 자막의 내용을 출력합니다.</label>\n    </div>\n    <div class=\"form-row mb-3\" >\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Foreign Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\" name=\"foreignFile\" (change)=\"onForeignFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{foreignFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row mb-3\">\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Mother Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\"  name=\"motherFile\" (change)=\"onMotherFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{motherFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row align-items-center mb-5 \">\n        <button type=\"button\" class=\"btn btn-outline-primary\" (click)=\"onUpload()\">Upload</button> \n    </div>\n    <div class=\"form-row mb-3\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
+module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"mb-3\"></div>\n    <div class=\"form-group\">\n      <label for=\"inputAddress\">Regist Your Subtitle</label>\n    </div>\n    <div class=\"form-row mb-3\" >\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Foreign Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\" name=\"foreignFile\" (change)=\"onForeignFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{foreignFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row mb-3\">\n      <div class=\"col-md-6\">\n        <label for=\"inputAddress\">Mother Language</label>\n      </div>\n      <div class=\"custom-file\">\n        <input type=\"file\" class=\"custom-file-input\"  name=\"motherFile\" (change)=\"onMotherFileSelected($event)\">\n        <label class=\"custom-file-label\" for=\"customFile\">{{motherFileNm}}</label>\n      </div>\n    </div>\n    <div class=\"form-row align-items-center mb-5 \">\n        <button type=\"button\" class=\"btn btn-outline-primary\" (click)=\"onUpload()\">Upload</button> \n    </div>\n    <!--\n    <div class=\"form-row mb-3\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div>\n    --> \n  </form>\n</div>"
 
 /***/ }),
 
@@ -78,7 +78,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubtitleRegistComponent", function() { return SubtitleRegistComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _subtitle_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../subtitle.service */ "./src/app/layout/subtitle/subtitle.service.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -91,12 +91,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var httpOptions = {
-    headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({ 'Content-Type': 'application/json' })
-};
 var SubtitleRegistComponent = /** @class */ (function () {
-    function SubtitleRegistComponent(subtitleService) {
+    function SubtitleRegistComponent(subtitleService, router) {
         this.subtitleService = subtitleService;
+        this.router = router;
         //usrId = 'lifedomy@gmail.com';
         this.usrId = localStorage.getItem('usrId');
         this.foreignFile = null;
@@ -128,7 +126,6 @@ var SubtitleRegistComponent = /** @class */ (function () {
         }
     };
     SubtitleRegistComponent.prototype.onUpload = function () {
-        //console.log("usrId================"+this.usrId);
         var _this = this;
         var fd = new FormData();
         fd.append('uploadFile', this.foreignFile);
@@ -141,9 +138,10 @@ var SubtitleRegistComponent = /** @class */ (function () {
                 console.log("errSysMsg=====" + result.errSysMsg);
             }
             else {
-                _this.foreignSubtitle = result.foreignSubtitle;
-                _this.motherSubtitle = result.motherSubtitle;
-                console.log(result.usrMsg);
+                //this.foreignSubtitle = result.foreignSubtitle;  
+                //this.motherSubtitle = result.motherSubtitle; 
+                _this.router.navigate(['/subtitle-view/' + result.sttlNm]);
+                //console.log(result.usrMsg);  
             }
         });
     };
@@ -153,7 +151,8 @@ var SubtitleRegistComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./subtitle-regist.component.html */ "./src/app/layout/subtitle/subtitle-regist/subtitle-regist.component.html"),
             styles: [__webpack_require__(/*! ./subtitle-regist.component.scss */ "./src/app/layout/subtitle/subtitle-regist/subtitle-regist.component.scss")]
         }),
-        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"]])
+        __metadata("design:paramtypes", [_subtitle_service__WEBPACK_IMPORTED_MODULE_1__["SubtitleService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], SubtitleRegistComponent);
     return SubtitleRegistComponent;
 }());

@@ -37,6 +37,9 @@ var SubtitleService = /** @class */ (function () {
         this.document = document;
         this.heroesUrl = '/subtitle/test3'; // URL to web api
     }
+    SubtitleService.prototype.saveUsrSubtitles = function (fd) {
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/saveUsrSubtitles', fd);
+    };
     /** GET heroes from the server */
     SubtitleService.prototype.getHeroes = function () {
         return this.http.get('http://' + this.document.location.hostname + ':8085/subtitle/test5');
@@ -52,9 +55,6 @@ var SubtitleService = /** @class */ (function () {
     };
     SubtitleService.prototype.selectUsrSttlDtlList = function (subtitle) {
         return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/selectUsrSttlDtlList', subtitle, httpOptions);
-    };
-    SubtitleService.prototype.saveUsrSubtitles = function (fd) {
-        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/saveUsrSubtitles', fd);
     };
     SubtitleService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: 'root' }),

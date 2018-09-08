@@ -82,6 +82,11 @@ var map = {
 		"common",
 		"subtitle-subtitle-regist-subtitle-regist-module"
 	],
+	"./subtitle/subtitle-site/subtitle-site.module": [
+		"./src/app/layout/subtitle/subtitle-site/subtitle-site.module.ts",
+		"common",
+		"subtitle-subtitle-site-subtitle-site-module"
+	],
 	"./subtitle/subtitle-view-mother/subtitle-view-mother.module": [
 		"./src/app/layout/subtitle/subtitle-view-mother/subtitle-view-mother.module.ts",
 		"common",

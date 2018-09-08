@@ -82,6 +82,7 @@ public class SubtitleSrv {
         	
            	result.put("isSuccess", true);
    	       	result.put("usrMsg", "정상 처리 되었습니다");
+   	       	result.put("sttlNm", foreignSubtitleFile.getOriginalFilename());
    	       	result.put("foreignSubtitle", foreignSubtitle);
    	       	result.put("motherSubtitle", motherSubtitle);
 		} catch (Exception e){
