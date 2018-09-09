@@ -1,4 +1,9 @@
-
+SELECT ROW_NUMBER() OVER()
+FROM   sttl.tsscm00020 A
+    
+SELECT ROW_NUMBER() OVER()
+FROM   STTL.TSSCM00020 A
+ 
     SELECT DISTINCT
            A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
