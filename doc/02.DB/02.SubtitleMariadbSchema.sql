@@ -242,7 +242,57 @@ USR_ID,STTL_NM,STTL_CD,STTL_STM,STTL_ETM,STTL_DESC,REG_DTM,REG_USR_ID,UPD_DTM,UP
 FROM STTL.TSSCM00021
 ORDER BY USR_ID,STTL_NM,STTL_CD,STTL_STM,STTL_ETM,STTL_DESC,REG_DTM,REG_USR_ID,UPD_DTM,UPD_USR_ID    
 
+INSERT INTO STTL.TSSCM00020
+SELECT 
+ USR_ID,STTL_NM,STTL_CD
+,ROW_NUMBER() OVER(PARTITION BY USR_ID,STTL_NM,STTL_CD ORDER BY USR_ID,STTL_NM,STTL_CD ) as STTL_NUM
+,STTL_STM,STTL_ETM,STTL_DESC,REG_DTM,REG_USR_ID,UPD_DTM,UPD_USR_ID
+FROM STTL.TSSCM00021
+ORDER BY USR_ID,STTL_NM,STTL_CD
 
+
+select * FROM   STTL.TSSCM00020
+
+
+
+SELECT * FROM   STTL.TSSCM00020 WHERE STTL_NM = 'Silicon.Valley.S03E06.720p.HDTV.x264-AVS.smi'  
+                        
+
+DELETE  FROM   STTL.TSSCM00010 WHERE STTL_NM = 'Silicon.Valley.S03E06.720p.HDTV.x264-AVS.smi'  
+                        
+
+SELECT DISTINCT
+           A.STTL_NM         -- 자막명      
+    FROM   STTL.TSSCM00020 A
+
+SELECT DISTINCT
+           A.USR_ID          -- 사용자아이디    
+         , A.STTL_NM         -- 자막명      
+         , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_NUM        -- 자막순번      
+         , A.STTL_STM        -- 자막시작시각      
+         , A.STTL_ETM        -- 자막종료시각      
+         , A.STTL_DESC       -- 자막문장내용
+         , A.REG_DTM AS REG_DTM
+         , A.REG_USR_ID
+         , A.UPD_DTM AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00020 A
+    WHERE  A.USR_ID = 'lifedomy@gmail.com'
+    AND    A.STTL_NM = (
+                        SELECT MAX(STTL_NM) 
+                        FROM   STTL.TSSCM00020 
+                        WHERE  USR_ID = 'lifedomy@gmail.com'
+                        AND    REG_DTM = (SELECT MAX(REG_DTM) 
+                                          FROM STTL.TSSCM00020 
+                                          WHERE USR_ID = 'lifedomy@gmail.com'
+                                          ) 
+                        )
+    AND    LENGTH(TRIM(A.STTL_DESC)) > 0
+    AND    A.STTL_CD = IFNULL('2',A.STTL_CD)  
+    ORDER BY A.STTL_CD,STTL_NUM
+
+commit
 
 DROP TABLE STTL.TSSCM00020;
 

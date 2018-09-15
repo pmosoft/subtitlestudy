@@ -37,6 +37,7 @@
          USR_ID          -- 사용자아이디    
         ,STTL_NM         -- 자막명      
         ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+        ,STTL_NUM        -- 자막순번
         ,STTL_STM        -- 자막시작시각      
         ,STTL_ETM        -- 자막종료시각      
         ,STTL_DESC       -- 자막문장내용
@@ -48,6 +49,7 @@
          #{usrId}        -- 사용자아이디    
         ,#{sttlNm}       -- 자막명      
         ,#{sttlCd}       -- 자막구분(1:외국어,2:모국어)  
+        ,#{sttlNum}      -- 자막순번             
         ,#{sttlStm}      -- 자막시작시각             
         ,#{sttlEtm}      -- 자막종료시각             
         ,#{sttlDesc}     -- 자막문장내용             
@@ -68,6 +70,7 @@
          USR_ID          -- 사용자아이디    
         ,STTL_NM         -- 자막명      
         ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+        ,STTL_NUM        -- 자막순번
         ,STTL_STM        -- 자막시작시각      
         ,STTL_ETM        -- 자막종료시각      
         ,STTL_DESC       -- 자막문장내용
@@ -81,6 +84,7 @@
          #{usrSttlVo.usrId}        -- 사용자아이디    
         ,#{usrSttlVo.sttlNm}       -- 자막명      
         ,#{usrSttlVo.sttlCd}       -- 자막구분(1:외국어,2:모국어)  
+        ,#{usrSttlVo.sttlNum}      -- 자막순번             
         ,#{usrSttlVo.sttlStm}      -- 자막시작시각             
         ,#{usrSttlVo.sttlEtm}      -- 자막종료시각             
         ,#{usrSttlVo.sttlDesc}     -- 자막문장내용             
@@ -126,6 +130,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
            A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
          , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_NUM        -- 자막순번      
          , A.STTL_STM        -- 자막시작시각      
          , A.STTL_ETM        -- 자막종료시각      
          , A.STTL_DESC       -- 자막문장내용
@@ -146,7 +151,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
                         )
     AND    LENGTH(TRIM(A.STTL_DESC)) > 0
     AND    A.STTL_CD = IFNULL(#{sttlCd},A.STTL_CD)  
-    ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
+    ORDER BY A.STTL_NUM,A.STTL_CD
 </select>
 
 <select id="selectUsrSttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
@@ -155,6 +160,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
            A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
          , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_NUM        -- 자막순번      
          , A.STTL_STM        -- 자막시작시각      
          , A.STTL_ETM        -- 자막종료시각      
          , A.STTL_DESC       -- 자막문장내용
@@ -165,7 +171,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
     FROM   STTL.TSSCM00020 A
     WHERE  A.USR_ID = #{usrId}
     AND    A.STTL_NM = #{sttlNm}
-    ORDER BY A.STTL_CD,CAST(STTL_STM AS INT), A.REG_DTM
+    ORDER BY A.STTL_CD,A.STTL_NUM, A.REG_DTM
 </select>
 
 <select id="selectUsrSttlDtlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
@@ -173,6 +179,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
     SELECT A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
          , A.STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+         , A.STTL_NUM        -- 자막순번      
          , A.STTL_STM        -- 자막시작시각      
          , A.STTL_ETM        -- 자막종료시각      
          , A.STTL_DESC       -- 자막문장내용
@@ -182,7 +189,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00020 A
     WHERE  A.USR_ID = #{usrId}
-    ORDER BY A.REG_DTM
+    ORDER BY A.STTL_NUM
 
 </select>
 

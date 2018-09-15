@@ -11,6 +11,7 @@ public class UsrSttlVo {
 	private String msttlNm  ; // 모국어자막명
 	
 	private String sttlCd   ; //자막구분(1:외국어,2:모국어) 
+	private int    sttlNum  ; //자막순번 
 	private String sttlStm  ; //자막시작시각      	 
 	private String sttlEtm  ; //자막종료시각      	 
 	private String sttlDesc ; //자막문장내용	 
@@ -97,6 +98,12 @@ public class UsrSttlVo {
 	}
 	public void setUsrEmail(String usrEmail) {
 		this.usrEmail = usrEmail;
+	}
+	public int getSttlNum() {
+		return sttlNum;
+	}
+	public void setSttlNum(int sttlNum) {
+		this.sttlNum = sttlNum;
 	}
 	
 }

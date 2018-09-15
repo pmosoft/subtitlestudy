@@ -51,7 +51,7 @@ var SubtitleViewMotherRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row \">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-view/blank']\">View</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-list']\">Back to List</button>\n    </div>\n    <!--\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"20\">{{motherSubtitle}}</textarea>\n    </div>\n   --> \n\n    <div class=\"chat-panel card card-default\">\n      <div class=\"card-header\">\n          <i class=\"fa fa-comments fa-fw\"></i>\n          Mother Subtitle\n      </div>\n      <!-- /.panel-heading -->\n      <div class=\"card-body\">\n          <ul class=\"list-group\">\n              <li class=\"list-group-item list-group-item-action\" *ngFor=\"let subtitle of subtitleListVo\"\n                [class.selected]=\"subtitle === selectedSubtitle\"\n                (click)=\"onClick(subtitle)\">\n                <h5><span class=\"badge\">{{subtitle.sttlDesc}}</span></h5>\n              </li>\n          </ul>\n      </div>\n    </div>\n\n\n  </form>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"card\">\n    <div class=\"card-header\">\n      <div class=\"clearfix\">\n        <div class=\"float-left\">Mother Subtitle</div>\n        <div class=\"float-right\"><button type=\"button\" class=\"btn btn-outline-primary btn-sm mr-2\" (click)=\"onSelectRecentlySubtitle()\">Recent</button>\n          <button type=\"button\" class=\"btn btn-outline-primary btn-sm mr-2\" [routerLink]=\"['/subtitle-view/blank']\">View</button>\n          <button type=\"button\" class=\"btn btn-outline-primary btn-sm mr-2\" [routerLink]=\"['/subtitle-list']\">List</button>\n        </div>\n      </div>\n    </div>\n    <div>\n      <ul class=\"list-group\">\n        <li class=\"list-group-item list-group-item-action\" *ngFor=\"let subtitle of subtitleListVo;\"\n            [class.selected]=\"subtitle === selectedSubtitle\"\n            (click)=\"onClick(subtitle)\">\n            [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n        </li>\n      </ul>\n    </div>\n  </div>\n</div>\n    "
 
 /***/ }),
 
@@ -101,6 +101,9 @@ var SubtitleViewMotherComponent = /** @class */ (function () {
         this.motherSubtitle = "";
     }
     SubtitleViewMotherComponent.prototype.ngOnInit = function () {
+    };
+    SubtitleViewMotherComponent.prototype.customTB = function (index, item) {
+        return index + "-" + item.xrow + "-" + item.yplace;
     };
     SubtitleViewMotherComponent.prototype.onSelectRecentlySubtitle = function () {
         var _this = this;

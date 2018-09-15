@@ -51,7 +51,7 @@ var SubtitleListRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>My Subtitle List</h2>\n<ul class=\"usrSttlVoList\">\n  <li *ngFor=\"let usrSttlVo of usrSttlVoList\"\n    [class.selected]=\"usrSttlVo === selectedUsrSttlVo\"\n    (click)=\"onClick(usrSttlVo)\">\n    <span class=\"badge\">{{usrSttlVo.sttlNm}}</span> {{usrSttlVo.sttlNm}}\n  </li>\n</ul>"
+module.exports = "<!-- <div class=\"container\"> -->\n  <div class=\"card mb-1 \">\n    <div class=\"card-header   text-center\">\n      My Subtitle List\n    </div>\n  </div>\n\n  <ul class=\"list-group\">\n    <li class=\"list-group-item list-group-item-action\" *ngFor=\"let usrSttlVo of usrSttlVoList\"\n      [class.selected]=\"usrSttlVo === selectedUsrSttlVo\"\n      (click)=\"onClick(usrSttlVo)\">\n      {{usrSttlVo.sttlNm}}\n    </li>\n  </ul>\n<!-- </div> -->"
 
 /***/ }),
 
@@ -62,7 +62,7 @@ module.exports = "<h2>My Subtitle List</h2>\n<ul class=\"usrSttlVoList\">\n  <li
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".chat-panel .chat {\n  height: 450px;\n  overflow-y: scroll;\n  margin: 0;\n  padding: 0;\n  list-style: none; }\n  .chat-panel .chat li {\n    margin-bottom: 10px;\n    margin-right: 15px;\n    padding-bottom: 5px;\n    border-bottom: 1px dotted #999; }\n"
 
 /***/ }),
 

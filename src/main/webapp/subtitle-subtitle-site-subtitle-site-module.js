@@ -51,7 +51,7 @@ var SubtitleSiteRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <ul>\n    <li><a href=\"http://www.yifysubtitles.com/\" target=\"_blank\">yifysubtitles</a></li>\n  </ul>\n</div> "
+module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-site-mother']\">Mother Site</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-list']\">Back to List</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
 
 /***/ }),
 

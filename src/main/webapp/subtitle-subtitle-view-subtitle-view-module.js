@@ -51,7 +51,7 @@ var SubtitleViewRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row\">\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" (click)=\"onSelectRecentlySubtitle()\">Recently Subtitle</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n      <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2\" [routerLink]=\"['/subtitle-list']\">Back to List</button>\n    </div>\n    <div class=\"form-row\">\n      <label>Foreign subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{foreignSubtitle}}</textarea>\n    </div>\n    <div class=\"form-row\">\n      <label>Mother subtitle</label>\n      <textarea class=\"form-control\" rows=\"10\">{{motherSubtitle}}</textarea>\n    </div> \n  </form>\n</div>"
+module.exports = "<!-- \n<div class=\"container\">\n  <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" (click)=\"onSelectRecentlySubtitle()\">Recent</button>\n  <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n  <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-list']\">List</button>\n  \n  <div class=\"row\">\n    <div class=\"col\">\n      <label>Foreign subtitle</label>\n    <li class=\"list-group-item list-group-item-action \" *ngFor=\"let subtitle of foreignSubtitle;\"\n      [class.selected]=\"subtitle === selectedSubtitle\"\n      (click)=\"onClick(subtitle)\">\n      [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n    </li>\n    </div>\n    <div class=\"col\">\n      <label>Mother subtitle</label>\n      <li class=\"list-group-item list-group-item-action \" *ngFor=\"let subtitle of motherSubtitle;\"\n    [class.selected]=\"subtitle === selectedSubtitle\"\n    (click)=\"onClick(subtitle)\">\n    [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n  </li>\n    </div>\n  </div>\n</div> -->\n\n<div class=\"container\">\n\n<button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" (click)=\"onSelectRecentlySubtitle()\">Recent</button>\n<button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n<button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-list']\">List</button>\n\n<div class=\"chat-panel card\">\n  <div class=\"card-header\">\n     Foreign Subtitle\n  </div>\n  <div class=\"\">\n    <ul class=\"chat\">\n      <li class=\"clearfix\" *ngFor=\"let subtitle of foreignSubtitle;\"\n          [class.selected]=\"subtitle === selectedSubtitle\"\n          (click)=\"onClick(subtitle)\">\n          [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div class=\"mb-2\"></div>\n\n<div class=\"chat-panel card\">\n    <div class=\"card-header\">\n       Mother Subtitle\n    </div>\n    <div class=\"\">\n        <ul class=\"chat\">\n          <li class=\"clearfix\" *ngFor=\"let subtitle of motherSubtitle;\"\n              [class.selected]=\"subtitle === selectedSubtitle\"\n              (click)=\"onClick(subtitle)\">\n              [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n          </li>\n        </ul>\n      </div>\n  </div>\n</div>\n\n<!-- \n<li class=\"left clearfix\">\n    <span class=\"chat-img pull-left\">\n        <img src=\"http://placehold.it/50/55C1E7/fff\" alt=\"User Avatar\" class=\"img-circle\">\n    </span>\n    <div class=\"chat-body clearfix\">\n        <div class=\"header\">\n            <strong class=\"primary-font\">Jack Sparrow</strong>\n            <small class=\"pull-right text-muted\">\n                <i class=\"fa fa-clock-o fa-fw\"></i> 12 mins ago\n            </small>\n        </div>\n        <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.\n        </p>\n    </div>\n</li> -->"
 
 /***/ }),
 
@@ -62,7 +62,7 @@ module.exports = "<div class=\"container\">\n  <form>\n    <div class=\"form-row
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".chat-panel .chat {\n  height: 300px;\n  overflow-y: auto;\n  margin-top: 15px;\n  margin-left: 15px;\n  margin-bottom: 15px;\n  padding: 0 0 0 0;\n  list-style: none; }\n  .chat-panel .chat li {\n    margin-bottom: 10px;\n    margin-right: 15px;\n    padding-bottom: 5px;\n    border-bottom: 1px dotted #999; }\n  .container {\n  min-height: 100vh; }\n  .li {\n  margin-bottom: 10px;\n  margin-right: 15px;\n  padding-bottom: 5px;\n  border-bottom: 1px dotted #999; }\n"
 
 /***/ }),
 
@@ -98,11 +98,6 @@ var SubtitleViewComponent = /** @class */ (function () {
         this.subtitleService = subtitleService;
         this.route = route;
         this.subtitle = new _subtitle__WEBPACK_IMPORTED_MODULE_2__["Subtitle"]();
-        //subtitle : Subtitle = [];
-        //usrId = 'lifedomy@gmail.com';
-        //usrId = localStorage.getItem('usrId');
-        this.foreignSubtitle = "";
-        this.motherSubtitle = "";
     }
     SubtitleViewComponent.prototype.ngOnInit = function () {
         this.usrId = localStorage.getItem('usrId');
@@ -110,6 +105,9 @@ var SubtitleViewComponent = /** @class */ (function () {
         console.log("this.subtitle.usrId==" + this.subtitle.usrId);
         this.onSelectUsrSttl();
     };
+    //subtitle : Subtitle = [];
+    //usrId = 'lifedomy@gmail.com';
+    //usrId = localStorage.getItem('usrId');
     SubtitleViewComponent.prototype.onSelectUsrSttl = function () {
         var _this = this;
         var sttlNm = this.route.snapshot.paramMap.get('sttlNm');
@@ -125,7 +123,7 @@ var SubtitleViewComponent = /** @class */ (function () {
             else {
                 _this.foreignSubtitle = result.foreignSubtitle;
                 _this.motherSubtitle = result.motherSubtitle;
-                console.log(result.subtitleListVo);
+                //console.log(result.subtitleListVo);  
             }
         });
     };
