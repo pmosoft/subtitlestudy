@@ -27,6 +27,9 @@ public class ParseSubtitle {
         //String s1 = "<i>Metal </i>";
         
         //logger.debug(s1.matches("<i>")
+    	//String content = "&nbsp;";
+    	//System.out.println(content.contentEquals("nbsp"));
+    	//System.out.println(content..contentEquals("nbsp"));
         
         ParseSubtitle parseSubtitle = new ParseSubtitle();
         parseSubtitle.test02();
@@ -37,9 +40,8 @@ public class ParseSubtitle {
      */
     void test02() throws Exception{
         //String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
-    	String filePathName="C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Silicon.Valley.S01E01.720p.HDTV.x264-2HD.smi";
+    	String filePathName="d:\\Downloads\\moive\\Kill Command\\Kill Command 2016 1080p BluRay x264 DTS-JYK - ENGLISH.smi";
     	SmiSrtSubtitleVo smiSrtSubtitleVo = getSubtitleVo(filePathName);
-    	
     	logger.debug(smiSrtSubtitleVo.getFilePathNm());
     } 
     
@@ -200,25 +202,60 @@ public class ParseSubtitle {
                     logger.debug(str);
                     if (str != null) {
                         if(str.matches("(?i)<sync.*=[0-9]+.*")) {
-                            // rnum의 기반을 산출한다. 
-                            num++;
-                            parseRule = "[0-9]+";
+                            logger.debug("1111");
+                        	num++;
+                            
+                            /*******************************
+                             * stime 추출 
+                             *******************************/
+                        	parseRule = "[0-9]+";
                             p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
                             stime = Integer.parseInt(m.group());
-                            logger.debug(str+" "+stime);
-                        } else if(str.matches("(?i)<sync.*=>.*")) {
-                        } else {
-                            if(num>0){
-                                // rnum별로 내용을 산출한다.
-                                rnum++;
+                            //logger.debug("1111 content="+str+":"+stime);
+                            /*************************************************
+                             *  content가 존재하는 경우 추출
+                             *  예> <SYNC Start=90224><P Class=KRCC>킬 커맨드
+                             ************************************************/
+                        	parseRule = "(?i)<p class=.*>.*";
+                            p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
+                            String content = m.group();
+                            
+                            logger.debug("1111 content="+content);
+                            logger.debug("1111 content="+content.substring(content.indexOf('>')+1,content.length()));
+                            content = content.substring(content.indexOf('>')+1,content.length());
+                            content = content.replace("&nbsp;", "");
+                            if(content.contentEquals("nbsp")) content = "";
+                            if(content.trim().length()>0){
+                            	logger.debug("11111111 content="+content);
+                            	
+                            	rnum++;
                                 SmiVo smiVo = new SmiVo();
                                 smiVo.num = rnum;
                                 smiVo.stime = stime;
                                 smiVo.etime = 0;
-                                //smiList.set(rnum-2, etime).get(rnum-2).stime:333;
-                                smiVo.content = str; 
-                                //smiVo.print();
+                                smiVo.content = content; 
                                 smiList.add(smiVo);
+                            }
+                            
+                        } else if(str.matches("(?i)<sync.*=>.*")) {
+                        } else {
+                        	logger.debug("2222");
+                        	if(num>0){
+                                // rnum별로 내용을 산출한다.
+                            	//logger.debug("3333");
+                            	String content = str;
+                            	content = content.replace("&nbsp;", "");
+                                if(content.trim().length()>0){
+                                	logger.debug("22222222 content="+content);
+                                    
+                                	rnum++;
+                                    SmiVo smiVo = new SmiVo();
+                                    smiVo.num = rnum;
+                                    smiVo.stime = stime;
+                                    smiVo.etime = 0;
+                                    smiVo.content = content; 
+                                    smiList.add(smiVo);
+                                }
                             }   
                         }
                     } else {

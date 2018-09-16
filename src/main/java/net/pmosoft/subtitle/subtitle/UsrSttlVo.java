@@ -21,6 +21,8 @@ public class UsrSttlVo {
 	private String updDtm   ; // 변경일시
 	private String updUsrId ; // 변경자
 
+	private String condSttlNum ; // 조회조건:자막순번
+
 	public String getUsrId() {
 		return usrId;
 	}
@@ -104,6 +106,12 @@ public class UsrSttlVo {
 	}
 	public void setSttlNum(int sttlNum) {
 		this.sttlNum = sttlNum;
+	}
+	public String getCondSttlNum() {
+		return condSttlNum;
+	}
+	public void setCondSttlNum(String condSttlNum) {
+		this.condSttlNum = condSttlNum;
 	}
 	
 }

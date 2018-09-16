@@ -39,6 +39,15 @@ public class SubtitleCtrl {
 
              return subtitleSrv.saveUsrSubtitles(usrEmail,foreignSubtitleFile,motherSubtitleFile);
     }        
+
+    /**
+     * 자막 책갈피 기능. 자막번호 저장
+     */
+    @RequestMapping(value = "/subtitle/saveSttlNum")
+    public Map<String, Object> saveSttlNum(@RequestBody UsrSttlVo inVo) {
+        return subtitleSrv.saveSttlNum(inVo);
+    }
+       
     
     /**
      * 자막목록 조회

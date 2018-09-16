@@ -61,7 +61,6 @@
       
 </insert>
 
-
 <insert id="insertUsrSttlDtlBulk" parameterType="String">
 
     -- SubtitleDao.insertUsrSttlDtl
@@ -94,8 +93,6 @@
         ,#{usrSttlVo.updUsrId}     -- 변경자
         )
 	</foreach>
-
-      
 </insert>
 
 
@@ -108,6 +105,30 @@ INSERT INTO STTL.TSSCM00020 VALUES
 
 </insert>
 
+<insert id="insertSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.insertSttlNum 자막 책갈피
+    INSERT INTO STTL.TSSCM00030
+    (
+         USR_ID          -- 사용자아이디    
+        ,STTL_NM         -- 자막명      
+        ,STTL_CD         -- 자막구분(1:외국어,2:모국어) 
+        ,STTL_NUM        -- 자막순번
+        ,REG_DTM         -- 등록일시
+        ,REG_USR_ID      -- 등록자 
+        ,UPD_DTM         -- 변경일시
+        ,UPD_USR_ID      -- 변경자
+    ) VALUES
+        (
+         #{usrId}        -- 사용자아이디    
+        ,#{sttlNm}       -- 자막명      
+        ,#{sttlCd}       -- 자막구분(1:외국어,2:모국어)  
+        ,0               -- 자막순번             
+        ,now()           -- 등록일시
+        ,#{regUsrId}     -- 등록자
+        ,now()           -- 변경일시
+        ,#{updUsrId}     -- 변경자
+        )
+</insert>
 
 <select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
@@ -171,6 +192,16 @@ INSERT INTO STTL.TSSCM00020 VALUES
     FROM   STTL.TSSCM00020 A
     WHERE  A.USR_ID = #{usrId}
     AND    A.STTL_NM = #{sttlNm}
+    AND   (   (#{condSttlNum} = '0')
+           OR (#{condSttlNum} = '1' AND A.STTL_NUM BETWEEN 0 AND 999)
+           OR (#{condSttlNum} = '2' AND A.STTL_NUM BETWEEN 1000 AND 1999)
+           OR (#{condSttlNum} = '3' AND A.STTL_NUM BETWEEN 2000 AND 2999)
+           OR (#{condSttlNum} = '4' AND A.STTL_NUM BETWEEN 3000 AND 3999)
+           OR (#{condSttlNum} = '5' AND A.STTL_NUM BETWEEN 4000 AND 4999)
+           OR (#{condSttlNum} = '6' AND A.STTL_NUM BETWEEN 5000 AND 5999)
+           OR (#{condSttlNum} = '7' AND A.STTL_NUM BETWEEN 6000 AND 6999)
+          )          
+     
     ORDER BY A.STTL_CD,A.STTL_NUM, A.REG_DTM
 </select>
 
@@ -193,6 +224,16 @@ INSERT INTO STTL.TSSCM00020 VALUES
 
 </select>
 
+<update id="updateSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.updateSttlNum
+    UPDATE STTL.TSSCM00030 
+    SET    STTL_NUM = #{sttl_num}
+    WHERE  USR_ID  = #{usrId} 
+    AND    STTL_NM = #{sttlNm}
+    AND    STTL_CD = #{sttlCdm}
+</update> 
+
+
 <delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.deleteUsrSttlMstr
     DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
@@ -202,5 +243,11 @@ INSERT INTO STTL.TSSCM00020 VALUES
     -- SubtitleDao.deleteUsrSttlDtl
     DELETE FROM STTL.TSSCM00020 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
 </delete> 
+
+<delete id="deleteSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.deleteUsrSttlNum
+    DELETE FROM STTL.TSSCM00030 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
+</delete> 
+
 
 </mapper>
