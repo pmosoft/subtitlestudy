@@ -22,6 +22,8 @@ public class UsrSttlVo {
 	private String updUsrId ; // 변경자
 
 	private String condSttlNum ; // 조회조건:자막순번
+	private String condSttlCd  ; // 조회조건:자막구분
+	private String condBookmarkYn; // 책갈피
 
 	public String getUsrId() {
 		return usrId;
@@ -112,6 +114,18 @@ public class UsrSttlVo {
 	}
 	public void setCondSttlNum(String condSttlNum) {
 		this.condSttlNum = condSttlNum;
+	}
+	public String getCondSttlCd() {
+		return condSttlCd;
+	}
+	public void setCondSttlCd(String condSttlCd) {
+		this.condSttlCd = condSttlCd;
+	}
+	public String getCondBookmarkYn() {
+		return condBookmarkYn;
+	}
+	public void setCondBookmarkYn(String condBookmarkYn) {
+		this.condBookmarkYn = condBookmarkYn;
 	}
 	
 }

@@ -190,6 +190,18 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.UPD_DTM AS UPD_DTM
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00020 A
+         ,(SELECT STTL_NUM AS STTL_NUM  
+           FROM   STTL.TSSCM00030
+           WHERE  USR_ID  = #{usrId}
+           AND    STTL_NM = #{sttlNm}
+           AND    STTL_CD = '1'
+           ) B
+         ,(SELECT STTL_NUM AS STTL_NUM  
+           FROM   STTL.TSSCM00030
+           WHERE  USR_ID  = #{usrId}
+           AND    STTL_NM = #{sttlNm}
+           AND    STTL_CD = '2'
+           ) C
     WHERE  A.USR_ID = #{usrId}
     AND    A.STTL_NM = #{sttlNm}
     AND   (   (#{condSttlNum} = '0')
@@ -201,8 +213,12 @@ INSERT INTO STTL.TSSCM00020 VALUES
            OR (#{condSttlNum} = '6' AND A.STTL_NUM BETWEEN 5000 AND 5999)
            OR (#{condSttlNum} = '7' AND A.STTL_NUM BETWEEN 6000 AND 6999)
           )          
-     
-    ORDER BY A.STTL_CD,A.STTL_NUM, A.REG_DTM
+    AND   A.STTL_CD = (CASE WHEN #{condSttlCd} = '0' THEN A.STTL_CD ELSE #{condSttlCd} END)
+    AND   (   (#{condBookmarkYn} = 'N'                                                 )
+           OR (#{condBookmarkYn} = 'Y' AND #{condSttlCd} IN ('1','0') AND A.STTL_CD = '1' AND A.STTL_NUM >= B.STTL_NUM)
+           OR (#{condBookmarkYn} = 'Y' AND #{condSttlCd} IN ('2','0') AND A.STTL_CD = '2' AND A.STTL_NUM >= C.STTL_NUM)
+          )          
+    ORDER BY A.STTL_NUM, A.REG_DTM
 </select>
 
 <select id="selectUsrSttlDtlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
@@ -227,10 +243,10 @@ INSERT INTO STTL.TSSCM00020 VALUES
 <update id="updateSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.updateSttlNum
     UPDATE STTL.TSSCM00030 
-    SET    STTL_NUM = #{sttl_num}
+    SET    STTL_NUM = #{sttlNum}
     WHERE  USR_ID  = #{usrId} 
     AND    STTL_NM = #{sttlNm}
-    AND    STTL_CD = #{sttlCdm}
+    AND    STTL_CD = #{sttlCd}
 </update> 
 
 

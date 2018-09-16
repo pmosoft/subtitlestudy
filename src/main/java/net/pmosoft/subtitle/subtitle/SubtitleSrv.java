@@ -101,7 +101,9 @@ public class SubtitleSrv {
     public Map<String, Object> saveSttlNum(UsrSttlVo inVo){
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            //subtitleDao.saveSttlNum(inVo);
+        	System.out.println("inVo==="+inVo.getUsrId());
+        	System.out.println("inVo==="+inVo.getSttlNm());
+            subtitleDao.updateSttlNum(inVo);
             result.put("isSuccess", true);
         } catch (Exception e){
             result.put("isSuccess", false);
@@ -260,18 +262,18 @@ public class SubtitleSrv {
             List<UsrSttlVo> foreignSubtitle = new ArrayList<UsrSttlVo>();
             List<UsrSttlVo> motherSubtitle = new ArrayList<UsrSttlVo>();
            
-                  for (int i = 0; i < list.size(); i++) {
-                      if(list.get(i).getSttlCd().equals("1"))
-                          foreignSubtitle.add(list.get(i)); 
-                      else motherSubtitle.add(list.get(i));
-                  }
-                  
-                  //System.out.println("foreignSubtitle="+foreignSubtitle);
+            for (int i = 0; i < list.size(); i++) {
+                if(list.get(i).getSttlCd().equals("1"))
+                    foreignSubtitle.add(list.get(i)); 
+                else motherSubtitle.add(list.get(i));
+            }
+            
+            //System.out.println("foreignSubtitle="+foreignSubtitle);
                   
             result.put("isSuccess", true);
             result.put("subtitleListVo", list);
-                  result.put("foreignSubtitle", foreignSubtitle);
-                  result.put("motherSubtitle", motherSubtitle);
+            result.put("foreignSubtitle", foreignSubtitle);
+            result.put("motherSubtitle", motherSubtitle);
             
         } catch (Exception e){
             result.put("isSuccess", false);
