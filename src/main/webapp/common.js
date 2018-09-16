@@ -40,6 +40,9 @@ var SubtitleService = /** @class */ (function () {
     SubtitleService.prototype.saveUsrSubtitles = function (fd) {
         return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/saveUsrSubtitles', fd);
     };
+    SubtitleService.prototype.saveSttlNum = function (subtitle) {
+        return this.http.post('http://' + this.document.location.hostname + ':8085/subtitle/saveSttlNum', subtitle, httpOptions);
+    };
     /** GET heroes from the server */
     SubtitleService.prototype.getHeroes = function () {
         return this.http.get('http://' + this.document.location.hostname + ':8085/subtitle/test5');

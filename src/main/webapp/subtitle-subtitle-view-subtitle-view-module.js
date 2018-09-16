@@ -51,7 +51,7 @@ var SubtitleViewRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- \n<div class=\"container\">\n  <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" (click)=\"onSelectRecentlySubtitle()\">Recent</button>\n  <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n  <button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-list']\">List</button>\n  \n  <div class=\"row\">\n    <div class=\"col\">\n      <label>Foreign subtitle</label>\n    <li class=\"list-group-item list-group-item-action \" *ngFor=\"let subtitle of foreignSubtitle;\"\n      [class.selected]=\"subtitle === selectedSubtitle\"\n      (click)=\"onClick(subtitle)\">\n      [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n    </li>\n    </div>\n    <div class=\"col\">\n      <label>Mother subtitle</label>\n      <li class=\"list-group-item list-group-item-action \" *ngFor=\"let subtitle of motherSubtitle;\"\n    [class.selected]=\"subtitle === selectedSubtitle\"\n    (click)=\"onClick(subtitle)\">\n    [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n  </li>\n    </div>\n  </div>\n</div> -->\n\n<div class=\"container\">\n\n<button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" (click)=\"onSelectRecentlySubtitle()\">Recent</button>\n<button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n<button type=\"button\" class=\"btn btn-outline-primary mb-3 mr-2 btn-sm\" [routerLink]=\"['/subtitle-list']\">List</button>\n\n<div class=\"chat-panel card\">\n  <div class=\"card-header\">\n     Foreign Subtitle\n  </div>\n  <div class=\"\">\n    <ul class=\"chat\">\n      <li class=\"clearfix\" *ngFor=\"let subtitle of foreignSubtitle;\"\n          [class.selected]=\"subtitle === selectedSubtitle\"\n          (click)=\"onClick(subtitle)\">\n          [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div class=\"mb-2\"></div>\n\n<div class=\"chat-panel card\">\n    <div class=\"card-header\">\n       Mother Subtitle\n    </div>\n    <div class=\"\">\n        <ul class=\"chat\">\n          <li class=\"clearfix\" *ngFor=\"let subtitle of motherSubtitle;\"\n              [class.selected]=\"subtitle === selectedSubtitle\"\n              (click)=\"onClick(subtitle)\">\n              [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n          </li>\n        </ul>\n      </div>\n  </div>\n</div>\n\n<!-- \n<li class=\"left clearfix\">\n    <span class=\"chat-img pull-left\">\n        <img src=\"http://placehold.it/50/55C1E7/fff\" alt=\"User Avatar\" class=\"img-circle\">\n    </span>\n    <div class=\"chat-body clearfix\">\n        <div class=\"header\">\n            <strong class=\"primary-font\">Jack Sparrow</strong>\n            <small class=\"pull-right text-muted\">\n                <i class=\"fa fa-clock-o fa-fw\"></i> 12 mins ago\n            </small>\n        </div>\n        <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.\n        </p>\n    </div>\n</li> -->"
+module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\" >\n    <div class=\"col-md-12\">\n      <div class=\"card\">\n        <div class=\"card-header\">\n          <div class=\"clearfix\">\n            <div class=\"float-left\">View Subtitles</div>\n            <div class=\"float-right\">\n              <select (change)=\"onChange($event.target.value)\" class=\"btn btn-outline-primary btn-sm mr-2\"> \n                  <option *ngFor=\"let sttlNum of sel_sttlNum\" [value]=\"sttlNum.id\" >{{sttlNum.name}}</option>\n                  <!-- <option value=\"0\" selected>All</option>\n                  <option value=\"1\">1000-1999</option>\n                  <option value=\"2\">2000-2999</option>\n                  <option value=\"3\">3000-3999</option>\n                  <option value=\"4\">4000-4999</option>\n                  <option value=\"5\">5000-5999</option>\n                  <option value=\"6\">6000-6999</option> -->\n              </select>\n              <button type=\"button\" class=\"btn btn-outline-primary mr-2 btn-sm\" (click)=\"onSelectUsrSttl()\">Search</button>\n              <button type=\"button\" class=\"btn btn-outline-primary mr-2 btn-sm\" [routerLink]=\"['/subtitle-view-mother']\">Mother View</button>\n              <button type=\"button\" class=\"btn btn-outline-primary mr-2 btn-sm\" [routerLink]=\"['/subtitle-list']\">\n                <i class=\"fa fa-tasks fa-fw\"></i> List\n              </button>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row  row-first\">\n    <div class=\"col-xl-6 col-lg-12\">\n      <div class=\"chat-panel card\">\n        <div class=\"\">\n          <ul class=\"chat\">\n            <li class=\"list-group-item list-group-item-action\" *ngFor=\"let subtitle of foreignSubtitle;\"\n                [class.selected]=\"subtitle === selectedSubtitle\"\n                (dblclick)=\"onSaveSttlNum(subtitle)\">\n                [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>  \n \n    <div class=\"col-xl-6 col-lg-12\">\n      <div class=\"chat-panel card\">\n          <div class=\"\">\n              <ul class=\"chat\">\n                <li class=\"list-group-item list-group-item-action\" *ngFor=\"let subtitle of motherSubtitle;\"\n                    [class.selected]=\"subtitle === selectedSubtitle\"\n                    (dblclick)=\"onSaveSttlNum(subtitle)\">\n                    [{{subtitle.sttlNum}}] {{subtitle.sttlDesc}}\n                </li>\n              </ul>\n            </div>\n      </div>\n    </div>\n  </div>\n\n    <!-- <div class=\"mb-2\"></div> -->\n\n\n</div>\n"
 
 /***/ }),
 
@@ -62,7 +62,7 @@ module.exports = "<!-- \n<div class=\"container\">\n  <button type=\"button\" cl
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".chat-panel .chat {\n  height: 300px;\n  overflow-y: auto;\n  margin-top: 15px;\n  margin-left: 15px;\n  margin-bottom: 15px;\n  padding: 0 0 0 0;\n  list-style: none; }\n  .chat-panel .chat li {\n    margin-bottom: 10px;\n    margin-right: 15px;\n    padding-bottom: 5px;\n    border-bottom: 1px dotted #999; }\n  .container {\n  min-height: 100vh; }\n  .li {\n  margin-bottom: 10px;\n  margin-right: 15px;\n  padding-bottom: 5px;\n  border-bottom: 1px dotted #999; }\n"
+module.exports = ".container-fluid {\n  height: 100%;\n  padding-left: 0px;\n  padding-right: 0px; }\n\n.row-first {\n  height: 80%;\n  overflow: hidden; }\n\n.chat-panel .chat {\n  height: 200px;\n  overflow-y: auto;\n  margin-top: 0px;\n  margin-left: 0px;\n  margin-bottom: 0px;\n  padding: 0 0 0 0;\n  list-style: none; }\n\n.chat-panel .chat2 {\n  margin-top: 15px;\n  margin-left: 15px;\n  margin-bottom: 15px;\n  padding: 0 0 0 0; }\n\n.container {\n  min-height: 100vh; }\n\n.li {\n  margin-bottom: 10px;\n  margin-right: 15px;\n  padding-bottom: 5px;\n  border-bottom: 1px dotted #999; }\n"
 
 /***/ }),
 
@@ -98,6 +98,17 @@ var SubtitleViewComponent = /** @class */ (function () {
         this.subtitleService = subtitleService;
         this.route = route;
         this.subtitle = new _subtitle__WEBPACK_IMPORTED_MODULE_2__["Subtitle"]();
+        this.sel_sttlNum = [
+            { id: 0, name: "All" },
+            { id: 1, name: "1-999" },
+            { id: 2, name: "1000-1999" },
+            { id: 3, name: "2000-2999" },
+            { id: 4, name: "3000-3999" },
+            { id: 5, name: "4000-4999" },
+            { id: 6, name: "5000-5999" },
+            { id: 7, name: "6000-6999" }
+        ];
+        this.selectedValue = "0";
     }
     SubtitleViewComponent.prototype.ngOnInit = function () {
         this.usrId = localStorage.getItem('usrId');
@@ -108,24 +119,36 @@ var SubtitleViewComponent = /** @class */ (function () {
     //subtitle : Subtitle = [];
     //usrId = 'lifedomy@gmail.com';
     //usrId = localStorage.getItem('usrId');
+    SubtitleViewComponent.prototype.onChange = function (deviceValue) {
+        console.log(deviceValue);
+        this.selectedValue = deviceValue;
+        console.log(this.selectedValue);
+    };
     SubtitleViewComponent.prototype.onSelectUsrSttl = function () {
         var _this = this;
+        console.log("selectedValue==" + this.selectedValue);
         var sttlNm = this.route.snapshot.paramMap.get('sttlNm');
-        console.log("sttlNm==" + sttlNm);
-        console.log("usrId1==" + localStorage.getItem('usrId'));
-        console.log("usrId2==" + this.usrId);
-        this.subtitle.usrId = this.usrId;
-        this.subtitle.sttlNm = sttlNm;
-        this.subtitleService.selectUsrSttl(this.subtitle)
-            .subscribe(function (result) {
-            if (!result.isSuccess)
-                alert(result.errUsrMsg);
-            else {
-                _this.foreignSubtitle = result.foreignSubtitle;
-                _this.motherSubtitle = result.motherSubtitle;
-                //console.log(result.subtitleListVo);  
-            }
-        });
+        if (sttlNm == ":blank") {
+            this.onSelectRecentlySubtitle();
+        }
+        else {
+            console.log("sttlNm==" + sttlNm);
+            console.log("usrId1==" + localStorage.getItem('usrId'));
+            console.log("usrId2==" + this.usrId);
+            this.subtitle.usrId = this.usrId;
+            this.subtitle.sttlNm = sttlNm;
+            this.subtitle.condSttlNum = this.selectedValue;
+            this.subtitleService.selectUsrSttl(this.subtitle)
+                .subscribe(function (result) {
+                if (!result.isSuccess)
+                    alert(result.errUsrMsg);
+                else {
+                    _this.foreignSubtitle = result.foreignSubtitle;
+                    _this.motherSubtitle = result.motherSubtitle;
+                    //console.log(result.subtitleListVo);  
+                }
+            });
+        }
     };
     SubtitleViewComponent.prototype.onSelectRecentlySubtitle = function () {
         var _this = this;
@@ -140,6 +163,18 @@ var SubtitleViewComponent = /** @class */ (function () {
                 console.log(result.subtitleListVo);
             }
         });
+    };
+    SubtitleViewComponent.prototype.onSaveSttlNum = function (subtitle) {
+        console.log("subtitle.sttlNm==" + subtitle.sttlNm);
+        console.log("subtitle.sttlCd==" + subtitle.sttlCd);
+        console.log("subtitle.sttlNum==" + subtitle.sttlNum);
+        // this.subtitleService.saveSttlNum(this.subtitle)
+        // .subscribe(result => {
+        //   if(!result.isSuccess) alert(result.errUsrMsg)
+        //   else {
+        //     console.log("");  
+        //   } 
+        // });
     };
     SubtitleViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
