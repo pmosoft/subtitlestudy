@@ -23,8 +23,12 @@ public class UsrSttlVo {
 
 	private String condSttlNum ; // 조회조건:자막순번
 	private String condSttlCd  ; // 조회조건:자막구분
-	private String condBookmarkYn; // 책갈피
+	private String condBookmarkYn; // 북마크
 
+	private int foreignQryNum; // 외국어 북마크번호
+	private int motherQryNum;  // 모국어 북마크번호
+	
+	
 	public String getUsrId() {
 		return usrId;
 	}
@@ -126,6 +130,18 @@ public class UsrSttlVo {
 	}
 	public void setCondBookmarkYn(String condBookmarkYn) {
 		this.condBookmarkYn = condBookmarkYn;
+	}
+	public int getForeignQryNum() {
+		return foreignQryNum;
+	}
+	public void setForeignQryNum(int foreignQryNum) {
+		this.foreignQryNum = foreignQryNum;
+	}
+	public int getMotherQryNum() {
+		return motherQryNum;
+	}
+	public void setMotherQryNum(int motherQryNum) {
+		this.motherQryNum = motherQryNum;
 	}
 	
 }

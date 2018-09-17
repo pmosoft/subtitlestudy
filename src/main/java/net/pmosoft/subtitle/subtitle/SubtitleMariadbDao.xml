@@ -176,7 +176,19 @@ INSERT INTO STTL.TSSCM00020 VALUES
 </select>
 
 <select id="selectUsrSttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
-    -- SubtitleDao.selectUsrSttl : 유저 최근 등록 자막
+    -- SubtitleDao.selectUsrSttl : 유저 자막
+    WITH TEMP01 AS (
+	    SELECT CASE WHEN #{sttlNm} = ':blank' 
+	                THEN MAX(STTL_NM) 
+	                ELSE #{sttlNm}
+	           END  AS STTL_NM
+        FROM   STTL.TSSCM00010 
+        WHERE  USR_ID = #{usrId}
+        AND    REG_DTM = (SELECT MAX(REG_DTM) 
+                          FROM STTL.TSSCM00010 
+                          WHERE USR_ID = #{usrId}
+                          )
+    )
     SELECT DISTINCT
            A.USR_ID          -- 사용자아이디    
          , A.STTL_NM         -- 자막명      
@@ -189,36 +201,30 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.REG_USR_ID
          , A.UPD_DTM AS UPD_DTM
          , A.UPD_USR_ID
+         , B.STTL_NUM+D.QRY_NUM AS FOREIGN_QRY_NUM 
+         , C.STTL_NUM+D.QRY_NUM AS MOTHER_QRY_NUM 
     FROM   STTL.TSSCM00020 A
          ,(SELECT STTL_NUM AS STTL_NUM  
            FROM   STTL.TSSCM00030
            WHERE  USR_ID  = #{usrId}
-           AND    STTL_NM = #{sttlNm}
+           AND    STTL_NM = (SELECT STTL_NM FROM TEMP01)
            AND    STTL_CD = '1'
            ) B
          ,(SELECT STTL_NUM AS STTL_NUM  
            FROM   STTL.TSSCM00030
            WHERE  USR_ID  = #{usrId}
-           AND    STTL_NM = #{sttlNm}
+           AND    STTL_NM = (SELECT STTL_NM FROM TEMP01)
            AND    STTL_CD = '2'
            ) C
+         ,(SELECT 200 QRY_NUM) D
     WHERE  A.USR_ID = #{usrId}
-    AND    A.STTL_NM = #{sttlNm}
-    AND   (   (#{condSttlNum} = '0')
-           OR (#{condSttlNum} = '1' AND A.STTL_NUM BETWEEN 0 AND 999)
-           OR (#{condSttlNum} = '2' AND A.STTL_NUM BETWEEN 1000 AND 1999)
-           OR (#{condSttlNum} = '3' AND A.STTL_NUM BETWEEN 2000 AND 2999)
-           OR (#{condSttlNum} = '4' AND A.STTL_NUM BETWEEN 3000 AND 3999)
-           OR (#{condSttlNum} = '5' AND A.STTL_NUM BETWEEN 4000 AND 4999)
-           OR (#{condSttlNum} = '6' AND A.STTL_NUM BETWEEN 5000 AND 5999)
-           OR (#{condSttlNum} = '7' AND A.STTL_NUM BETWEEN 6000 AND 6999)
-          )          
+    AND    A.STTL_NM = (SELECT STTL_NM FROM TEMP01) 
     AND   A.STTL_CD = (CASE WHEN #{condSttlCd} = '0' THEN A.STTL_CD ELSE #{condSttlCd} END)
     AND   (   (#{condBookmarkYn} = 'N'                                                 )
            OR (#{condBookmarkYn} = 'Y' AND #{condSttlCd} IN ('1','0') AND A.STTL_CD = '1' 
-               AND A.STTL_NUM BETWEEN B.STTL_NUM AND B.STTL_NUM+200 )
+               AND A.STTL_NUM BETWEEN B.STTL_NUM AND B.STTL_NUM+D.QRY_NUM )
            OR (#{condBookmarkYn} = 'Y' AND #{condSttlCd} IN ('2','0') AND A.STTL_CD = '2' 
-               AND A.STTL_NUM BETWEEN C.STTL_NUM AND C.STTL_NUM+200 )
+               AND A.STTL_NUM BETWEEN C.STTL_NUM AND C.STTL_NUM+D.QRY_NUM )
           )          
     ORDER BY A.STTL_NUM, A.REG_DTM
 </select>
