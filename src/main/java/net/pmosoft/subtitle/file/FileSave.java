@@ -36,6 +36,8 @@ public class FileSave {
             
             // 외국어 자막 파일 저장            
             String foreignSubtitleFilePath = usrFilePathNm + foreignSubtitleFile.getOriginalFilename();
+            fileUtil.fileDelete(foreignSubtitleFilePath);
+            
             logger.info("foreignSubtitleFilePath="+foreignSubtitleFilePath);
             Path foreignPath = Paths.get(foreignSubtitleFilePath);
             byte[] foreignBytes = foreignSubtitleFile.getBytes();
@@ -43,6 +45,8 @@ public class FileSave {
             
             // 자국어 자막 파일 저장
             String motherSubtitleFilePath = usrFilePathNm + motherSubtitleFile.getOriginalFilename();
+            fileUtil.fileDelete(motherSubtitleFilePath);
+
             logger.info("motherSubtitleFilePath="+motherSubtitleFilePath);
             Path motherPath = Paths.get(motherSubtitleFilePath);
             byte[] motherBytes = motherSubtitleFile.getBytes();

@@ -31,8 +31,11 @@ public class ParseSubtitle {
     	//System.out.println(content.contentEquals("nbsp"));
     	//System.out.println(content..contentEquals("nbsp"));
         
-        ParseSubtitle parseSubtitle = new ParseSubtitle();
-        parseSubtitle.test02();
+        //ParseSubtitle parseSubtitle = new ParseSubtitle();
+        //parseSubtitle.test02();
+        File I = new File("/home/subtitle/files/kmjwhite@hanmail.net/Star.Wars.Episode.1.The.Phantom.Menace.1999.1080p.BluRay.xnHD.x264-NhaNc3.srt");
+        I.delete();
+        
     }
 
     /*
