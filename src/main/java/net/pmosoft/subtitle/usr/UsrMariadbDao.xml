@@ -27,9 +27,9 @@
         ,SUBSTRING(#{usrEmail},1,INSTR(#{usrEmail},'@')-1)
         ,CAST(#{usrAge} as INT)
         ,'Y'
-        ,CURDATE()
+        ,NOW()
         ,'ADMIN'
-        ,CURDATE() 
+        ,NOW() 
         ,'ADMIN' 
     )
 </insert>
