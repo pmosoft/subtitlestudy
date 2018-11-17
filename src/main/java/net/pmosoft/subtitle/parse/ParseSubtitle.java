@@ -262,8 +262,8 @@ public class ParseSubtitle {
                         //logger.debug(srtList.get(i).getContent());
                     	content2 += srtList.get(i).getContent() + " ";
                     } else {  
-                        SrtVo tvo = new SrtVo(); 
-                        tvo.setNum(++num);
+                        SrtVo tvo = new SrtVo();  
+                        tvo.setNum(++num); 
                         tvo.setStime(srtList.get(i).getStime());
                         tvo.setEtime(srtList.get(i+1).getStime());
                         tvo.setContent(content2+srtList.get(i).getContent());
