@@ -254,14 +254,14 @@ public class ParseSubtitle {
                 
                 num = 0;
                 // stime별로 content를 합친다
-                String content2 = "";
+                String content2 = ""; 
                 for (int i = 0; i < srtList.size()-1; i++) {
                 	logger.debug(srtList.size() +":"+ i);
                 	logger.debug(srtList.get(i).getContent());
                 	if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
                         //logger.debug(srtList.get(i).getContent());
                     	content2 += srtList.get(i).getContent() + " ";
-                    } else { 
+                    } else {  
                         SrtVo tvo = new SrtVo(); 
                         tvo.setNum(++num);
                         tvo.setStime(srtList.get(i).getStime());
