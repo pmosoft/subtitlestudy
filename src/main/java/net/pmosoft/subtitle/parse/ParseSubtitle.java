@@ -31,10 +31,10 @@ public class ParseSubtitle {
     	//System.out.println(content.contentEquals("nbsp"));
     	//System.out.println(content..contentEquals("nbsp"));
         
-        //ParseSubtitle parseSubtitle = new ParseSubtitle();
-        //parseSubtitle.test02();
-        File I = new File("/home/subtitle/files/kmjwhite@hanmail.net/Star.Wars.Episode.1.The.Phantom.Menace.1999.1080p.BluRay.xnHD.x264-NhaNc3.srt");
-        I.delete();
+        ParseSubtitle parseSubtitle = new ParseSubtitle();
+        parseSubtitle.test02();
+        //File I = new File("/home/subtitle/files/kmjwhite@hanmail.net/Star.Wars.Episode.1.The.Phantom.Menace.1999.1080p.BluRay.xnHD.x264-NhaNc3.srt");
+        //I.delete();
         
     }
 
@@ -43,9 +43,11 @@ public class ParseSubtitle {
      */
     void test02() throws Exception{
         //String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
-    	String filePathName="d:\\Downloads\\moive\\Kill Command\\Kill Command 2016 1080p BluRay x264 DTS-JYK - ENGLISH.smi";
+    	String filePathName="d:\\Downloads\\Halo.The.Fall.of.Reach.2015.1080p.BluRay.x264.AC3-JYK\\Halo.The.Fall.of.Reach.2015.1080p.BluRay.x264.AC3-JYK2.srt";
+    	
     	SmiSrtSubtitleVo smiSrtSubtitleVo = getSubtitleVo(filePathName);
     	logger.debug(smiSrtSubtitleVo.getFilePathNm());
+    	//System.out.println(smiSrtSubtitleVo);
     } 
     
     
@@ -67,7 +69,7 @@ public class ParseSubtitle {
         		logger.info("srt");
         		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
                 for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-                	//smiSrtSubtitleVo.getSrtList().get(i).print();
+                	smiSrtSubtitleVo.getSrtList().get(i).print();
         		}
         	}
         	return smiSrtSubtitleVo;
@@ -80,8 +82,116 @@ public class ParseSubtitle {
     /*
      * 메인 : Srt 파싱하여 Vo로 리턴
      */
-    public ArrayList<SrtVo> parseSrtFile(String filePathName) throws Exception {
+    public ArrayList<SrtVo> parseSrtFile2(String filePathName) throws Exception {
+    	
+        logger.debug("parseSrtFile2");
+   
+    	ArrayList<SrtVo> srtList2 = new ArrayList<SrtVo>();
+            	
+        Pattern p; Matcher m;
+        String parseRule;
+        
+        BufferedReader br = null;
+        String src = "";
+        ArrayList<SrtVo> srtList = new ArrayList<SrtVo>();
 
+        try {
+
+            File file = new File(filePathName);
+            
+            if (file.isFile()) {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
+                
+                int num = 0;
+                int bnum = 0;
+                int rnum = 0;
+                String stime = "";
+                String etime = "";
+                String str2 = "";
+                
+                String timeParseRule = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9] --> [0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
+                
+                
+                /*
+                 * bnum = 1 num = 1
+                 * bnum = 0 num = 2
+                 * */
+                while (true) {
+                    String str = br.readLine();
+                    logger.debug("str="+str);
+                    if (str != null) {
+                        if(str.matches("[0-9]+$")) {
+                        	bnum = num;
+                        	num = Integer.parseInt(str);
+                        } else if(str.matches(timeParseRule)) {
+                            parseRule = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
+                            p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
+                            stime = m.group();
+                            //logger.debug(stime);
+
+                            parseRule = "--> [0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
+                            p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
+                            etime = m.group().substring(4);
+                            //logger.debug(num + " "+ stime + " " + etime);
+                        } else {
+                        	str2 += str;
+                            if(num>bnum) {
+                                // rnum별로 내용을 산출한다.
+                                rnum++;
+                                str2 = "";
+                                SrtVo srtVo = new SrtVo();
+                                srtVo.num = rnum;
+                                srtVo.stime = stime;
+                                srtVo.etime = etime;
+                                srtVo.content = str2;
+                                //srtVo.print();
+                                srtList.add(srtVo);
+                            }
+                        }
+                    } else {
+                        break;
+                    }    
+                }
+                br.close();
+                
+                num = 0;
+                // stime별로 content를 합친다
+                String content2 = "";
+                for (int i = 0; i < srtList.size()-1; i++) {
+                	logger.debug(srtList.size() +":"+ i);
+                	logger.debug(srtList.get(i).getContent());
+                	if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
+                        //logger.debug(srtList.get(i).getContent());
+                    	content2 += srtList.get(i).getContent();
+                    } else { 
+                        SrtVo tvo = new SrtVo(); 
+                        tvo.setNum(++num);
+                        tvo.setStime(srtList.get(i).getStime());
+                        tvo.setEtime(srtList.get(i+1).getStime());
+                        tvo.setContent(content2+" "+srtList.get(i).getContent());
+                        content2 = "";
+                        //tvo.print();
+                        srtList2.add(tvo);
+                    }
+                }                     
+            }
+        } catch(Exception e) { e.printStackTrace(); throw e; }
+    	
+        
+        return srtList;
+        //String src2 = src.replaceAll("<br>\n", " ");
+        //logger.debug(src2.substring(328+7,src2.length()));
+        
+    }
+
+    
+    /*
+     * 메인 : Srt 파싱하여 Vo로 리턴
+     */
+    public ArrayList<SrtVo> parseSrtFile(String filePathName) throws Exception {
+    	
+        logger.debug("parseSrtFile");
+   
     	ArrayList<SrtVo> srtList2 = new ArrayList<SrtVo>();
             	
         Pattern p; Matcher m;
@@ -146,12 +256,12 @@ public class ParseSubtitle {
                 // stime별로 content를 합친다
                 String content2 = "";
                 for (int i = 0; i < srtList.size()-1; i++) {
-                	//logger.debug(srtList.size() +":"+ i);
-                	//logger.debug(srtList.get(i).getContent());
+                	logger.debug(srtList.size() +":"+ i);
+                	logger.debug(srtList.get(i).getContent());
                 	if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
                         //logger.debug(srtList.get(i).getContent());
-                    	content2 += srtList.get(i).getContent();
-                    } else {
+                    	content2 += srtList.get(i).getContent() + " ";
+                    } else { 
                         SrtVo tvo = new SrtVo(); 
                         tvo.setNum(++num);
                         tvo.setStime(srtList.get(i).getStime());
@@ -166,7 +276,7 @@ public class ParseSubtitle {
         } catch(Exception e) { e.printStackTrace(); throw e; }
     	
         
-        return srtList;
+        return srtList2;
         //String src2 = src.replaceAll("<br>\n", " ");
         //logger.debug(src2.substring(328+7,src2.length()));
         
@@ -459,7 +569,7 @@ public class ParseSubtitle {
     /*
      * 테스트     
      */
-    public void parseSrtFile2(String filePathName) {
+    public void parseSrtFile3(String filePathName) {
         //logger.debug(parseSrt.readFile(filePathName));
         String src = FileUtil.readFile(filePathName);
         
