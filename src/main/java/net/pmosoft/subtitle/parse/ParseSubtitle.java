@@ -419,7 +419,7 @@ public class ParseSubtitle {
         
         //String src2 = src.replaceAll("<br>\n", " ");
         //logger.debug(src2.substring(328+7,src2.length()));
-        return smiList;
+        return smiList2;
     }
     
     
