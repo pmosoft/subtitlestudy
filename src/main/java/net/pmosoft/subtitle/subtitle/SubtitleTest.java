@@ -32,6 +32,9 @@ public class SubtitleTest {
 	@Autowired
 	private SubtitleDao subtitleDao;
 
+
+	
+	
 	@Test @Ignore
 	public void insertUsrSttlDtlDao() { 
 		
@@ -49,7 +52,7 @@ public class SubtitleTest {
 		
 	}
 	
-	@Test
+	@Test @Ignore
 	public void insertTestBulkDao() { 
 		String qry = "";
 		qry += "INSERT INTO STTL.TSSCM00020 VALUES ('lifedomy@gmail.com','Silicon.Valley.S01E02.720p.HDTV.x264-2HD.smi','2','1602830','1606670','- Thank you.<BR>- Sorry. Ok.',now(),NULL,now(),NULL)";

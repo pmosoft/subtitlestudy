@@ -43,7 +43,7 @@ public class ParseSubtitle {
      */
     void test02() throws Exception{
         //String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
-    	String filePathName="d:\\Downloads\\Halo.The.Fall.of.Reach.2015.1080p.BluRay.x264.AC3-JYK\\Halo.The.Fall.of.Reach.2015.1080p.BluRay.x264.AC3-JYK2.srt";
+    	String filePathName="d:\\fframe\\workspace\\subtitlestudy\\file\\Black.Mirror.S03E03.smi";
     	
     	SmiSrtSubtitleVo smiSrtSubtitleVo = getSubtitleVo(filePathName);
     	logger.debug(smiSrtSubtitleVo.getFilePathNm());
@@ -452,6 +452,7 @@ public class ParseSubtitle {
 			}
 			detector.dataEnd();
 			String encoding = detector.getDetectedCharset();
+			encoding = encoding.replace("WINDOWS-1252", "EUC-KR");
 			if (encoding != null) {
 				logger.info("Detected encoding = " + encoding);
 			} else {
