@@ -35,7 +35,7 @@
 </insert>
 
 
-<select id="selectUsr" parameterType="String" resultType="net.pmosoft.subtitle.usr.Usr">
+<select id="selectUsr" parameterType="net.pmosoft.subtitle.usr.Usr" resultType="net.pmosoft.subtitle.usr.Usr">
     -- UsrDao.selectUsr
     SELECT   
            USR_ID

@@ -2,9 +2,9 @@ package net.pmosoft.subtitle.subtitle;
 
 public class Subtitle {
 
-	int id;        
+	int id;
     String name;
-    
+
 	public int getId() {
 		return id;
 	}
@@ -16,6 +16,6 @@ public class Subtitle {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}    
-    
+	}
+
 }
