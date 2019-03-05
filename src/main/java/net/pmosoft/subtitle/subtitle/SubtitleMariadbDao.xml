@@ -130,6 +130,36 @@ INSERT INTO STTL.TSSCM00020 VALUES
         )
 </insert>
 
+<insert id="insertReviewSttl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.insertReviewSttl 리뷰 자막 저장
+    INSERT INTO STTL.TSSCM00040
+    (
+         USR_ID           -- 사용자아이디
+        ,STTL_NM          -- 자막명
+        ,SERIAL_NO        -- 일련번호
+        ,FSTTL_DESC       -- 외국어자막문장내용
+        ,MSTTL_DESC       -- 모국어자막문장내용
+        ,REVIEW_CNT       -- 리뷰횟수
+        ,USE_YN           -- 사용여부
+        ,REG_DTM          -- 등록일시
+        ,REG_USR_ID       -- 등록자
+        ,UPD_DTM          -- 변경일시
+        ,UPD_USR_ID       -- 변경자
+    )
+    SELECT
+         #{usrId}         -- 사용자아이디
+        ,#{sttlNm}        -- 자막명
+        ,(SELECT IFNULL(MAX(SERIAL_NO),0)+1 FROM STTL.TSSCM00040 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}) -- 일련번호
+        ,#{fsttlDesc}     -- 외국어자막문장내용
+        ,#{msttlDesc}     -- 모국어자막문장내용
+        ,#{reviewCnt}     -- 리뷰횟수
+        ,'Y'              -- 사용여부
+        ,now()            -- 등록일시
+        ,#{regUsrId}      -- 등록자
+        ,now()            -- 변경일시
+        ,#{updUsrId}      -- 변경자
+</insert>
+
 <select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
     SELECT A.USR_ID          -- 사용자아이디
@@ -247,6 +277,26 @@ INSERT INTO STTL.TSSCM00020 VALUES
     ORDER BY A.STTL_NUM
 
 </select>
+
+
+<select id="selectReviewSttlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+    -- SubtitleDao.selectReviewSttlList : 리뷰자막내용
+    SELECT A.USR_ID          -- 사용자아이디
+         , CONCAT(SUBSTR(A.STTL_NM,1,30),'...') AS STTL_NM -- 자막명
+         , A.SERIAL_NO       -- 일련번호
+         , A.FSTTL_DESC      -- 외국어자막문장내용
+         , A.MSTTL_DESC      -- 모국어자막문장내용
+         , A.REVIEW_CNT      -- 리뷰횟수
+         , A.USE_YN          -- 사용여부
+         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00040 A
+    WHERE  A.USR_ID  = #{usrId}
+    ORDER BY A.USR_ID, A.REG_DTM DESC, A.SERIAL_NO DESC
+</select>
+
 
 <update id="updateSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
     -- SubtitleDao.updateSttlNum

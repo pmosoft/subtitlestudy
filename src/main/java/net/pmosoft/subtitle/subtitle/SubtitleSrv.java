@@ -20,7 +20,7 @@ import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
 public class SubtitleSrv {
 
     private static Logger logger = LoggerFactory.getLogger(SubtitleSrv.class);
-    
+
     @Autowired
     private SubtitleDao subtitleDao;
 
@@ -32,14 +32,14 @@ public class SubtitleSrv {
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-        
+
              /************************************************
              * 자막파일들 저장
              ************************************************/
             Map<String,ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
             FileSave fileSave = new FileSave();
             map = fileSave.saveUsrSubtitles(usrId, foreignSubtitleFile, motherSubtitleFile);
-           
+
             /************************************************
              * 외국어 파싱후 자막 Vo 리턴
              ************************************************/
@@ -58,25 +58,25 @@ public class SubtitleSrv {
 //            System.out.println("11="+foreignSubtitleVo.getSrtList().size());
 //            System.out.println("11="+motherSubtitleVo.getSmiList().size());
 //            System.out.println("22="+motherSubtitleVo.getSrtList().size());
-            
-            
+
+
             /************************************************
              * 자막 저장
              ************************************************/
             UsrSttlVo usrSttlVo = new UsrSttlVo();
-            
+
             // 유저 자막 정보 저장
             usrSttlVo.setUsrId(usrId);
             usrSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
             subtitleDao.deleteUsrSttlMstr(usrSttlVo);
             subtitleDao.insertUsrSttlMstr(usrSttlVo);
-            
+
             // 유저 자막 책갈피
             subtitleDao.deleteUsrSttlDtl(usrSttlVo);
             subtitleDao.deleteSttlNum(usrSttlVo);
             usrSttlVo.setSttlCd("1");subtitleDao.insertSttlNum(usrSttlVo);
             usrSttlVo.setSttlCd("2");subtitleDao.insertSttlNum(usrSttlVo);
-            
+
             // 유저 외국어 자막 내용  저장
             String foreignSubtitle = "", motherSubtitle="";
             foreignSubtitle = insertUsrSttlDtlBulk(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
@@ -84,7 +84,7 @@ public class SubtitleSrv {
 
             //String foreignSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
             //String motherSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
-            	
+
             result.put("isSuccess", true);
             result.put("usrMsg", "정상 처리 되었습니다");
             result.put("sttlNm", foreignSubtitleFile.getOriginalFilename());
@@ -96,7 +96,7 @@ public class SubtitleSrv {
             result.put("errSysMsg", e.toString());
         }
         return result;
-    }  
+    }
 
     public Map<String, Object> saveSttlNum(UsrSttlVo inVo){
         Map<String, Object> result = new HashMap<String, Object>();
@@ -113,9 +113,26 @@ public class SubtitleSrv {
         }
         return result;
     }
-    
+
+    public Map<String, Object> saveReviewSttl(UsrSttlVo inVo){
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+        	System.out.println("inVo==="+inVo.getUsrId());
+        	System.out.println("inVo==="+inVo.getSttlNm());
+            subtitleDao.insertReviewSttl(inVo);
+            result.put("isSuccess", true);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
     private String insertUsrSttlDtl(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
-        
+
         String result = "";
 
         if(smiSrtSubtitleVo.getExtention().equals("smi")) {
@@ -145,12 +162,12 @@ public class SubtitleSrv {
                 result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
             }
         }
-        
+
         return result;
     }
 
     private String insertUsrSttlDtlBulk(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
-        
+
 	    String result = "";
 	    int rowCnt = 0;
 	    int commitCnt = 500;
@@ -160,7 +177,7 @@ public class SubtitleSrv {
             int sttlNum = 0;
             for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
                 if(smiSrtSubtitleVo.getSmiList().get(i).getContent().trim().length() != 0) {
-                	//logger.debug("getContent()=="+smiSrtSubtitleVo.getSmiList().get(i).getContent().trim().length()+":"+smiSrtSubtitleVo.getSmiList().get(i).getContent()); 
+                	//logger.debug("getContent()=="+smiSrtSubtitleVo.getSmiList().get(i).getContent().trim().length()+":"+smiSrtSubtitleVo.getSmiList().get(i).getContent());
                 	sttlNum++;
                     UsrSttlVo usrSttlVo = new UsrSttlVo();
                     usrSttlVo.setUsrId(usrId);
@@ -173,7 +190,7 @@ public class SubtitleSrv {
                     usrSttlListVo.add(usrSttlVo);
                     result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
                     rowCnt++;
-                }        
+                }
                 if(i%commitCnt == 0) {
                     logger.debug("rowCnt1=========="+rowCnt);
                    subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
@@ -181,7 +198,7 @@ public class SubtitleSrv {
                    rowCnt = 0;
                 }
             }
-            
+
             if(rowCnt < commitCnt) {
                 logger.debug("rowCnt2=========="+rowCnt);
                subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
@@ -204,7 +221,7 @@ public class SubtitleSrv {
 	                usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
 	                usrSttlListVo.add(usrSttlVo);
 	                result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
-	                rowCnt++;    
+	                rowCnt++;
             	}
                 if(i%commitCnt == 0) {
                    logger.debug("rowCnt1=========="+rowCnt);
@@ -213,7 +230,7 @@ public class SubtitleSrv {
                     rowCnt = 0;
                  }
             }
-            
+
                if(rowCnt < commitCnt) {
                    logger.debug("rowCnt2=========="+rowCnt);
                    subtitleDao.insertUsrSttlDtlBulk(usrSttlListVo);
@@ -221,29 +238,29 @@ public class SubtitleSrv {
            }
         return result;
     }
-    
-    
+
+
     public Map<String, Object> selectUsrRecentlySttl(UsrSttlVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
-            
+
         try {
             List<UsrSttlVo> list = subtitleDao.selectUsrRecentlySttl(inVo);
             List<UsrSttlVo> foreignSubtitle = new ArrayList<UsrSttlVo>();
             List<UsrSttlVo> motherSubtitle = new ArrayList<UsrSttlVo>();
-           
+
                   for (int i = 0; i < list.size(); i++) {
                       if(list.get(i).getSttlCd().equals("1"))
-                          foreignSubtitle.add(list.get(i)); 
+                          foreignSubtitle.add(list.get(i));
                       else motherSubtitle.add(list.get(i));
                   }
-                  
+
                   //System.out.println("foreignSubtitle="+foreignSubtitle);
-                  
+
             result.put("isSuccess", true);
             result.put("subtitleListVo", list);
-                  result.put("foreignSubtitle", foreignSubtitle);
-                  result.put("motherSubtitle", motherSubtitle);
+            result.put("foreignSubtitle", foreignSubtitle);
+            result.put("motherSubtitle", motherSubtitle);
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
@@ -261,20 +278,20 @@ public class SubtitleSrv {
             List<UsrSttlVo> list = subtitleDao.selectUsrSttl(inVo);
             List<UsrSttlVo> foreignSubtitle = new ArrayList<UsrSttlVo>();
             List<UsrSttlVo> motherSubtitle = new ArrayList<UsrSttlVo>();
-           
+
             for (int i = 0; i < list.size(); i++) {
                 if(list.get(i).getSttlCd().equals("1"))
-                    foreignSubtitle.add(list.get(i)); 
+                    foreignSubtitle.add(list.get(i));
                 else motherSubtitle.add(list.get(i));
             }
-            
+
             //System.out.println("foreignSubtitle="+foreignSubtitle);
-                  
+
             result.put("isSuccess", true);
             result.put("subtitleListVo", list);
             result.put("foreignSubtitle", foreignSubtitle);
             result.put("motherSubtitle", motherSubtitle);
-            
+
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
@@ -282,8 +299,8 @@ public class SubtitleSrv {
             e.printStackTrace();
         }
         return result;
-    }    
-    
+    }
+
     public Map<String, Object> selectUsrSttlMstrList(UsrSttlVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
@@ -301,7 +318,7 @@ public class SubtitleSrv {
         }
         return result;
     }
-    
+
     public Map<String, Object> selectUsrSttlDtlList(UsrSttlVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
@@ -320,8 +337,28 @@ public class SubtitleSrv {
         return result;
     }
 
+    public Map<String, Object> selectReviewSttlList(UsrSttlVo inVo){
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            List<UsrSttlVo> list = null;
+            list = subtitleDao.selectReviewSttlList(inVo);;
+            result.put("isSuccess", true);
+            result.put("reviewSubtitles", list);
+
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
     public Map<String, Object> deleteUsrSttl(UsrSttlVo inVo){
-        
+
         Map<String, Object> result = new HashMap<String, Object>();
 
         Map<String, String> errors = new HashMap<String, String>();
@@ -332,12 +369,12 @@ public class SubtitleSrv {
             result.put("errUsrMsg", errors.get("errUsrMsg"));
             System.out.println(result);
             return result;
-        } else {     
+        } else {
             subtitleDao.deleteUsrSttlMstr(inVo);
             subtitleDao.deleteUsrSttlDtl(inVo);
             result.put("isSuccess", true);
             result.put("usrMsg", "삭제 되었습니다");
-            return result;            
-        }    
+            return result;
+        }
     }
 }
