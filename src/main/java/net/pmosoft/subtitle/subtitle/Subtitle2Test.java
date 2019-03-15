@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SubtitlestudyApplication.class)
-public class SubtitleTest {
+public class Subtitle2Test {
 
     @Autowired
     private SubtitleCtrl subtitleCtrl;
@@ -38,16 +38,16 @@ public class SubtitleTest {
 	@Test @Ignore
 	public void insertUsrSttlDtlDao() { 
 		
-		List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
-		UsrSttlVo usrSttlVo = new UsrSttlVo();
+		List<Subtitle> usrSttlListVo = new ArrayList<Subtitle>();
+		Subtitle Subtitle = new Subtitle();
 		
-		usrSttlVo.setUsrId("lifedomy@gmail.com");
-		usrSttlVo.setSttlNm("file01");
-		usrSttlVo.setSttlCd("1");
-		usrSttlVo.setSttlStm("1");
-		usrSttlVo.setSttlEtm("2");
-		usrSttlVo.setSttlDesc("test2");
-		usrSttlListVo.add(usrSttlVo);
+		Subtitle.setUsrId("lifedomy@gmail.com");
+		Subtitle.setSttlNm("file01");
+		Subtitle.setSttlCd("1");
+		Subtitle.setSttlStm("1");
+		Subtitle.setSttlEtm("2");
+		Subtitle.setSttlDesc("test2");
+		usrSttlListVo.add(Subtitle);
 		//subtitleDao.insertUsrSttlDtl(usrSttlListVo);
 		
 	}

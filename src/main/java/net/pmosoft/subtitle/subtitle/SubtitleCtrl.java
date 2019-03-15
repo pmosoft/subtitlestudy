@@ -43,7 +43,7 @@ public class SubtitleCtrl {
      * 자막 책갈피 기능. 자막번호 저장
      */
     @RequestMapping(value = "/subtitle/saveSttlNum")
-    public Map<String, Object> saveSttlNum(@RequestBody UsrSttlVo inVo) {
+    public Map<String, Object> saveSttlNum(@RequestBody Subtitle inVo) {
         return subtitleSrv.saveSttlNum(inVo);
     }
 
@@ -51,7 +51,7 @@ public class SubtitleCtrl {
      * 리뷰 저장
      */
     @RequestMapping(value = "/subtitle/saveReviewSttl")
-    public Map<String, Object> saveReviewSttl(@RequestBody UsrSttlVo inVo) {
+    public Map<String, Object> saveReviewSttl(@RequestBody Subtitle inVo) {
         return subtitleSrv.saveReviewSttl(inVo);
     }
 
@@ -63,7 +63,7 @@ public class SubtitleCtrl {
      * 자막목록 조회
      */
     @RequestMapping(value = "/subtitle/selectUsrSttlMstrList")
-    public Map<String, Object> selectUsrSttlMstrList(@RequestBody UsrSttlVo inVo) {
+    public Map<String, Object> selectUsrSttlMstrList(@RequestBody Subtitle inVo) {
         return subtitleSrv.selectUsrSttlMstrList(inVo);
     }
 
@@ -71,7 +71,7 @@ public class SubtitleCtrl {
      * 유저 최근 등록 자막 조회
      */
     @RequestMapping(value = "/subtitle/selectUsrRecentlySttl")
-    public Map<String, Object> selectUsrRecentlySttl(@RequestBody UsrSttlVo inVo) {
+    public Map<String, Object> selectUsrRecentlySttl(@RequestBody Subtitle inVo) {
         return subtitleSrv.selectUsrRecentlySttl(inVo);
     }
 
@@ -79,7 +79,7 @@ public class SubtitleCtrl {
      * 유저 목록에서 선택된 자막 조회
      */
     @RequestMapping(value = "/subtitle/selectUsrSttl")
-    public Map<String, Object> selectUsrSttl(@RequestBody UsrSttlVo inVo) {
+    public Map<String, Object> selectUsrSttl(@RequestBody Subtitle inVo) {
         return subtitleSrv.selectUsrSttl(inVo);
      }
 
@@ -87,7 +87,7 @@ public class SubtitleCtrl {
      * 자막상세 조회
      */
     @RequestMapping(value = "/subtitle/selectUsrSttlDtlList")
-    public Map<String, Object> selectUsrSttlDtlList(@RequestParam UsrSttlVo inVo) {
+    public Map<String, Object> selectUsrSttlDtlList(@RequestParam Subtitle inVo) {
         return subtitleSrv.selectUsrSttlDtlList(inVo);
     }
 
@@ -95,7 +95,7 @@ public class SubtitleCtrl {
      * 리뷰자막 조회
      */
     @RequestMapping(value = "/subtitle/selectReviewSttlList")
-    public Map<String, Object> selectReviewSttlList(@RequestBody UsrSttlVo inVo) {
+    public Map<String, Object> selectReviewSttlList(@RequestBody Subtitle inVo) {
     	System.out.println("selectReviewSttlList");
         return subtitleSrv.selectReviewSttlList(inVo);
     }
@@ -108,7 +108,7 @@ public class SubtitleCtrl {
      * 자막 삭제(Multi:json)
      */
     @RequestMapping(value = "/subtitle/deleteUsrSttl")
-    public Map<String, Object> deleteUsrSttl(@RequestParam UsrSttlVo inVo) {
+    public Map<String, Object> deleteUsrSttl(@RequestParam Subtitle inVo) {
         return subtitleSrv.deleteUsrSttl(inVo);
     }
 

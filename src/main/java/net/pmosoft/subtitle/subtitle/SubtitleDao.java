@@ -7,21 +7,21 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface SubtitleDao {
-    void insertUsrSttlMstr(UsrSttlVo inVo);
-    void insertUsrSttlDtl(UsrSttlVo inVo);
-    void insertUsrSttlDtlBulk(List<UsrSttlVo> inVo);
+    void insertUsrSttlMstr(Subtitle inVo);
+    void insertUsrSttlDtl(Subtitle inVo);
+    void insertUsrSttlDtlBulk(List<Subtitle> inVo);
     void insertTestBulk(String qry);
     void insertTestBulk2(String qry);
-    void insertSttlNum(UsrSttlVo inVo);
-    void insertReviewSttl(UsrSttlVo inVo);
-    List<UsrSttlVo> selectUsrSttl(UsrSttlVo inVo);
-    List<UsrSttlVo> selectUsrRecentlySttl(UsrSttlVo inVo);
-    List<UsrSttlVo> selectUsrSttlMstrList(UsrSttlVo inVo);
-    List<UsrSttlVo> selectUsrSttlDtlList(UsrSttlVo inVo);
-    List<UsrSttlVo> selectReviewSttlList(UsrSttlVo inVo);
-    void updateSttlNum(UsrSttlVo inVo);
-    void deleteUsrSttlMstr(UsrSttlVo inVo);
-    void deleteUsrSttlDtl(UsrSttlVo inVo);
-    void deleteSttlNum(UsrSttlVo inVo);
+    void insertSttlNum(Subtitle inVo);
+    void insertReviewSttl(Subtitle inVo);
+    List<Subtitle> selectUsrSttl(Subtitle inVo);
+    List<Subtitle> selectUsrRecentlySttl(Subtitle inVo);
+    List<Subtitle> selectUsrSttlMstrList(Subtitle inVo);
+    List<Subtitle> selectUsrSttlDtlList(Subtitle inVo);
+    List<Subtitle> selectReviewSttlList(Subtitle inVo);
+    void updateSttlNum(Subtitle inVo);
+    void deleteUsrSttlMstr(Subtitle inVo);
+    void deleteUsrSttlDtl(Subtitle inVo);
+    void deleteSttlNum(Subtitle inVo);
 }
 

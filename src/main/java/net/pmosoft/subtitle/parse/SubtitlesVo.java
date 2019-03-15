@@ -2,7 +2,7 @@ package net.pmosoft.subtitle.parse;
 
 import java.util.ArrayList;
 
-public class SmiSrtSubtitleVo {
+public class SubtitlesVo {
 
 	String category  = ""; // Foreign or Mother
 	String extention = ""; // smi or srt

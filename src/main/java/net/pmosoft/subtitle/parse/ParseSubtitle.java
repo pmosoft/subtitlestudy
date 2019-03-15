@@ -16,16 +16,19 @@ import org.slf4j.LoggerFactory;
 
 import net.pmosoft.subtitle.file.FileUtil;
 
-
 public class ParseSubtitle {
+
+	public String pathFileNm = "";
+
+	public ParseSubtitle(){}
+	public ParseSubtitle(String pathFileNm){
+		this.pathFileNm = pathFileNm;
+	}
 
 	private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
 
-
     public static void main(String[] args) throws Exception {
-        // TODO Auto-generated method stub
         //String s1 = "<i>Metal </i>";
-
         //logger.debug(s1.matches("<i>")
     	//String content = "&nbsp;";
     	//System.out.println(content.contentEquals("nbsp"));
@@ -35,7 +38,6 @@ public class ParseSubtitle {
         parseSubtitle.test02();
         //File I = new File("/home/subtitle/files/kmjwhite@hanmail.net/Star.Wars.Episode.1.The.Phantom.Menace.1999.1080p.BluRay.xnHD.x264-NhaNc3.srt");
         //I.delete();
-
     }
 
     /*
@@ -43,144 +45,50 @@ public class ParseSubtitle {
      */
     void test02() throws Exception{
         //String filePathName = "C:/fframe/workspace/subtitlestudy/file/lifedomy@gmail.com/Star.Trek.Beyond.2016.1080p.BluRay.x264-SPARKS-complete.smi";
-    	String filePathName="d:\\fframe\\workspace\\subtitlestudy\\file\\Black.Mirror.S03E03.smi";
+    	//String filePathName="d:\\Downloads\\마블\\478져스 인피니티 워] x265코덱 8채널 사운드 Blu-Ray 1080P\\Avengers.Infinity.War.english.srt";
+    	//String filePathName="d:\\Downloads\\마블\\478져스 인피니티 워] x265코덱 8채널 사운드 Blu-Ray 1080P\\Avengers.Infinity.War.brazilian.srt";
+    	//String filePathName="d:\\Downloads\\마블\\478져스 인피니티 워] x265코덱 8채널 사운드 Blu-Ray 1080P\\Avengers.Infinity.War.german.srt";
+    	//String filePathName="d:\\Downloads\\익스팬스\\[ HD ] 익스팬스 시즌2 01-13화 완 한글자막 720p The Expanse\\The.Expanse.S02E04.720p.HDTV.x264-SVA.smi";
+    	String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].srt";
+    	//String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].cht.srt";
 
-    	SmiSrtSubtitleVo smiSrtSubtitleVo = getSubtitleVo(filePathName);
-    	logger.debug(smiSrtSubtitleVo.getFilePathNm());
-    	//System.out.println(smiSrtSubtitleVo);
+    	SubtitlesVo subtitlesVo = getSubtitleVo(filePathName);
+    	logger.debug(subtitlesVo.getFilePathNm());
+    	//System.out.println(SubtitlesVo);
     }
 
+    public void execute(String pathFileNm) {
+    	//String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].srt";
+
+    	//SubtitlesVo subtitlesVo = getSubtitleVo(filePathName);
+    	//logger.debug(subtitlesVo.getFilePathNm());
+    	//System.out.println(SubtitlesVo);
+    }
 
     /*
      * 메인 : 샘파일를 파싱하여 VO로 리턴
      */
-    public SmiSrtSubtitleVo getSubtitleVo(String subtitleFilePath) throws Exception {
-    	SmiSrtSubtitleVo smiSrtSubtitleVo = new SmiSrtSubtitleVo();
+    public SubtitlesVo getSubtitleVo(String subtitleFilePath) throws Exception {
+    	SubtitlesVo subtitlesVo = new SubtitlesVo();
     	try {
         	logger.info(subtitleFilePath +":"+ verifySrtSmi(subtitleFilePath));
-        	smiSrtSubtitleVo.setExtention(verifySrtSmi(subtitleFilePath));
-        	if(smiSrtSubtitleVo.getExtention().equals("smi")) {
+        	subtitlesVo.setExtention(verifySrtSmi(subtitleFilePath));
+        	if(subtitlesVo.getExtention().equals("smi")) {
         		logger.info("smi");
-        		smiSrtSubtitleVo.setSmiList(parseSmiFile(subtitleFilePath));
-                for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-                	//smiSrtSubtitleVo.getSmiList().get(i).print();
+        		subtitlesVo.setSmiList(parseSmiFile(subtitleFilePath));
+                for (int i = 0; i < subtitlesVo.getSmiList().size(); i++) {
+                	subtitlesVo.getSmiList().get(i).print();
         		}
         	} else {
         		logger.info("srt");
-        		smiSrtSubtitleVo.setSrtList(parseSrtFile(subtitleFilePath));
-                for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-                	smiSrtSubtitleVo.getSrtList().get(i).print();
+        		subtitlesVo.setSrtList(parseSrtFile(subtitleFilePath));
+                for (int i = 0; i < subtitlesVo.getSrtList().size(); i++) {
+                	subtitlesVo.getSrtList().get(i).print();
         		}
         	}
-        	return smiSrtSubtitleVo;
+        	return subtitlesVo;
 
 		} catch(Exception e) { e.printStackTrace(); throw e; }
-
-    }
-
-
-    /*
-     * 메인 : Srt 파싱하여 Vo로 리턴
-     */
-    public ArrayList<SrtVo> parseSrtFile2(String filePathName) throws Exception {
-
-        logger.debug("parseSrtFile2");
-
-    	ArrayList<SrtVo> srtList2 = new ArrayList<SrtVo>();
-
-        Pattern p; Matcher m;
-        String parseRule;
-
-        BufferedReader br = null;
-        String src = "";
-        ArrayList<SrtVo> srtList = new ArrayList<SrtVo>();
-
-        try {
-
-            File file = new File(filePathName);
-
-            if (file.isFile()) {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),detectEncoding(filePathName)));
-
-                int num = 0;
-                int bnum = 0;
-                int rnum = 0;
-                String stime = "";
-                String etime = "";
-                String str2 = "";
-
-                String timeParseRule = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9] --> [0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
-
-
-                /*
-                 * bnum = 1 num = 1
-                 * bnum = 0 num = 2
-                 * */
-                while (true) {
-                    String str = br.readLine();
-                    logger.debug("str="+str);
-                    if (str != null) {
-                        if(str.matches("[0-9]+$")) {
-                        	bnum = num;
-                        	num = Integer.parseInt(str);
-                        } else if(str.matches(timeParseRule)) {
-                            parseRule = "[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
-                            p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
-                            stime = m.group();
-                            //logger.debug(stime);
-
-                            parseRule = "--> [0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]";
-                            p = Pattern.compile(parseRule); m = p.matcher(str); m.find();
-                            etime = m.group().substring(4);
-                            //logger.debug(num + " "+ stime + " " + etime);
-                        } else {
-                        	str2 += str;
-                            if(num>bnum) {
-                                // rnum별로 내용을 산출한다.
-                                rnum++;
-                                str2 = "";
-                                SrtVo srtVo = new SrtVo();
-                                srtVo.num = rnum;
-                                srtVo.stime = stime;
-                                srtVo.etime = etime;
-                                srtVo.content = str2;
-                                //srtVo.print();
-                                srtList.add(srtVo);
-                            }
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                br.close();
-
-                num = 0;
-                // stime별로 content를 합친다
-                String content2 = "";
-                for (int i = 0; i < srtList.size()-1; i++) {
-                	logger.debug(srtList.size() +":"+ i);
-                	logger.debug(srtList.get(i).getContent());
-                	if(srtList.get(i).getStime() == srtList.get(i+1).getStime()) {
-                        //logger.debug(srtList.get(i).getContent());
-                    	content2 += srtList.get(i).getContent();
-                    } else {
-                        SrtVo tvo = new SrtVo();
-                        tvo.setNum(++num);
-                        tvo.setStime(srtList.get(i).getStime());
-                        tvo.setEtime(srtList.get(i+1).getStime());
-                        tvo.setContent(content2+" "+srtList.get(i).getContent());
-                        content2 = "";
-                        //tvo.print();
-                        srtList2.add(tvo);
-                    }
-                }
-            }
-        } catch(Exception e) { e.printStackTrace(); throw e; }
-
-
-        return srtList;
-        //String src2 = src.replaceAll("<br>\n", " ");
-        //logger.debug(src2.substring(328+7,src2.length()));
 
     }
 
@@ -218,7 +126,7 @@ public class ParseSubtitle {
 
                 while (true) {
                     String str = br.readLine();
-                    str = str.replace("<br>"," ");
+                    //str = str.replace("<br>"," ");
                     logger.debug("str="+str);
                     if (str != null) {
                         if(str.matches("[0-9]+$")) {
@@ -454,12 +362,16 @@ public class ParseSubtitle {
 			}
 			detector.dataEnd();
 			String encoding = detector.getDetectedCharset();
-			encoding = encoding.replace("WINDOWS-1252", "EUC-KR");
+			logger.info("encoding="+encoding);
+
+			//encoding = encoding.replace("WINDOWS-1252", "EUC-KR");
 			if (encoding != null) {
 				logger.info("Detected encoding = " + encoding);
 			} else {
 				logger.info("No encoding detected.");
-				encoding = "EUC-KR";
+				//encoding = "EUC-KR";
+				encoding = "UTF-8";
+				logger.info("encoding="+encoding);
 			}
 			detector.reset();
 

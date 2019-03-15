@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.pmosoft.subtitle.file.FileSave;
 import net.pmosoft.subtitle.parse.ParseSubtitle;
-import net.pmosoft.subtitle.parse.SmiSrtSubtitleVo;
+import net.pmosoft.subtitle.parse.SubtitlesVo;
 
 
 @Service
@@ -44,13 +44,13 @@ public class SubtitleSrv {
              * 외국어 파싱후 자막 Vo 리턴
              ************************************************/
             ParseSubtitle parseSubtitle1 = new ParseSubtitle();
-            SmiSrtSubtitleVo foreignSubtitleVo = parseSubtitle1.getSubtitleVo(map.get("subtitleFilePathList").get(0));
+            SubtitlesVo foreignSubtitleVo = parseSubtitle1.getSubtitleVo(map.get("subtitleFilePathList").get(0));
 
             /************************************************
              * 모국어 파싱후 자막 Vo 리턴
              ************************************************/
             ParseSubtitle parseSubtitle2 = new ParseSubtitle();
-            SmiSrtSubtitleVo motherSubtitleVo = parseSubtitle2.getSubtitleVo(map.get("subtitleFilePathList").get(1));
+            SubtitlesVo motherSubtitleVo = parseSubtitle2.getSubtitleVo(map.get("subtitleFilePathList").get(1));
 
 //            System.out.println(map.get("subtitleFilePathList").get(0));
 //            System.out.println(map.get("subtitleFilePathList").get(1));
@@ -63,19 +63,19 @@ public class SubtitleSrv {
             /************************************************
              * 자막 저장
              ************************************************/
-            UsrSttlVo usrSttlVo = new UsrSttlVo();
+            Subtitle subtitle = new Subtitle();
 
             // 유저 자막 정보 저장
-            usrSttlVo.setUsrId(usrId);
-            usrSttlVo.setSttlNm(foreignSubtitleFile.getOriginalFilename());
-            subtitleDao.deleteUsrSttlMstr(usrSttlVo);
-            subtitleDao.insertUsrSttlMstr(usrSttlVo);
+            subtitle.setUsrId(usrId);
+            subtitle.setSttlNm(foreignSubtitleFile.getOriginalFilename());
+            subtitleDao.deleteUsrSttlMstr(subtitle);
+            subtitleDao.insertUsrSttlMstr(subtitle);
 
             // 유저 자막 책갈피
-            subtitleDao.deleteUsrSttlDtl(usrSttlVo);
-            subtitleDao.deleteSttlNum(usrSttlVo);
-            usrSttlVo.setSttlCd("1");subtitleDao.insertSttlNum(usrSttlVo);
-            usrSttlVo.setSttlCd("2");subtitleDao.insertSttlNum(usrSttlVo);
+            subtitleDao.deleteUsrSttlDtl(subtitle);
+            subtitleDao.deleteSttlNum(subtitle);
+            subtitle.setSttlCd("1");subtitleDao.insertSttlNum(subtitle);
+            subtitle.setSttlCd("2");subtitleDao.insertSttlNum(subtitle);
 
             // 유저 외국어 자막 내용  저장
             String foreignSubtitle = "", motherSubtitle="";
@@ -98,7 +98,7 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> saveSttlNum(UsrSttlVo inVo){
+    public Map<String, Object> saveSttlNum(Subtitle inVo){
         Map<String, Object> result = new HashMap<String, Object>();
         try {
         	System.out.println("inVo==="+inVo.getUsrId());
@@ -114,7 +114,7 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> saveReviewSttl(UsrSttlVo inVo){
+    public Map<String, Object> saveReviewSttl(Subtitle inVo){
         Map<String, Object> result = new HashMap<String, Object>();
         try {
         	System.out.println("inVo==="+inVo.getUsrId());
@@ -131,64 +131,64 @@ public class SubtitleSrv {
     }
 
 
-    private String insertUsrSttlDtl(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
+    private String insertUsrSttlDtl(String usrId, String fileName, String sttlCd, SubtitlesVo SubtitlesVo){
 
         String result = "";
 
-        if(smiSrtSubtitleVo.getExtention().equals("smi")) {
-            for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-                UsrSttlVo usrSttlVo = new UsrSttlVo();
-                usrSttlVo.setUsrId(usrId);
-                usrSttlVo.setSttlNm(fileName);
-                usrSttlVo.setSttlCd(sttlCd);
-                usrSttlVo.setSttlNum(i);
-                usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
-                usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
-                usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
-                subtitleDao.insertUsrSttlDtl(usrSttlVo);
-                result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
+        if(SubtitlesVo.getExtention().equals("smi")) {
+            for (int i = 0; i < SubtitlesVo.getSmiList().size(); i++) {
+                Subtitle subtitle = new Subtitle();
+                subtitle.setUsrId(usrId);
+                subtitle.setSttlNm(fileName);
+                subtitle.setSttlCd(sttlCd);
+                subtitle.setSttlNum(i);
+                subtitle.setSttlStm(SubtitlesVo.getSmiList().get(i).getStime()+"");
+                subtitle.setSttlEtm(SubtitlesVo.getSmiList().get(i).getEtime()+"");
+                subtitle.setSttlDesc(SubtitlesVo.getSmiList().get(i).getContent());
+                subtitleDao.insertUsrSttlDtl(subtitle);
+                result += SubtitlesVo.getSmiList().get(i).getContent() + "\n";
             }
         } else {
-            for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-                UsrSttlVo usrSttlVo = new UsrSttlVo();
-                usrSttlVo.setUsrId(usrId);
-                usrSttlVo.setSttlNm(fileName);
-                usrSttlVo.setSttlCd(sttlCd);
-                usrSttlVo.setSttlNum(i);
-                usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
-                usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
-                usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
-                subtitleDao.insertUsrSttlDtl(usrSttlVo);
-                result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
+            for (int i = 0; i < SubtitlesVo.getSrtList().size(); i++) {
+                Subtitle subtitle = new Subtitle();
+                subtitle.setUsrId(usrId);
+                subtitle.setSttlNm(fileName);
+                subtitle.setSttlCd(sttlCd);
+                subtitle.setSttlNum(i);
+                subtitle.setSttlStm(SubtitlesVo.getSrtList().get(i).getStime()+"");
+                subtitle.setSttlEtm(SubtitlesVo.getSrtList().get(i).getEtime()+"");
+                subtitle.setSttlDesc(SubtitlesVo.getSrtList().get(i).getContent());
+                subtitleDao.insertUsrSttlDtl(subtitle);
+                result += SubtitlesVo.getSrtList().get(i).getContent() + "\n";
             }
         }
 
         return result;
     }
 
-    private String insertUsrSttlDtlBulk(String usrId, String fileName, String sttlCd, SmiSrtSubtitleVo smiSrtSubtitleVo){
+    private String insertUsrSttlDtlBulk(String usrId, String fileName, String sttlCd, SubtitlesVo SubtitlesVo){
 
 	    String result = "";
 	    int rowCnt = 0;
 	    int commitCnt = 500;
-        if(smiSrtSubtitleVo.getExtention().equals("smi")) {
-            logger.info("smi start cnt="+smiSrtSubtitleVo.getSmiList().size());
-            List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
+        if(SubtitlesVo.getExtention().equals("smi")) {
+            logger.info("smi start cnt="+SubtitlesVo.getSmiList().size());
+            List<Subtitle> usrSttlListVo = new ArrayList<Subtitle>();
             int sttlNum = 0;
-            for (int i = 0; i < smiSrtSubtitleVo.getSmiList().size(); i++) {
-                if(smiSrtSubtitleVo.getSmiList().get(i).getContent().trim().length() != 0) {
-                	//logger.debug("getContent()=="+smiSrtSubtitleVo.getSmiList().get(i).getContent().trim().length()+":"+smiSrtSubtitleVo.getSmiList().get(i).getContent());
+            for (int i = 0; i < SubtitlesVo.getSmiList().size(); i++) {
+                if(SubtitlesVo.getSmiList().get(i).getContent().trim().length() != 0) {
+                	//logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(i).getContent().trim().length()+":"+SubtitlesVo.getSmiList().get(i).getContent());
                 	sttlNum++;
-                    UsrSttlVo usrSttlVo = new UsrSttlVo();
-                    usrSttlVo.setUsrId(usrId);
-                    usrSttlVo.setSttlNm(fileName);
-                    usrSttlVo.setSttlCd(sttlCd);
-                    usrSttlVo.setSttlNum(sttlNum);
-                    usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSmiList().get(i).getStime()+"");
-                    usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSmiList().get(i).getEtime()+"");
-                    usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSmiList().get(i).getContent());
-                    usrSttlListVo.add(usrSttlVo);
-                    result += smiSrtSubtitleVo.getSmiList().get(i).getContent() + "\n";
+                    Subtitle subtitle = new Subtitle();
+                    subtitle.setUsrId(usrId);
+                    subtitle.setSttlNm(fileName);
+                    subtitle.setSttlCd(sttlCd);
+                    subtitle.setSttlNum(sttlNum);
+                    subtitle.setSttlStm(SubtitlesVo.getSmiList().get(i).getStime()+"");
+                    subtitle.setSttlEtm(SubtitlesVo.getSmiList().get(i).getEtime()+"");
+                    subtitle.setSttlDesc(SubtitlesVo.getSmiList().get(i).getContent());
+                    usrSttlListVo.add(subtitle);
+                    result += SubtitlesVo.getSmiList().get(i).getContent() + "\n";
                     rowCnt++;
                 }
                 if(i%commitCnt == 0) {
@@ -206,21 +206,21 @@ public class SubtitleSrv {
 
         } else {
             logger.info("srt start");
-            List<UsrSttlVo> usrSttlListVo = new ArrayList<UsrSttlVo>();
+            List<Subtitle> usrSttlListVo = new ArrayList<Subtitle>();
             int sttlNum = 0;
-            for (int i = 0; i < smiSrtSubtitleVo.getSrtList().size(); i++) {
-            	if(smiSrtSubtitleVo.getSrtList().get(i).getContent().trim().length() != 0) {
+            for (int i = 0; i < SubtitlesVo.getSrtList().size(); i++) {
+            	if(SubtitlesVo.getSrtList().get(i).getContent().trim().length() != 0) {
 	            	sttlNum++;
-	            	UsrSttlVo usrSttlVo = new UsrSttlVo();
-	                usrSttlVo.setUsrId(usrId);
-	                usrSttlVo.setSttlNm(fileName);
-	                usrSttlVo.setSttlCd(sttlCd);
-	                usrSttlVo.setSttlNum(sttlNum);
-	                usrSttlVo.setSttlStm(smiSrtSubtitleVo.getSrtList().get(i).getStime()+"");
-	                usrSttlVo.setSttlEtm(smiSrtSubtitleVo.getSrtList().get(i).getEtime()+"");
-	                usrSttlVo.setSttlDesc(smiSrtSubtitleVo.getSrtList().get(i).getContent());
-	                usrSttlListVo.add(usrSttlVo);
-	                result += smiSrtSubtitleVo.getSrtList().get(i).getContent() + "\n";
+	            	Subtitle subtitle = new Subtitle();
+	                subtitle.setUsrId(usrId);
+	                subtitle.setSttlNm(fileName);
+	                subtitle.setSttlCd(sttlCd);
+	                subtitle.setSttlNum(sttlNum);
+	                subtitle.setSttlStm(SubtitlesVo.getSrtList().get(i).getStime()+"");
+	                subtitle.setSttlEtm(SubtitlesVo.getSrtList().get(i).getEtime()+"");
+	                subtitle.setSttlDesc(SubtitlesVo.getSrtList().get(i).getContent());
+	                usrSttlListVo.add(subtitle);
+	                result += SubtitlesVo.getSrtList().get(i).getContent() + "\n";
 	                rowCnt++;
             	}
                 if(i%commitCnt == 0) {
@@ -240,14 +240,14 @@ public class SubtitleSrv {
     }
 
 
-    public Map<String, Object> selectUsrRecentlySttl(UsrSttlVo inVo){
+    public Map<String, Object> selectUsrRecentlySttl(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<UsrSttlVo> list = subtitleDao.selectUsrRecentlySttl(inVo);
-            List<UsrSttlVo> foreignSubtitle = new ArrayList<UsrSttlVo>();
-            List<UsrSttlVo> motherSubtitle = new ArrayList<UsrSttlVo>();
+            List<Subtitle> list = subtitleDao.selectUsrRecentlySttl(inVo);
+            List<Subtitle> foreignSubtitle = new ArrayList<Subtitle>();
+            List<Subtitle> motherSubtitle = new ArrayList<Subtitle>();
 
                   for (int i = 0; i < list.size(); i++) {
                       if(list.get(i).getSttlCd().equals("1"))
@@ -270,14 +270,14 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> selectUsrSttl(UsrSttlVo inVo){
+    public Map<String, Object> selectUsrSttl(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<UsrSttlVo> list = subtitleDao.selectUsrSttl(inVo);
-            List<UsrSttlVo> foreignSubtitle = new ArrayList<UsrSttlVo>();
-            List<UsrSttlVo> motherSubtitle = new ArrayList<UsrSttlVo>();
+            List<Subtitle> list = subtitleDao.selectUsrSttl(inVo);
+            List<Subtitle> foreignSubtitle = new ArrayList<Subtitle>();
+            List<Subtitle> motherSubtitle = new ArrayList<Subtitle>();
 
             for (int i = 0; i < list.size(); i++) {
                 if(list.get(i).getSttlCd().equals("1"))
@@ -301,15 +301,15 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> selectUsrSttlMstrList(UsrSttlVo inVo){
+    public Map<String, Object> selectUsrSttlMstrList(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<UsrSttlVo> usrSttlVoList = null;
-            usrSttlVoList = subtitleDao.selectUsrSttlMstrList(inVo);
+            List<Subtitle> subtitleList = null;
+            subtitleList = subtitleDao.selectUsrSttlMstrList(inVo);
             result.put("isSuccess", true);
-            result.put("usrSttlVoList", usrSttlVoList);
+            result.put("subtitleList", subtitleList);
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
@@ -319,12 +319,12 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> selectUsrSttlDtlList(UsrSttlVo inVo){
+    public Map<String, Object> selectUsrSttlDtlList(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<UsrSttlVo> list = null;
+            List<Subtitle> list = null;
             list = subtitleDao.selectUsrSttlDtlList(inVo);;
             result.put("isSuccess", true);
             result.put("data", list);
@@ -337,12 +337,12 @@ public class SubtitleSrv {
         return result;
     }
 
-    public Map<String, Object> selectReviewSttlList(UsrSttlVo inVo){
+    public Map<String, Object> selectReviewSttlList(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<UsrSttlVo> list = null;
+            List<Subtitle> list = null;
             list = subtitleDao.selectReviewSttlList(inVo);;
             result.put("isSuccess", true);
             result.put("reviewSubtitles", list);
@@ -357,7 +357,7 @@ public class SubtitleSrv {
     }
 
 
-    public Map<String, Object> deleteUsrSttl(UsrSttlVo inVo){
+    public Map<String, Object> deleteUsrSttl(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 

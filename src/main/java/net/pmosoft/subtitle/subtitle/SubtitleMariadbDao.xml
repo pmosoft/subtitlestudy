@@ -5,7 +5,7 @@
 
 <mapper namespace="net.pmosoft.subtitle.subtitle.SubtitleDao">
 
-<insert id="insertUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<insert id="insertUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
 
     -- SubtitleDao.insertUsrSttlMstr
     INSERT INTO STTL.TSSCM00010
@@ -78,19 +78,19 @@
         ,UPD_DTM         -- 변경일시
         ,UPD_USR_ID      -- 변경자
     ) VALUES
-	<foreach item="usrSttlVo" index="index" collection="list" open="" separator="," close="">
+	<foreach item="Subtitle" index="index" collection="list" open="" separator="," close="">
 		(
-         #{usrSttlVo.usrId}        -- 사용자아이디
-        ,#{usrSttlVo.sttlNm}       -- 자막명
-        ,#{usrSttlVo.sttlCd}       -- 자막구분(1:외국어,2:모국어)
-        ,#{usrSttlVo.sttlNum}      -- 자막순번
-        ,#{usrSttlVo.sttlStm}      -- 자막시작시각
-        ,#{usrSttlVo.sttlEtm}      -- 자막종료시각
-        ,#{usrSttlVo.sttlDesc}     -- 자막문장내용
+         #{Subtitle.usrId}        -- 사용자아이디
+        ,#{Subtitle.sttlNm}       -- 자막명
+        ,#{Subtitle.sttlCd}       -- 자막구분(1:외국어,2:모국어)
+        ,#{Subtitle.sttlNum}      -- 자막순번
+        ,#{Subtitle.sttlStm}      -- 자막시작시각
+        ,#{Subtitle.sttlEtm}      -- 자막종료시각
+        ,#{Subtitle.sttlDesc}     -- 자막문장내용
         ,now()       -- 등록일시
-        ,#{usrSttlVo.regUsrId}     -- 등록자
+        ,#{Subtitle.regUsrId}     -- 등록자
         ,now()       -- 변경일시
-        ,#{usrSttlVo.updUsrId}     -- 변경자
+        ,#{Subtitle.updUsrId}     -- 변경자
         )
 	</foreach>
 </insert>
@@ -105,7 +105,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
 
 </insert>
 
-<insert id="insertSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<insert id="insertSttlNum" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.insertSttlNum 자막 책갈피
     INSERT INTO STTL.TSSCM00030
     (
@@ -130,7 +130,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
         )
 </insert>
 
-<insert id="insertReviewSttl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<insert id="insertReviewSttl" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.insertReviewSttl 리뷰 자막 저장
     INSERT INTO STTL.TSSCM00040
     (
@@ -160,7 +160,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
         ,#{updUsrId}      -- 변경자
 </insert>
 
-<select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
     SELECT A.USR_ID          -- 사용자아이디
          , A.STTL_NM         -- 자막명
@@ -175,7 +175,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
     ORDER BY A.REG_DTM DESC
 </select>
 
-<select id="selectUsrRecentlySttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<select id="selectUsrRecentlySttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.selectUsrRecentlySttl : 유저 최근 등록 자막
     SELECT DISTINCT
            A.USR_ID          -- 사용자아이디
@@ -205,7 +205,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
     ORDER BY A.STTL_NUM,A.STTL_CD
 </select>
 
-<select id="selectUsrSttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<select id="selectUsrSttl" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.selectUsrSttl : 유저 자막
     WITH TEMP01 AS (
 	    SELECT CASE WHEN #{sttlNm} = ':blank'
@@ -259,7 +259,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
     ORDER BY A.STTL_NUM, A.REG_DTM
 </select>
 
-<select id="selectUsrSttlDtlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<select id="selectUsrSttlDtlList" parameterType="net.pmosoft.subtitle.subtitle.Subtitle" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.selectUsrSttlDtlList : 유저자막내용
     SELECT A.USR_ID          -- 사용자아이디
          , A.STTL_NM         -- 자막명
@@ -279,7 +279,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
 </select>
 
 
-<select id="selectReviewSttlList" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo" resultType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<select id="selectReviewSttlList" parameterType="net.pmosoft.subtitle.subtitle.Subtitle" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.selectReviewSttlList : 리뷰자막내용
     SELECT A.USR_ID          -- 사용자아이디
          , CONCAT(SUBSTR(A.STTL_NM,1,30),'...') AS STTL_NM -- 자막명
@@ -294,11 +294,14 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00040 A
     WHERE  A.USR_ID  = #{usrId}
+    AND    A.SERIAL_NO > 10
+    AND    LENGTH(TRIM(A.FSTTL_DESC)) > 5
+    AND    LENGTH(TRIM(A.MSTTL_DESC)) > 5
     ORDER BY A.USR_ID, A.REG_DTM DESC, A.SERIAL_NO DESC
 </select>
 
 
-<update id="updateSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<update id="updateSttlNum" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.updateSttlNum
     UPDATE STTL.TSSCM00030
     SET    STTL_NUM = #{sttlNum}
@@ -310,17 +313,17 @@ INSERT INTO STTL.TSSCM00020 VALUES
 </update>
 
 
-<delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.deleteUsrSttlMstr
     DELETE FROM STTL.TSSCM00010 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
 </delete>
 
-<delete id="deleteUsrSttlDtl" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<delete id="deleteUsrSttlDtl" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.deleteUsrSttlDtl
     DELETE FROM STTL.TSSCM00020 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
 </delete>
 
-<delete id="deleteSttlNum" parameterType="net.pmosoft.subtitle.subtitle.UsrSttlVo">
+<delete id="deleteSttlNum" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.deleteUsrSttlNum
     DELETE FROM STTL.TSSCM00030 WHERE USR_ID = #{usrId} AND STTL_NM = #{sttlNm}
 </delete>
