@@ -43,7 +43,7 @@ public class DetectEncoding {
      * 유틸 : 샘파일의 인코딩을 판단(리턴:UTF-8, EUC-KR...)
      */
     @SuppressWarnings("resource")
-	String detectEncoding(String filePathName) throws Exception {
+	String execute(String filePathName) throws Exception {
 
 		try {
 			byte[] buf = new byte[4096];
@@ -64,8 +64,8 @@ public class DetectEncoding {
 				logger.info("Detected encoding = " + encoding);
 			} else {
 				logger.info("No encoding detected.");
-				//encoding = "EUC-KR";
-				encoding = "UTF-8";
+				encoding = "EUC-KR";
+				//encoding = "UTF-8";
 				logger.info("encoding="+encoding);
 			}
 			detector.reset();

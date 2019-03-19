@@ -44,13 +44,13 @@ public class SubtitleSrv {
              * 외국어 파싱후 자막 Vo 리턴
              ************************************************/
             ParseSubtitle parseSubtitle1 = new ParseSubtitle();
-            SubtitlesVo foreignSubtitleVo = parseSubtitle1.getSubtitleVo(map.get("subtitleFilePathList").get(0));
+            SubtitlesVo foreignSubtitleVo = parseSubtitle1.execute(map.get("subtitleFilePathList").get(0));
 
             /************************************************
              * 모국어 파싱후 자막 Vo 리턴
              ************************************************/
             ParseSubtitle parseSubtitle2 = new ParseSubtitle();
-            SubtitlesVo motherSubtitleVo = parseSubtitle2.getSubtitleVo(map.get("subtitleFilePathList").get(1));
+            SubtitlesVo motherSubtitleVo = parseSubtitle2.execute(map.get("subtitleFilePathList").get(1));
 
 //            System.out.println(map.get("subtitleFilePathList").get(0));
 //            System.out.println(map.get("subtitleFilePathList").get(1));
