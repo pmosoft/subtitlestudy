@@ -14,55 +14,57 @@ import org.springframework.web.multipart.MultipartFile;
 import net.pmosoft.subtitle.file.FileSave;
 import net.pmosoft.subtitle.parse.ParseSubtitle;
 import net.pmosoft.subtitle.parse.SubtitlesVo;
+import net.pmosoft.subtitle.usr.Usr;
+import net.pmosoft.subtitle.usr.UsrDao;
 
 
 @Service
 public class SubtitleSrv {
-
     private static Logger logger = LoggerFactory.getLogger(SubtitleSrv.class);
 
     @Autowired
     private SubtitleDao subtitleDao;
 
     @Autowired
+    private UsrDao usrDao;
+
+    @Autowired
     private SubtitleValidatorSrv subtitleValidatorSrv;
 
-    public Map<String, Object> saveUsrSubtitles(String usrId, MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
+    public Map<String, Object> saveUsrSubtitles(String usrId , MultipartFile foreignSubtitleFile, MultipartFile motherSubtitleFile) {
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
 
-             /************************************************
-             * 자막파일들 저장
-             ************************************************/
+            //------------------------------------------------
+            logger.info("자막파일들 저장");
+            //------------------------------------------------
             Map<String,ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
             FileSave fileSave = new FileSave();
             map = fileSave.saveUsrSubtitles(usrId, foreignSubtitleFile, motherSubtitleFile);
 
-            /************************************************
-             * 외국어 파싱후 자막 Vo 리턴
-             ************************************************/
+            //------------------------------------------------
+            logger.info("유저 언어코드 정보  Vo 리턴");
+            //------------------------------------------------
+            Usr usr = new Usr(); usr.setUsrId(usrId);
+            Usr usrOutVo = usrDao.selectUsr(usr);
+
+            //------------------------------------------------
+            logger.info("외국어 파싱후 자막 Vo 리턴");
+            //------------------------------------------------
             ParseSubtitle parseSubtitle1 = new ParseSubtitle();
-            SubtitlesVo foreignSubtitleVo = parseSubtitle1.execute(map.get("subtitleFilePathList").get(0));
+            SubtitlesVo foreignSubtitleVo = parseSubtitle1.execute(map.get("subtitleFilePathList").get(0),usrOutVo.getFlangCd());
 
-            /************************************************
-             * 모국어 파싱후 자막 Vo 리턴
-             ************************************************/
+            //------------------------------------------------
+            logger.info("모국어 파싱후 자막 Vo 리턴");
+            //------------------------------------------------
             ParseSubtitle parseSubtitle2 = new ParseSubtitle();
-            SubtitlesVo motherSubtitleVo = parseSubtitle2.execute(map.get("subtitleFilePathList").get(1));
+            SubtitlesVo motherSubtitleVo = parseSubtitle2.execute(map.get("subtitleFilePathList").get(1),usrOutVo.getMlangCd());
 
-//            System.out.println(map.get("subtitleFilePathList").get(0));
-//            System.out.println(map.get("subtitleFilePathList").get(1));
-//            System.out.println("11="+foreignSubtitleVo.getSmiList().size());
-//            System.out.println("11="+foreignSubtitleVo.getSrtList().size());
-//            System.out.println("11="+motherSubtitleVo.getSmiList().size());
-//            System.out.println("22="+motherSubtitleVo.getSrtList().size());
-
-
-            /************************************************
-             * 자막 저장
-             ************************************************/
+            //------------------------------------------------
+            logger.info("자막리스트들을 DB에 저장");
+            //------------------------------------------------
             Subtitle subtitle = new Subtitle();
 
             // 유저 자막 정보 저장
@@ -85,6 +87,9 @@ public class SubtitleSrv {
             //String foreignSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "1", foreignSubtitleVo);
             //String motherSubtitle = insertUsrSttlDtl(usrId, foreignSubtitleFile.getOriginalFilename(), "2", motherSubtitleVo);
 
+            //------------------------------------------------
+            logger.info("자막정보를 화면으로 리턴");
+            //------------------------------------------------
             result.put("isSuccess", true);
             result.put("usrMsg", "정상 처리 되었습니다");
             result.put("sttlNm", foreignSubtitleFile.getOriginalFilename());
@@ -175,9 +180,18 @@ public class SubtitleSrv {
             logger.info("smi start cnt="+SubtitlesVo.getSmiList().size());
             List<Subtitle> usrSttlListVo = new ArrayList<Subtitle>();
             int sttlNum = 0;
+
+        	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(0).getContent());
+        	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(1).getContent());
+        	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(2).getContent());
+        	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(3).getContent());
+        	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(4).getContent());
+
             for (int i = 0; i < SubtitlesVo.getSmiList().size(); i++) {
-                if(SubtitlesVo.getSmiList().get(i).getContent().trim().length() != 0) {
-                	//logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(i).getContent().trim().length()+":"+SubtitlesVo.getSmiList().get(i).getContent());
+            	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(i).getContent());
+
+            	if(SubtitlesVo.getSmiList().get(i).getContent().trim().length() != 0) {
+                	logger.debug("getContent()=="+SubtitlesVo.getSmiList().get(i).getContent().trim().length()+":"+SubtitlesVo.getSmiList().get(i).getContent());
                 	sttlNum++;
                     Subtitle subtitle = new Subtitle();
                     subtitle.setUsrId(usrId);

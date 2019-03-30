@@ -11,6 +11,12 @@ public class Usr {
 	private String useYn   ;
 	private String regUsrId;
 	private String updUsrId;
+
+	// 엔티티
+  	private String flangCd  ; // 외국어코드
+  	private String mlangCd  ; // 모국어코드
+
+
 	public String getUsrId() {
 		return usrId;
 	}
@@ -65,5 +71,22 @@ public class Usr {
 	public void setUpdUsrId(String updUsrId) {
 		this.updUsrId = updUsrId;
 	}
-		
+
+	public String getFlangCd() {
+		return flangCd;
+	}
+
+	public void setFlangCd(String flangCd) {
+		this.flangCd = flangCd;
+	}
+
+	public String getMlangCd() {
+		return mlangCd;
+	}
+
+	public void setMlangCd(String mlangCd) {
+		this.mlangCd = mlangCd;
+	}
+
+
 }

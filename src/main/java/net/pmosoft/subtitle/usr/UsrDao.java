@@ -9,12 +9,15 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UsrDao {
 
 	void insertUsr(Usr usr);
-	
+	void insertUsrLang(Usr usr);
+
 	List<Usr> selectUsrList(Usr usr);
 	Usr selectUsr(Usr usr);
 	int selectUsrCnt(Usr usr);
-	
+	int selectUsrLangCnt(Usr usr);
+
 	void updateUsr(Usr usr);
+	void updateUsrLang(Usr usr);
 	void deleteUsr(Usr usr);
 }
 

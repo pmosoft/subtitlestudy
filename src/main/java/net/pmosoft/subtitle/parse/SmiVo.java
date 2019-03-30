@@ -7,11 +7,22 @@ public class SmiVo {
     int   etime;
     String content;
 
+    SmiVo() {}
+
+    SmiVo(int num, int stime, int etime, String content) {
+
+        this.num     = num    ;
+        this.stime   = stime  ;
+        this.etime   = etime  ;
+        this.content = content;
+
+    }
+
     public void print() {
-        System.out.println(num+" "+stime+" "+etime+" "+content);    
-    }    
-    
-    
+        System.out.println(num+" "+stime+" "+etime+" "+content);
+    }
+
+
     public int getNum() {
         return num;
     }

@@ -294,7 +294,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00040 A
     WHERE  A.USR_ID  = #{usrId}
-    AND    A.SERIAL_NO > 10
+    AND    A.SERIAL_NO > 20
     AND    LENGTH(TRIM(A.FSTTL_DESC)) > 5
     AND    LENGTH(TRIM(A.MSTTL_DESC)) > 5
     ORDER BY A.USR_ID, A.REG_DTM DESC, A.SERIAL_NO DESC
@@ -311,7 +311,6 @@ INSERT INTO STTL.TSSCM00020 VALUES
     AND    STTL_NM = #{sttlNm}
     AND    STTL_CD = #{sttlCd}
 </update>
-
 
 <delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.deleteUsrSttlMstr

@@ -1,22 +1,10 @@
 package net.pmosoft.subtitle.parse;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.pmosoft.subtitle.file.FileUtil;
 
 public class ParseSubtitle {
+    private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
 
 	public String pathFileNm = "";
 
@@ -25,7 +13,6 @@ public class ParseSubtitle {
 		this.pathFileNm = pathFileNm;
 	}
 
-	private static Logger logger = LoggerFactory.getLogger(ParseSubtitle.class);
 
     public static void main(String[] args) throws Exception {
         //String s1 = "<i>Metal </i>";
@@ -48,31 +35,30 @@ public class ParseSubtitle {
     	//String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].srt";
     	//String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].cht.srt";
 
-    	SubtitlesVo subtitlesVo = execute(filePathName);
+    	SubtitlesVo subtitlesVo = execute(filePathName,"ko");
     	logger.debug(subtitlesVo.getFilePathNm());
     	//System.out.println(SubtitlesVo);
     }
 
-    public SubtitlesVo execute(String pathFileNm)  throws Exception {
+    public SubtitlesVo execute(String pathFileNm, String langCd)  throws Exception {
     	SubtitlesVo subtitlesVo = new SubtitlesVo();
 
     	ParseSrt parseSrt = new ParseSrt();
-    	ParseSmi parseSmi = new ParseSmi();
+    	ParseSmi parseSmi = new ParseSmi(pathFileNm,langCd);
 
     	try {
-        	logger.info(pathFileNm +":"+ verifySrtSmi(pathFileNm));
         	subtitlesVo.setExtention(verifySrtSmi(pathFileNm));
         	if(subtitlesVo.getExtention().equals("smi")) {
         		logger.info("smi");
-        		subtitlesVo.setSmiList(parseSmi.excute(pathFileNm));
+        		subtitlesVo.setSmiList(parseSmi.execute());
                 for (int i = 0; i < subtitlesVo.getSmiList().size(); i++) {
-                	subtitlesVo.getSmiList().get(i).print();
+                	//subtitlesVo.getSmiList().get(i).print();
         		}
         	} else {
         		logger.info("srt");
-        		subtitlesVo.setSrtList(parseSrt.excute(pathFileNm));
+        		subtitlesVo.setSrtList(parseSrt.excute(pathFileNm,langCd));
                 for (int i = 0; i < subtitlesVo.getSrtList().size(); i++) {
-                	subtitlesVo.getSrtList().get(i).print();
+                	//subtitlesVo.getSrtList().get(i).print();
         		}
         	}
         	return subtitlesVo;

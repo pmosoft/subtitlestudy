@@ -20,7 +20,7 @@
         ,REG_USR_ID
         ,UPD_DTM
         ,UPD_USR_ID
-    ) VALUES ( 
+    ) VALUES (
          #{usrEmail}
         ,#{usrEmail}
         ,#{usrPw}
@@ -29,34 +29,60 @@
         ,'Y'
         ,NOW()
         ,'ADMIN'
-        ,NOW() 
-        ,'ADMIN' 
+        ,NOW()
+        ,'ADMIN'
     )
 </insert>
 
+<insert id="insertUsrLang" parameterType="net.pmosoft.subtitle.usr.Usr">
+
+    -- UsrDao.insertUsr
+    INSERT INTO STTL.TSYUR00020
+    (
+         USR_ID
+        ,FLANG_CD
+        ,MLANG_CD
+        ,REG_DTM
+        ,REG_USR_ID
+        ,UPD_DTM
+        ,UPD_USR_ID
+    ) VALUES (
+        ,#{usrEmail}
+        ,''
+        ,''
+        ,NOW()
+        ,'ADMIN'
+        ,NOW()
+        ,'ADMIN'
+    )
+</insert>
 
 <select id="selectUsr" parameterType="net.pmosoft.subtitle.usr.Usr" resultType="net.pmosoft.subtitle.usr.Usr">
     -- UsrDao.selectUsr
-    SELECT   
-           USR_ID
-         , USR_EMAIL
-         , USR_PW
-         , USR_NM
-         , USR_AGE
-         , USE_YN
-         , DATE_FORMAT(REG_DTM,'%Y.%M.%D %H:%I:%S') AS REG_DTM
-         , REG_USR_ID
-         , DATE_FORMAT(UPD_DTM,'%Y.%M.%D %H:%I:%S') AS UPD_DTM
-         , UPD_USR_ID 
-    FROM   TSYUR00010
-    WHERE  USR_ID = #{usrEmail}
-    ORDER BY USR_ID               
+    SELECT
+           A.USR_ID
+         , A.USR_EMAIL
+         , A.USR_PW
+         , A.USR_NM
+         , A.USR_AGE
+         , A.USE_YN
+         , DATE_FORMAT(A.REG_DTM,'%Y.%M.%D %H:%I:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%M.%D %H:%I:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+         , B.FLANG_CD
+         , B.MLANG_CD
+    FROM   TSYUR00010 A
+           LEFT OUTER JOIN TSYUR00020 B
+                ON A.USR_ID = B.USR_ID
+    WHERE  A.USR_ID = #{usrId}
+    ORDER BY A.USR_ID
 </select>
 
 
 <select id="selectUsrList" parameterType="java.util.HashMap" resultType="net.pmosoft.subtitle.usr.Usr">
      -- UsrDao.selectUsrList
-    SELECT   
+    SELECT
            USR_ID
          , USR_EMAIL
          , USR_PW
@@ -66,43 +92,61 @@
          , date_format(REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DT
          , REG_USR_ID
          , date_format(UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DT
-         , UPD_USR_ID 
+         , UPD_USR_ID
     FROM   TSYUR00010
-    WHERE 1=1 
+    WHERE 1=1
     AND  (
           (#{searchKeyCombo} = 'USR_ID' AND USR_ID LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
-           OR   
+           OR
           (#{searchKeyCombo} = 'USR_NM' AND USR_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
-         ) 
-    ORDER BY USR_ID               
+         )
+    ORDER BY USR_ID
 </select>
 
 <select id="selectUsrCnt" parameterType="net.pmosoft.subtitle.usr.Usr" resultType="int">
     -- UsrDao.selectUsrCnt
-    SELECT COUNT(*) CNT 
+    SELECT COUNT(*) CNT
     FROM   TSYUR00010
     WHERE  USR_ID = #{usrEmail}
 </select>
 
+<select id="selectUsrLangCnt" parameterType="net.pmosoft.subtitle.usr.Usr" resultType="int">
+    -- UsrDao.selectUsrCnt
+    SELECT COUNT(*) CNT
+    FROM   TSYUR00020
+    WHERE  USR_ID = #{usrId}
+</select>
+
 <update id="updateUsr" parameterType="java.util.HashMap">
-    
+
     -- UsrDao.updateUsr
-    UPDATE STTL.TSYUR00010 
-    SET   USR_ID     = #{usrEmail}            
-        , USR_EMAIL  = #{usrEmail}         
-        , USR_PW     = #{usrPw}            
-        , USR_NM     = #{usrNm}            
+    UPDATE STTL.TSYUR00010
+    SET   USR_ID     = #{usrEmail}
+        , USR_EMAIL  = #{usrEmail}
+        , USR_PW     = #{usrPw}
+        , USR_NM     = #{usrNm}
         , USR_AGE    = CAST(#{usrAge} AS INT)
         , USE_YN     = CASE WHEN #{useYn} = 'true' THEN 'Y' ELSE 'N' END
-        , UPD_DTM     = curdate()
+        , UPD_DTM    = curdate()
         , UPD_USR_ID = #{updUsrId}
     WHERE  USR_ID = #{usrEmail}
-     
+
 </update>
+
+<update id="updateUsrLang" parameterType="net.pmosoft.subtitle.usr.Usr">
+    -- SubtitleDao.updateSttlNum
+    UPDATE STTL.TSYUR00020
+    SET    FLANG_CD = #{flangCd}
+         , MLANG_CD = #{mlangCd}
+         , UPD_DTM  = NOW()
+         , UPD_USR_ID = #{usrId}
+    WHERE  USR_ID  = #{usrId}
+</update>
+
 
 <delete id="deleteUsr" parameterType="java.util.HashMap">
     -- UsrDao.deleteUsr
-    DELETE FROM STTL.TSYUR00010 WHERE USR_ID = #{usrEmail} 
+    DELETE FROM STTL.TSYUR00010 WHERE USR_ID = #{usrEmail}
 </delete>
-    
+
 </mapper>

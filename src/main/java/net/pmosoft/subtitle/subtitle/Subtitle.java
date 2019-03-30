@@ -33,6 +33,9 @@ public class Subtitle {
 	private String msttlDesc; // 모국어자막문장내용
 	private int reviewCnt;    // 리뷰횟수
 
+    // 사용자언어
+	private String flangCd; // 외국어언어코드
+	private String mlangCd; // 모국어언어코드
 
 	public String getUsrId() {
 		return usrId;
@@ -201,5 +204,22 @@ public class Subtitle {
 	public void setReviewCnt(int reviewCnt) {
 		this.reviewCnt = reviewCnt;
 	}
+
+	public String getFlangCd() {
+		return flangCd;
+	}
+
+	public void setFlangCd(String flangCd) {
+		this.flangCd = flangCd;
+	}
+
+	public String getMlangCd() {
+		return mlangCd;
+	}
+
+	public void setMlangCd(String mlangCd) {
+		this.mlangCd = mlangCd;
+	}
+
 
 }

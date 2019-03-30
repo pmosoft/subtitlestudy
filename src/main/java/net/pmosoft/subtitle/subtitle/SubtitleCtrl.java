@@ -35,8 +35,8 @@ public class SubtitleCtrl {
     public Map<String, Object> saveUsrSubtitles(
          @RequestPart("uploadFile") MultipartFile foreignSubtitleFile
         ,@RequestPart("uploadFile2") MultipartFile motherSubtitleFile
-        ,@RequestParam String usrEmail){
-        return subtitleSrv.saveUsrSubtitles(usrEmail,foreignSubtitleFile,motherSubtitleFile);
+        ,@RequestParam String usrId){
+        return subtitleSrv.saveUsrSubtitles(usrId,foreignSubtitleFile,motherSubtitleFile);
     }
 
     /**

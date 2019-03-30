@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.pmosoft.subtitle.comm.util.FileUtil;
+
 public class ParseSrt {
 
 	public String pathFileNm = "";
@@ -31,13 +33,13 @@ public class ParseSrt {
         ParseSrt parseSrt = new ParseSrt();
     	String filePathName="d:\\Downloads\\익스팬스\\[ HD ] 익스팬스 시즌2 01-13화 완 한글자막 720p The Expanse\\The.Expanse.S01E02.720p.HDTV.x264-0SEC.smi";
 
-        parseSrt.excute(filePathName);
+        parseSrt.excute(filePathName,"ko");
     }
 
     /*
      * 메인 : Srt 파싱하여 Vo로 리턴
      */
-    public ArrayList<SrtVo> excute(String filePathName) throws Exception {
+    public ArrayList<SrtVo> excute(String filePathName, String langCd) throws Exception {
 
         logger.debug("parseSrtFile");
 
@@ -53,8 +55,7 @@ public class ParseSrt {
         try {
 
             File file = new File(filePathName);
-            DetectEncoding detectEncoding = new DetectEncoding();
-            String encoding = detectEncoding.execute(filePathName);
+            String encoding = FileUtil.detectEncoding(filePathName);
             if (file.isFile()) {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(filePathName),encoding));
 
@@ -87,6 +88,8 @@ public class ParseSrt {
                         } else {
                             if(num>0){
                                 // rnum별로 내용을 산출한다.
+
+
                                 rnum++;
                                 SrtVo srtVo = new SrtVo();
                                 srtVo.num = rnum;
@@ -118,6 +121,8 @@ public class ParseSrt {
                         tvo.setStime(srtList.get(i).getStime());
                         tvo.setEtime(srtList.get(i+1).getStime());
                         tvo.setContent(content2+srtList.get(i).getContent());
+                        content2 = content2.replace("<br>"," ");
+                        content2 = content2.replaceAll("<([^>]+)>","");
                         content2 = "";
                         //tvo.print();
                         srtList2.add(tvo);
