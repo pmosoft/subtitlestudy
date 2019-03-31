@@ -43,7 +43,7 @@ public class ParseSubtitle {
     public SubtitlesVo execute(String pathFileNm, String langCd)  throws Exception {
     	SubtitlesVo subtitlesVo = new SubtitlesVo();
 
-    	ParseSrt parseSrt = new ParseSrt();
+    	ParseSrt parseSrt = new ParseSrt(pathFileNm,langCd);
     	ParseSmi parseSmi = new ParseSmi(pathFileNm,langCd);
 
     	try {
@@ -56,7 +56,7 @@ public class ParseSubtitle {
         		}
         	} else {
         		logger.info("srt");
-        		subtitlesVo.setSrtList(parseSrt.excute(pathFileNm,langCd));
+        		subtitlesVo.setSrtList(parseSrt.execute());
                 for (int i = 0; i < subtitlesVo.getSrtList().size(); i++) {
                 	//subtitlesVo.getSrtList().get(i).print();
         		}

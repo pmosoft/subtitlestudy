@@ -27,7 +27,7 @@ public class ParseSmi {
     public ArrayList<SmiVo> smiList = new ArrayList<SmiVo>();
     // 스타트 시간별로 합쳐진 리스트
     public ArrayList<SmiVo> smiList2 = new ArrayList<SmiVo>();
-    // .별로 합쳐진 리스트
+    // 콤마별로 합쳐진 리스트
     public ArrayList<SmiVo> smiList3 = new ArrayList<SmiVo>();
 
     ParseSmi(){}
@@ -174,37 +174,27 @@ public class ParseSmi {
                  * content 추출
                  *******************************/
                 content = line;
-                //logger.info(content);
                 content = replaceContent(content);
-                //logger.info(content);
 
                 if(content.length()>0) smiList.add(new SmiVo(rnum++,stime,0,content));
                 //logger.info(smiList.size());
             }
 
-            /*******************************
-             * etime 세팅
-             *******************************/
-            for (int j = 0; j < smiList.size(); j++) {
-                if(j < smiList.size()-1) {
-                    //smiList.add(new SmiVo(smiList.get(j).getNum(),smiList.get(j).getStime(),smiList.get(j+1).getStime(),smiList.get(j).getContent()));
-                }
-            }
         }
 
         //-------------------------------
         logger.info("동시간별로 내용을 합친다.");
         //-------------------------------
-        content = ""; int prevStime = 0; rnum = 0;
-        for (int k = 0; k < smiList.size(); k++) {
-            if(prevStime == smiList.get(k).getStime()) {
-                content += smiList.get(k).getContent()+" ";
+        rnum = 0; int prevStime = 0; content = "";
+        for (int i = 0; i < smiList.size(); i++) {
+            if(prevStime == smiList.get(i).getStime()) {
+                content += smiList.get(i).getContent()+" ";
             } else {
                if(content.trim().length() != 0) {
-                   smiList2.add(new SmiVo(rnum++,prevStime,0,content));
+                   smiList2.add(new SmiVo(rnum++,prevStime,0,content.trim()));
                }
-               if(k>0) prevStime = smiList.get(k-1).getStime();
-               content = smiList.get(k).getContent();
+               if(i>0) prevStime = smiList.get(i-1).getStime();
+               content = smiList.get(i).getContent();
             }
         }
 
@@ -214,7 +204,7 @@ public class ParseSmi {
         //
         int commaCnt = 0;
         for (int i = 0; i < smiList2.size(); i++) {
-            if(smiList2.get(i).getContent().matches(".*[.]")){
+            if(smiList2.get(i).getContent().matches(".*[.?!\"]")){
                 commaCnt++;
             }
         }
@@ -231,14 +221,10 @@ public class ParseSmi {
                 }
             }
 
-            for (int i = 0; i < smiList2.size(); i++) {
-                //System.out.println(smiList2.get(i).getContent());
-            }
-
-
             for (int i = 0; i < smiList3.size(); i++) {
-                //System.out.println(smiList3.get(i).getContent());
+                System.out.println(smiList3.get(i).getContent());
             }
+
             return smiList3;
 
         } else {

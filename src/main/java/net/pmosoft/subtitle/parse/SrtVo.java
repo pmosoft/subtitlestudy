@@ -7,8 +7,18 @@ public class SrtVo {
     String etime;
     String content;
 
+    SrtVo() {}
+
+    SrtVo(int num, String stime, String etime, String content) {
+        this.num     = num    ;
+        this.stime   = stime  ;
+        this.etime   = etime  ;
+        this.content = content;
+    }
+
+
     public void print() {
-        System.out.println(num+" "+stime+" "+etime+" "+content);    
+        System.out.println(num+" "+stime+" "+etime+" "+content);
     }
 
 	public int getNum() {
@@ -41,8 +51,8 @@ public class SrtVo {
 
 	public void setContent(String content) {
 		this.content = content;
-	}    
-    
-    
+	}
+
+
 
 }
