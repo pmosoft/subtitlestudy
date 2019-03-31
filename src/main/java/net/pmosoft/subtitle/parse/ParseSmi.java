@@ -20,6 +20,7 @@ public class ParseSmi {
     int sttlStartIdx = 0;
     int sttlEndIdx = 0;
 
+    // 언어코드에 해당하는 자막 리스트
     public ArrayList<String> parseFileList = new ArrayList<String>();
 
     // 원자막 리스트
@@ -37,12 +38,20 @@ public class ParseSmi {
 
     public static void main(String[] args) throws Exception {
         String pathFileNm="d:/Downloads/익스팬스/익스팬스 시즌1 01-10화 완 한글자막 720p The Expanse/The.Expanse.S01E03.INTERNAL.720p.HDTV.x264-KILLERS.smi ";
-        ParseSmi parseSmi = new ParseSmi(pathFileNm, "ko");
+        ParseSmi parseSmi = new ParseSmi(pathFileNm, "en");
         parseSmi.execute();
+        //parseSmi.test01();
 
     }
 
     void test01(){
+        String line = " aa bbb. ccc?";
+        if(line.matches(".*[.?!]")){
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
+        } else {
+            System.out.println("no match");
+        }
+
         /*
         String line = "<SYNC Start=3069983><P Class=kor>&nbsp;";
         if(line.matches("(?i).*[ ]*class[ ]*= *"+"KOR.*")){
@@ -61,9 +70,8 @@ public class ParseSmi {
         fileToList();
         detectLanguage();
         filterFileList();
-        parsing();
 
-        return smiList2;
+        return parsing();
     }
 
     /*
@@ -123,16 +131,15 @@ public class ParseSmi {
     /*
      * 5단계 : 파싱 - 메인
      */
-    void parsing() {
+    ArrayList<SmiVo> parsing() {
 
         String line = "";
         int rnum = 0;
         int stime = 0;
-        int etime = 0;
         String content = "";
 
         String ruleSyncTag = "(?i)<sync.*=[0-9]+.*";
-        String ruleContent = "(?i)[^<sync].*";
+        //String ruleContent = "(?i)[^<sync].*";
         String ruleStime= "[0-9]+";
         String ruleClassContent= "(?i)<p class=.*>.*";
 
@@ -188,26 +195,55 @@ public class ParseSmi {
         //-------------------------------
         logger.info("동시간별로 내용을 합친다.");
         //-------------------------------
-        String content2 = ""; int prevStime = 0; int num2 = 0;
+        content = ""; int prevStime = 0; rnum = 0;
         for (int k = 0; k < smiList.size(); k++) {
             if(prevStime == smiList.get(k).getStime()) {
-                content2 += smiList.get(k).getContent()+" ";
+                content += smiList.get(k).getContent()+" ";
             } else {
-               if(content2.trim().length() != 0) {
-                   smiList2.add(new SmiVo(rnum++,prevStime,0,content2));
+               if(content.trim().length() != 0) {
+                   smiList2.add(new SmiVo(rnum++,prevStime,0,content));
                }
                if(k>0) prevStime = smiList.get(k-1).getStime();
-               content2 = smiList.get(k).getContent();
+               content = smiList.get(k).getContent();
             }
         }
+
+        //------------------------------------------
+        logger.info("콤바별로 내용을 합친다.");
+        //------------------------------------------
+        //
+        int commaCnt = 0;
         for (int i = 0; i < smiList2.size(); i++) {
-            //logger.info(smiList2.get(i).getStime() +":"+smiList2.get(i).getContent());
+            if(smiList2.get(i).getContent().matches(".*[.]")){
+                commaCnt++;
+            }
         }
+        System.out.println("commaCnt========="+commaCnt);
+        if(langCd.equals("en") && commaCnt > smiList2.size()/2 ){
+            System.out.println("comma progress");
 
-        //-------------------------------
-        //logger.info("콤바별 내용을 합친다.");
-        //-------------------------------
+            content = ""; rnum = 0;
+            for (int i = 0; i < smiList2.size(); i++) {
+                content += smiList2.get(i).getContent()+" ";
+                if(smiList2.get(i).getContent().matches(".*[.?!\"]")){
+                    smiList3.add(new SmiVo(rnum++,0,0,content));
+                    content = "";
+                }
+            }
 
+            for (int i = 0; i < smiList2.size(); i++) {
+                //System.out.println(smiList2.get(i).getContent());
+            }
+
+
+            for (int i = 0; i < smiList3.size(); i++) {
+                //System.out.println(smiList3.get(i).getContent());
+            }
+            return smiList3;
+
+        } else {
+            return smiList2;
+        }
     }
 
     /*
