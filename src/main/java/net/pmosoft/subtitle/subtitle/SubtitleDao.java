@@ -21,6 +21,7 @@ public interface SubtitleDao {
     List<Subtitle> selectReviewSttlList(Subtitle inVo);
     void updateSttlNum(Subtitle inVo);
     void updateUsrLang(Subtitle inVo);
+    void updateReviewCnt(Subtitle inVo);
     void deleteUsrSttlMstr(Subtitle inVo);
     void deleteUsrSttlDtl(Subtitle inVo);
     void deleteSttlNum(Subtitle inVo);

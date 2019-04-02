@@ -280,9 +280,10 @@ INSERT INTO STTL.TSSCM00020 VALUES
 
 
 <select id="selectReviewSttlList" parameterType="net.pmosoft.subtitle.subtitle.Subtitle" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
+<![CDATA[
     -- SubtitleDao.selectReviewSttlList : 리뷰자막내용
     SELECT A.USR_ID          -- 사용자아이디
-         , CONCAT(SUBSTR(A.STTL_NM,1,30),'...') AS STTL_NM -- 자막명
+         , A.STTL_NM         -- 자막명
          , A.SERIAL_NO       -- 일련번호
          , A.FSTTL_DESC      -- 외국어자막문장내용
          , A.MSTTL_DESC      -- 모국어자막문장내용
@@ -294,10 +295,12 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.UPD_USR_ID
     FROM   STTL.TSSCM00040 A
     WHERE  A.USR_ID  = #{usrId}
-    AND    A.SERIAL_NO > 20
     AND    LENGTH(TRIM(A.FSTTL_DESC)) > 5
     AND    LENGTH(TRIM(A.MSTTL_DESC)) > 5
-    ORDER BY A.USR_ID, A.REG_DTM DESC, A.SERIAL_NO DESC
+    AND    A.REVIEW_CNT < 3
+    ORDER BY A.USR_ID, A.REVIEW_CNT, A.REG_DTM DESC, A.SERIAL_NO DESC
+    LIMIT 1, 100
+]]>
 </select>
 
 
@@ -311,6 +314,18 @@ INSERT INTO STTL.TSSCM00020 VALUES
     AND    STTL_NM = #{sttlNm}
     AND    STTL_CD = #{sttlCd}
 </update>
+
+<update id="updateReviewCnt" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
+    -- SubtitleDao.updateReviewCnt
+    UPDATE STTL.TSSCM00040
+    SET    REVIEW_CNT = REVIEW_CNT + 1
+         , UPD_DTM  = NOW()
+         , UPD_USR_ID = #{usrId}
+    WHERE  USR_ID  = #{usrId}
+    AND    STTL_NM = #{sttlNm}
+    AND    SERIAL_NO = #{serialNo}
+</update>
+
 
 <delete id="deleteUsrSttlMstr" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.deleteUsrSttlMstr

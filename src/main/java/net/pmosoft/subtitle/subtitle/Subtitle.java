@@ -29,6 +29,7 @@ public class Subtitle {
 	private String condBookmarkYn; // 북마크
 
     // 리뷰
+    private String serialNo;  // 시리얼번호
 	private String fsttlDesc; // 외국어자막문장내용
 	private String msttlDesc; // 모국어자막문장내용
 	private int reviewCnt;    // 리뷰횟수
@@ -220,6 +221,14 @@ public class Subtitle {
 	public void setMlangCd(String mlangCd) {
 		this.mlangCd = mlangCd;
 	}
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
 
 
 }
