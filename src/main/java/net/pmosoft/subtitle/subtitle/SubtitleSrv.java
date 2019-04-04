@@ -390,6 +390,26 @@ public class SubtitleSrv {
         }
     }
 
+    public Map<String, Object> updateReviewCd(Subtitle inVo){
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        Map<String, String> errors = new HashMap<String, String>();
+        //errors = subtitleValidatorSrv.validateDeleteUsr(usr);
+        if(errors.size()>0){
+            //model.addAttribute("tbUsr", tbUsr);
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", errors.get("errUsrMsg"));
+            System.out.println(result);
+            return result;
+        } else {
+            subtitleDao.updateReviewCd(inVo);
+            result.put("isSuccess", true);
+            result.put("usrMsg", "갱신 되었습니다");
+            return result;
+        }
+    }
+
     public Map<String, Object> deleteUsrSttl(Subtitle inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();

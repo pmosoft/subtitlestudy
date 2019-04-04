@@ -140,7 +140,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
         ,FSTTL_DESC       -- 외국어자막문장내용
         ,MSTTL_DESC       -- 모국어자막문장내용
         ,REVIEW_CNT       -- 리뷰횟수
-        ,USE_YN           -- 사용여부
+        ,REVIEW_CD        -- 리뷰코드
         ,REG_DTM          -- 등록일시
         ,REG_USR_ID       -- 등록자
         ,UPD_DTM          -- 변경일시
@@ -153,7 +153,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
         ,#{fsttlDesc}     -- 외국어자막문장내용
         ,#{msttlDesc}     -- 모국어자막문장내용
         ,#{reviewCnt}     -- 리뷰횟수
-        ,'Y'              -- 사용여부
+        ,'1'              -- 상태코드
         ,now()            -- 등록일시
         ,#{regUsrId}      -- 등록자
         ,now()            -- 변경일시
@@ -288,7 +288,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
          , A.FSTTL_DESC      -- 외국어자막문장내용
          , A.MSTTL_DESC      -- 모국어자막문장내용
          , A.REVIEW_CNT      -- 리뷰횟수
-         , A.USE_YN          -- 사용여부
+         , A.REVIEW_CD       -- 사용여부
          , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
          , A.REG_USR_ID
          , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
@@ -298,6 +298,7 @@ INSERT INTO STTL.TSSCM00020 VALUES
     AND    LENGTH(TRIM(A.FSTTL_DESC)) > 5
     AND    LENGTH(TRIM(A.MSTTL_DESC)) > 5
     AND    A.REVIEW_CNT < 3
+    AND    A.REVIEW_CD = #{reviewCd}
     ORDER BY A.USR_ID, A.REVIEW_CNT, A.REG_DTM DESC, A.SERIAL_NO DESC
     LIMIT 1, 100
 ]]>
@@ -319,6 +320,18 @@ INSERT INTO STTL.TSSCM00020 VALUES
     -- SubtitleDao.updateReviewCnt
     UPDATE STTL.TSSCM00040
     SET    REVIEW_CNT = REVIEW_CNT + 1
+         , UPD_DTM  = NOW()
+         , UPD_USR_ID = #{usrId}
+    WHERE  USR_ID  = #{usrId}
+    AND    STTL_NM = #{sttlNm}
+    AND    SERIAL_NO = #{serialNo}
+</update>
+
+<update id="updateReviewCd" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
+    -- SubtitleDao.updateReviewCd
+    UPDATE STTL.TSSCM00040
+    SET    REVIEW_CD = #{reviewCd}
+         , REVIEW_CNT = REVIEW_CNT + 1
          , UPD_DTM  = NOW()
          , UPD_USR_ID = #{usrId}
     WHERE  USR_ID  = #{usrId}

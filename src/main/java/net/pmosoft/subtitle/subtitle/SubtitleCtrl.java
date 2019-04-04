@@ -112,6 +112,13 @@ public class SubtitleCtrl {
         return subtitleSrv.updateReviewCnt(inVo);
     }
 
+    /**
+     * 리뷰코드 갱신
+     */
+    @RequestMapping(value = "/subtitle/updateReviewCd")
+    public Map<String, Object> updateReviewCd(@RequestBody Subtitle inVo) {
+        return subtitleSrv.updateReviewCd(inVo);
+    }
 
     /**********************************************************************************
      *                                     삭제

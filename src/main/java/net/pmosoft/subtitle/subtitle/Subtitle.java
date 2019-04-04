@@ -32,7 +32,8 @@ public class Subtitle {
     private String serialNo;  // 시리얼번호
 	private String fsttlDesc; // 외국어자막문장내용
 	private String msttlDesc; // 모국어자막문장내용
-	private int reviewCnt;    // 리뷰횟수
+	private int    reviewCnt; // 리뷰횟수
+    private String reviewCd;  // 리뷰코드
 
     // 사용자언어
 	private String flangCd; // 외국어언어코드
@@ -228,6 +229,14 @@ public class Subtitle {
 
     public void setSerialNo(String serialNo) {
         this.serialNo = serialNo;
+    }
+
+    public String getReviewCd() {
+        return reviewCd;
+    }
+
+    public void setReviewCd(String reviewCd) {
+        this.reviewCd = reviewCd;
     }
 
 
