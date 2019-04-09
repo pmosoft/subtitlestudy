@@ -160,6 +160,28 @@ INSERT INTO STTL.TSSCM00020 VALUES
         ,#{updUsrId}      -- 변경자
 </insert>
 
+<insert id="insertOpinion" parameterType="net.pmosoft.subtitle.subtitle.Subtitle">
+    -- SubtitleDao.insertOpinion 유저 의견
+    INSERT INTO STTL.TSSCM00050
+    (
+         USR_ID           -- 사용자아이디
+        ,OPINION_REG_DTM  -- 의견등록일시분(YYYYMMDDHHMI)
+        ,OPINION_DESC     -- 유저의견
+        ,REG_DTM          -- 등록일시
+        ,REG_USR_ID       -- 등록자
+        ,UPD_DTM          -- 변경일시
+        ,UPD_USR_ID       -- 변경자
+    )
+    SELECT
+         #{usrId}                        -- 사용자아이디
+        ,date_format(now(),'%Y%m%d%H%i') -- 의견등록일시분
+        ,#{opinionDesc}                  -- 유저의견
+        ,now()                           -- 등록일시
+        ,#{regUsrId}                     -- 등록자
+        ,now()                           -- 변경일시
+        ,#{updUsrId}                     -- 변경자
+</insert>
+
 <select id="selectUsrSttlMstrList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
     -- SubtitleDao.selectUsrSttlMstrList : 유저자막목록
     SELECT A.USR_ID          -- 사용자아이디
@@ -302,6 +324,19 @@ INSERT INTO STTL.TSSCM00020 VALUES
     ORDER BY A.USR_ID, A.REVIEW_CNT, A.REG_DTM DESC, A.SERIAL_NO DESC
     LIMIT 1, 100
 ]]>
+</select>
+
+
+<select id="selectOpinionList" parameterType="String" resultType="net.pmosoft.subtitle.subtitle.Subtitle">
+    -- SubtitleDao.selectOpinionList : 유저의견
+    SELECT SUBSTR(A.USR_ID,1,POSITION('@' IN A.USR_ID)-1) AS USR_ID -- 사용자아이디
+         , A.OPINION_DESC    -- 자막명
+         , DATE_FORMAT(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DTM
+         , A.REG_USR_ID
+         , DATE_FORMAT(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DTM
+         , A.UPD_USR_ID
+    FROM   STTL.TSSCM00050 A
+    ORDER BY A.REG_DTM DESC
 </select>
 
 

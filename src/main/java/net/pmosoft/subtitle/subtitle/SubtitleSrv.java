@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -135,6 +136,25 @@ public class SubtitleSrv {
         return result;
     }
 
+    public Map<String, Object> saveOpinion(Subtitle inVo){
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            System.out.println("inVo==="+inVo.getUsrId());
+            System.out.println("inVo==="+inVo.getSttlNm());
+            subtitleDao.insertOpinion(inVo);
+            result.put("isSuccess", true);
+        }  catch (DataIntegrityViolationException e1) {
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "Only can register one per 1 minite");
+            result.put("errSysMsg", e1.getMessage());
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     private String insertUsrSttlDtl(String usrId, String fileName, String sttlCd, SubtitlesVo SubtitlesVo){
 
@@ -369,6 +389,26 @@ public class SubtitleSrv {
         }
         return result;
     }
+
+    public Map<String, Object> selectOpinionList(Subtitle inVo){
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            List<Subtitle> list = null;
+            list = subtitleDao.selectOpinionList(inVo);;
+            result.put("isSuccess", true);
+            result.put("opinions", list);
+
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public Map<String, Object> updateReviewCnt(Subtitle inVo){
 

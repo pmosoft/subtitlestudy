@@ -83,24 +83,27 @@
 <select id="selectUsrList" parameterType="java.util.HashMap" resultType="net.pmosoft.subtitle.usr.Usr">
      -- UsrDao.selectUsrList
     SELECT
-           USR_ID
-         , USR_EMAIL
-         , USR_PW
-         , USR_NM
-         , USR_AGE
-         , USE_YN
-         , date_format(REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DT
-         , REG_USR_ID
-         , date_format(UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DT
-         , UPD_USR_ID
-    FROM   TSYUR00010
+           A.USR_ID
+         , A.USR_EMAIL
+         , A.USR_PW
+         , A.USR_NM
+         , A.USR_AGE
+         , A.USE_YN
+         , date_format(A.REG_DTM,'%Y.%m.%d %H:%i:%S') AS REG_DT
+         , A.REG_USR_ID
+         , date_format(A.UPD_DTM,'%Y.%m.%d %H:%i:%S') AS UPD_DT
+         , A.UPD_USR_ID
+         , IFNULL(B.REG_CNT,0) AS REG_CNT
+    FROM   TSYUR00010 A
+           LEFT OUTER JOIN
+          (SELECT USR_ID
+                , COUNT(*) REG_CNT
+           FROM TSSCM00010
+           GROUP BY USR_ID
+           ) B
+           ON A.USR_ID = B.USR_ID
     WHERE 1=1
-    AND  (
-          (#{searchKeyCombo} = 'USR_ID' AND USR_ID LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
-           OR
-          (#{searchKeyCombo} = 'USR_NM' AND USR_NM LIKE CONCAT(CONCAT('%',#{searchValue}),'%'))
-         )
-    ORDER BY USR_ID
+    ORDER BY A.REG_DTM DESC
 </select>
 
 <select id="selectUsrCnt" parameterType="net.pmosoft.subtitle.usr.Usr" resultType="int">

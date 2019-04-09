@@ -39,6 +39,9 @@ public class Subtitle {
 	private String flangCd; // 외국어언어코드
 	private String mlangCd; // 모국어언어코드
 
+    // 사용자 의견
+    private String opinionDesc; // 의견
+
 	public String getUsrId() {
 		return usrId;
 	}
@@ -238,6 +241,15 @@ public class Subtitle {
     public void setReviewCd(String reviewCd) {
         this.reviewCd = reviewCd;
     }
+
+    public String getOpinionDesc() {
+        return opinionDesc;
+    }
+
+    public void setOpinionDesc(String opinionDesc) {
+        this.opinionDesc = opinionDesc;
+    }
+
 
 
 }

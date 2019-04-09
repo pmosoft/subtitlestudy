@@ -149,12 +149,12 @@ public class UsrSrv {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		List<Usr> list = null;
+		List<Usr> usrList = null;
 		try{
-			list = usrDao.selectUsrList(usr);;
+		    usrList = usrDao.selectUsrList(usr);;
 			result.put("isSuccess", true);
-			result.put("data", list);
-            result.put("total", list.size());
+			result.put("usrList", usrList);
+            result.put("total", usrList.size());
 		} catch (Exception e){
 			result.put("isSuccess", false);
 			result.put("errUsrMsg", "시스템 장애가 발생하였습니다");

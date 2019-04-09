@@ -55,6 +55,15 @@ public class SubtitleCtrl {
         return subtitleSrv.saveReviewSttl(inVo);
     }
 
+    /**
+     * 의견 저장
+     */
+    @RequestMapping(value = "/subtitle/saveOpinion")
+    public Map<String, Object> saveOpinion(@RequestBody Subtitle inVo) {
+        System.out.println("111111111111111111");
+        return subtitleSrv.saveOpinion(inVo);
+    }
+
     /**********************************************************************************
      *                                     조회
      **********************************************************************************/
@@ -96,9 +105,17 @@ public class SubtitleCtrl {
      */
     @RequestMapping(value = "/subtitle/selectReviewSttlList")
     public Map<String, Object> selectReviewSttlList(@RequestBody Subtitle inVo) {
-    	System.out.println("selectReviewSttlList");
         return subtitleSrv.selectReviewSttlList(inVo);
     }
+
+    /**
+     * 리뷰자막 조회
+     */
+    @RequestMapping(value = "/subtitle/selectOpinionList")
+    public Map<String, Object> selectOpinionList(@RequestBody Subtitle inVo) {
+        return subtitleSrv.selectOpinionList(inVo);
+    }
+
 
     /**********************************************************************************
      *                                     수정
