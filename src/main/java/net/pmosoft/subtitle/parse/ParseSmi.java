@@ -37,8 +37,9 @@ public class ParseSmi {
     }
 
     public static void main(String[] args) throws Exception {
-        String pathFileNm="d:/Downloads/익스팬스/익스팬스 시즌1 01-10화 완 한글자막 720p The Expanse/The.Expanse.S01E03.INTERNAL.720p.HDTV.x264-KILLERS.smi ";
-        ParseSmi parseSmi = new ParseSmi(pathFileNm, "en");
+        //String pathFileNm="d:/Downloads/익스팬스/익스팬스 시즌1 01-10화 완 한글자막 720p The Expanse/The.Expanse.S01E03.INTERNAL.720p.HDTV.x264-KILLERS.smi ";
+        String pathFileNm="d:\\Downloads\\위기의주부들 시즌4 완결(총17화) - 한영통합 (코믹추천미드)\\Desperate.Housewives.4x04.if.theres.anything.i.cant.stand.hdtv.xvid-xor.smi";
+        ParseSmi parseSmi = new ParseSmi(pathFileNm, "ko");
         parseSmi.execute();
         //parseSmi.test01();
 
@@ -97,14 +98,30 @@ public class ParseSmi {
      */
     void detectLanguage(){
         String line = "";
+        String langTag = "";
+        logger.info(langCd);
+
         for (int i = 0; i < fileList.size(); i++) {
             line = fileList.get(i);
             //.KOR { Name:Korean; lang:ko-KR; SAMIType:CC; }
             if(line.matches("^[.][a-zA-Z]* [{].*")){
-                if(line.contains(langCd)){
-                    sttlLangCd = StringUtil.patternMatch(line,"[.][a-zA-Z]*").replace(".", "");
+                // 예외처리(lang:en 이 아닌 데이터 오류)
+                //.ENCC { Name:ENCC; lang:kr-KR; SAMIType:CC; }
+                //.EGCC { Name:EGCC; lang:kr-KR; SAMIType:CC; }
+                if(langCd.matches("en") && line.matches("[.][eE][a-zA-Z][cC][cC].*")){
+                    langTag = StringUtil.patternMatch(line,"[.][a-zA-Z]*").replace(".", "");
+                    sttlLangCd = langTag;
+                    logger.info(sttlLangCd);
+                } else if(langCd.matches("ko") && line.matches("[.][kK][rR][cC][cC].*")){
+                    langTag = StringUtil.patternMatch(line,"[.][a-zA-Z]*").replace(".", "");
+                    sttlLangCd = langTag;
                     logger.info(sttlLangCd);
                 }
+                //} else if(line.contains(langCd)){
+                //    langTag = StringUtil.patternMatch(line,"[.][a-zA-Z]*").replace(".", "");
+                //    sttlLangCd = langTag;
+                //    logger.info(sttlLangCd);
+                // }
             }
         }
     }
@@ -173,11 +190,16 @@ public class ParseSmi {
                 /*******************************
                  * content 추출
                  *******************************/
+                //logger.info(line);
+
                 content = line;
                 content = replaceContent(content);
+                //logger.info(line);
 
                 if(content.length()>0) smiList.add(new SmiVo(rnum++,stime,0,content));
                 //logger.info(smiList.size());
+                //logger.info(line);
+
             }
 
         }
@@ -196,21 +218,22 @@ public class ParseSmi {
                if(i>0) prevStime = smiList.get(i-1).getStime();
                content = smiList.get(i).getContent();
             }
+            //logger.info(content);
         }
+        logger.info("동시간별 건수="+smiList2.size());
 
         //------------------------------------------
         logger.info("콤바별로 내용을 합친다.");
         //------------------------------------------
-        //
         int commaCnt = 0;
         for (int i = 0; i < smiList2.size(); i++) {
             if(smiList2.get(i).getContent().matches(".*[.?!\"]")){
                 commaCnt++;
             }
         }
-        System.out.println("commaCnt========="+commaCnt);
+        //logger.info("commaCnt========="+commaCnt);
         if(langCd.equals("en") && commaCnt > smiList2.size()/2 ){
-            System.out.println("comma progress");
+            logger.info("comma progress");
 
             content = ""; rnum = 0;
             for (int i = 0; i < smiList2.size(); i++) {
@@ -224,10 +247,15 @@ public class ParseSmi {
             for (int i = 0; i < smiList3.size(); i++) {
                 System.out.println(smiList3.get(i).getContent());
             }
+            logger.info("콤바별 건수="+smiList3.size());
 
             return smiList3;
 
         } else {
+            logger.info("콤바별 건수="+smiList2.size());
+            for (int i = 0; i < smiList2.size(); i++) {
+                System.out.println(smiList2.get(i).getContent());
+            }
             return smiList2;
         }
     }

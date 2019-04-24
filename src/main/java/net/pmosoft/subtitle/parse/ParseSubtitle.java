@@ -31,12 +31,13 @@ public class ParseSubtitle {
      * 테스트
      */
     void test02() throws Exception{
-    	String filePathName="d:\\Downloads\\익스팬스\\[ HD ] 익스팬스 시즌2 01-13화 완 한글자막 720p The Expanse\\The.Expanse.S01E02.720p.HDTV.x264-0SEC.smi";
-    	//String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].srt";
+    	//String filePathName="d:\\Downloads\\익스팬스\\[ HD ] 익스팬스 시즌2 01-13화 완 한글자막 720p The Expanse\\The.Expanse.S01E02.720p.HDTV.x264-0SEC.smi";
+    	String filePathName="d:\\Downloads\\위기의주부들 시즌4 완결(총17화) - 한영통합 (코믹추천미드)\\Desperate.Housewives.4x01.now.you.know,hdtv.xvid-caph.smi";
     	//String filePathName="d:\\Downloads\\subtitle-sample\\Sinbad.Legend.Of.The.Seven.Seas.2003.720p.BluRay.x264-[YTS.AM].cht.srt";
 
+    	//SubtitlesVo subtitlesVo = execute(filePathName,"ko");
     	SubtitlesVo subtitlesVo = execute(filePathName,"ko");
-    	logger.debug(subtitlesVo.getFilePathNm());
+        logger.debug(subtitlesVo.getFilePathNm());
     	//System.out.println(SubtitlesVo);
     }
 
@@ -45,6 +46,7 @@ public class ParseSubtitle {
 
     	ParseSrt parseSrt = new ParseSrt(pathFileNm,langCd);
     	ParseSmi parseSmi = new ParseSmi(pathFileNm,langCd);
+        logger.info("langCd="+langCd);
 
     	try {
         	subtitlesVo.setExtention(verifySrtSmi(pathFileNm));
